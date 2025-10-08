@@ -8,6 +8,7 @@ import {
   ForbiddenException,
   Inject,
   forwardRef,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, Between, MoreThanOrEqual, LessThanOrEqual, In, Not, IsNull } from 'typeorm';
@@ -24,6 +25,7 @@ import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class SupportService {
+  private readonly logger = new Logger(SupportService.name);
   private ticketCounter = 1;
 
   constructor(
@@ -43,12 +45,25 @@ export class SupportService {
     return `TKT-${year}-${number}`;
   }
 
-  private mapToTicketDto(ticket: SupportTicket): SupportTicketDto {
+  private async mapToTicketDto(ticket: SupportTicket): Promise<SupportTicketDto> {
     const { user, assigned_to, responses, ...ticketData } = ticket;
+    
+    // Handle assigned_to as a string ID and fetch the user if needed
+    let assignedToUser;
+    if (assigned_to) {
+      try {
+        // Try to get the assigned admin user
+        assignedToUser = await this.usersService.findOne(assigned_to);
+      } catch (error) {
+        this.logger.warn(`Could not find assigned admin with ID: ${assigned_to}`);
+        assignedToUser = undefined;
+      }
+    }
+
     return new SupportTicketDto({
       ...ticketData,
       user: user ? this.usersService.mapToResponseDto(user) : undefined,
-      assigned_to: assigned_to ? this.usersService.mapToResponseDto(assigned_to) : undefined,
+      assigned_to: assignedToUser ? this.usersService.mapToResponseDto(assignedToUser) : undefined,
       responses: responses ? responses.map(response => this.mapToResponseDto(response)) : [],
     });
   }
@@ -90,7 +105,7 @@ export class SupportService {
       // TODO: Implement admin notification
       // await this.notifyAdminsAboutNewTicket(savedTicket);
 
-      return this.mapToTicketDto(savedTicket);
+      return await this.mapToTicketDto(savedTicket);
     } catch (error) {
       await queryRunner.rollbackTransaction();
       
@@ -118,8 +133,11 @@ export class SupportService {
         order: { created_at: 'DESC' },
       });
 
+      // Process tickets asynchronously with Promise.all
+      const ticketDtos = await Promise.all(tickets.map(ticket => this.mapToTicketDto(ticket)));
+
       return {
-        data: tickets.map(ticket => this.mapToTicketDto(ticket)),
+        data: ticketDtos,
         pagination: {
           total,
           page,
@@ -148,8 +166,11 @@ export class SupportService {
         order: { created_at: 'DESC' },
       });
 
+      // Process tickets asynchronously with Promise.all
+      const ticketDtos = await Promise.all(tickets.map(ticket => this.mapToTicketDto(ticket)));
+
       return {
-        data: tickets.map(ticket => this.mapToTicketDto(ticket)),
+        data: ticketDtos,
         pagination: {
           total,
           page,
@@ -173,7 +194,7 @@ export class SupportService {
         throw new NotFoundException(`Support ticket with ID ${ticketId} not found`);
       }
 
-      return this.mapToTicketDto(ticket);
+      return await this.mapToTicketDto(ticket);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -219,7 +240,7 @@ export class SupportService {
         // await this.emailService.sendTicketUpdate(ticket.user.email, updatedTicket);
       }
 
-      return this.mapToTicketDto(updatedTicket);
+      return await this.mapToTicketDto(updatedTicket);
     } catch (error) {
       await queryRunner.rollbackTransaction();
       
@@ -259,11 +280,22 @@ export class SupportService {
         await queryRunner.manager.save(ticket);
       }
 
+      // Fix response create method
+      let attachmentsArray: string[] | undefined;
+      if (createResponseDto.attachments) {
+        attachmentsArray = typeof createResponseDto.attachments === 'string'
+          ? [createResponseDto.attachments]
+          : createResponseDto.attachments;
+      }
+
       const response = queryRunner.manager.create(SupportTicketResponse, {
-        ...createResponseDto,
-        ticket_id: ticketId,
-        user_id: userId,
+        message: createResponseDto.message,
+        is_internal: createResponseDto.is_internal,
+        attachments: attachmentsArray,
         response_type: isAdmin ? ResponseType.ADMIN : ResponseType.USER,
+        ticket: ticket,
+        user: user,
+        response_id: `RESP-${Date.now()}`, // Generate a response ID
       });
 
       const savedResponse = await queryRunner.manager.save(response);
@@ -368,8 +400,11 @@ export class SupportService {
         order: { created_at: 'DESC' },
       });
 
+      // Process tickets asynchronously with Promise.all
+      const ticketDtos = await Promise.all(tickets.map(ticket => this.mapToTicketDto(ticket)));
+
       return {
-        data: tickets.map(ticket => this.mapToTicketDto(ticket)),
+        data: ticketDtos,
         pagination: {
           total,
           page,
@@ -452,7 +487,7 @@ export class SupportService {
       ticket.status = TicketStatus.IN_PROGRESS;
       
       const updatedTicket = await this.supportTicketsRepository.save(ticket);
-      return this.mapToTicketDto(updatedTicket);
+      return await this.mapToTicketDto(updatedTicket);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -478,12 +513,127 @@ export class SupportService {
       }
 
       const updatedTicket = await this.supportTicketsRepository.save(ticket);
-      return this.mapToTicketDto(updatedTicket);
+      return await this.mapToTicketDto(updatedTicket);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       }
       throw new InternalServerErrorException('Failed to close support ticket');
+    }
+  }
+  
+  /**
+   * Delete a support ticket (Admin only)
+   * @param ticketId Ticket ID
+   */
+  async removeTicket(ticketId: string): Promise<void> {
+    try {
+      const ticket = await this.supportTicketsRepository.findOne({
+        where: { ticket_id: ticketId },
+        relations: ['responses'],
+      });
+
+      if (!ticket) {
+        throw new NotFoundException(`Support ticket with ID ${ticketId} not found`);
+      }
+
+      // Delete ticket responses first
+      if (ticket.responses && ticket.responses.length > 0) {
+        await this.ticketResponsesRepository.remove(ticket.responses);
+      }
+
+      // Delete the ticket
+      await this.supportTicketsRepository.remove(ticket);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Failed to delete support ticket');
+    }
+  }
+
+  /**
+   * Get dashboard overview data
+   * @returns Dashboard overview data
+   */
+  async getDashboardOverview(): Promise<any> {
+    try {
+      // Get ticket statistics
+      const stats = await this.getTicketStats();
+
+      // Get recent tickets
+      const recentTickets = await this.supportTicketsRepository.find({
+        relations: ['user'],
+        order: { created_at: 'DESC' },
+        take: 5,
+      });
+
+      // Get open high priority tickets
+      const highPriorityTickets = await this.supportTicketsRepository.find({
+        where: {
+          priority: In([TicketPriority.HIGH, TicketPriority.URGENT]),
+          status: Not(In([TicketStatus.RESOLVED, TicketStatus.CLOSED])),
+        },
+        relations: ['user'],
+        order: { created_at: 'DESC' },
+        take: 5,
+      });
+
+      // Calculate average resolution time
+      const resolvedTickets = await this.supportTicketsRepository.find({
+        where: {
+          status: In([TicketStatus.RESOLVED, TicketStatus.CLOSED]),
+          resolved_at: Not(IsNull()),
+        },
+      });
+
+      let avgResolutionTime = 0;
+      if (resolvedTickets.length > 0) {
+        const totalResolutionTime = resolvedTickets.reduce((sum, ticket) => {
+          const createdAt = new Date(ticket.created_at).getTime();
+          const resolvedAt = new Date(ticket.resolved_at).getTime();
+          return sum + (resolvedAt - createdAt);
+        }, 0);
+        
+        // Average time in hours
+        avgResolutionTime = totalResolutionTime / resolvedTickets.length / (1000 * 60 * 60);
+      }
+
+      return {
+        stats,
+        recent_tickets: recentTickets.map(ticket => this.mapToTicketDto(ticket)),
+        high_priority_tickets: highPriorityTickets.map(ticket => this.mapToTicketDto(ticket)),
+        avg_resolution_time: `${avgResolutionTime.toFixed(2)} hours`,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to get dashboard overview');
+    }
+  }
+
+  /**
+   * Notify administrators about a new ticket response
+   * @param ticket The support ticket
+   * @param response The ticket response
+   */
+  async notifyAdminsAboutResponse(ticket: SupportTicket, response: SupportTicketResponse): Promise<void> {
+    try {
+      // If ticket is assigned to an admin, notify only that admin
+      if (ticket.assigned_to) {
+        const admin = await this.usersService.findOne(ticket.assigned_to);
+        if (admin) {
+          // TODO: Implement email notification to the assigned admin
+          // await this.emailService.sendAdminResponseNotification(admin.email, ticket, response);
+        }
+      } else {
+        // Notify all admins
+        // TODO: Implement notifying all admins (e.g., through a notification system)
+        // const admins = await this.usersService.findAllByRole(Role.ADMIN);
+        // admins.forEach(async (admin) => {
+        //   await this.emailService.sendAdminResponseNotification(admin.email, ticket, response);
+        // });
+      }
+    } catch (error) {
+      this.logger.error(`Failed to notify admins about response: ${error.message}`, error.stack);
     }
   }
 }

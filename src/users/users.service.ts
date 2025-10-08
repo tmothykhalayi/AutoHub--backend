@@ -301,6 +301,31 @@ export class UsersService {
     }
   }
 
+  /**
+   * Find user by userId
+   * @param userId User ID
+   * @returns User entity
+   */
+  async findByUserId(userId: string): Promise<User> {
+    try {
+      const user = await this.usersRepository.findOne({
+        where: { id: userId },
+        relations: ['authentication'],
+      });
+
+      if (!user) {
+        throw new NotFoundException(`User with ID ${userId} not found`);
+      }
+
+      return user;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Failed to fetch user by ID');
+    }
+  }
+
   async verifyEmail(userId: string): Promise<UserResponseDto> {
     try {
       const user = await this.usersRepository.findOne({

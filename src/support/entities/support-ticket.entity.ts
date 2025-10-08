@@ -44,6 +44,9 @@ export class SupportTicket {
   @Column()
   subject: string;
 
+  @OneToMany(() => SupportTicketResponse, response => response.ticket)
+  responses: SupportTicketResponse[];
+
   @Column('text')
   description: string;
 
@@ -85,6 +88,9 @@ export class SupportTicket {
 
   @Column({ nullable: true })
   resolved_at: Date;
+  
+  @Column({ nullable: true })
+  due_date: Date;
 
   @CreateDateColumn()
   created_at: Date;

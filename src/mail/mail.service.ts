@@ -188,4 +188,33 @@ export class MailService {
       throw error;
     }
   }
+
+  /**
+   * Send a notification email when there's a new response to a support ticket
+   * @param email Recipient email address
+   * @param ticket Support ticket
+   * @param response Ticket response
+   */
+  async sendTicketResponse(email: string, ticket: any, response: any): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        subject: `New Response to Ticket #${ticket.ticket_id}: ${ticket.subject}`,
+        template: 'ticket-response',
+        context: {
+          name: ticket.user.full_name || 'User',
+          ticketId: ticket.ticket_id,
+          subject: ticket.subject,
+          message: response.message,
+          responseDate: new Date().toLocaleDateString(),
+          isAdminResponse: response.response_type === 'admin',
+          ticketUrl: `${process.env.CLIENT_URL}/support/tickets/${ticket.ticket_id}`,
+        },
+      });
+      this.logger.log(`Ticket response notification sent to ${email}`);
+    } catch (error) {
+      this.logger.error(`Failed to send ticket response notification to ${email}`, error.stack);
+      throw error;
+    }
+  }
 }
