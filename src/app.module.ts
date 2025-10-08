@@ -7,10 +7,10 @@ import { BookingsModule } from './bookings/bookings.module';
 import { PaymentsModule } from './payments/payments.module';
 import { LocationsModule } from './locations/locations.module';
 import { SupportModule } from './support/support.module';
-import { FleetModule } from './fleet/fleet.module';
+//mport { FleetModule } from './fleet/fleet.module';
 import { MailModule } from './mail/mail.module';
 import { AuthModule } from './auth/auth.module';
-import { VehicleCategoryModule } from './vehicle-category/vehicle-category.module';
+//import { VehicleCategoryModule } from './vehicle-category/vehicle-category.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
@@ -32,10 +32,8 @@ import { LogsModule } from './logs/logs.module';
     PaymentsModule, 
     LocationsModule, 
     SupportModule, 
-    FleetModule, 
     MailModule, 
-    AuthModule, 
-    VehicleCategoryModule
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
