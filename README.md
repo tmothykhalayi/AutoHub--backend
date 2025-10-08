@@ -1,147 +1,557 @@
-# AutoHub - Vehicle Rental Management System
-
 <p align="center">
-  <img src="https://img.shields.io/badge/React-18.2.0-61dafb?logo=react&logoColor=white" alt="React" />
-  <img src="https://img.shields.io/badge/TypeScript-5.0-3178c6?logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/NestJS-10.0-e0234e?logo=nestjs&logoColor=white" alt="NestJS" />
-  <img src="https://img.shields.io/badge/PostgreSQL-15.0-336791?logo=postgresql&logoColor=white" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/TanStack_Router-Latest-ff4154?logo=react&logoColor=white" alt="TanStack Router" />
-  <img src="https://img.shields.io/badge/Vite-5.0-646cff?logo=vite&logoColor=white" alt="Vite" />
+  <h1>AutoHub Backend - Vehicle Rental Management System</h1>
 </p>
 
-Welcome to AutoHub - A comprehensive vehicle rental management system featuring a modern React frontend and a robust NestJS backend.
+<p align="center">
+  <img src="https://img.shields.io/badge/NestJS-10.0-e0234e?logo=nestjs&logoColor=white" alt="NestJS" />
+  <img src="https://img.shields.io/badge/TypeScript-5.0-3178c6?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/PostgreSQL-15.0-336791?logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/TypeORM-0.3-orange?logo=typeorm&logoColor=white" alt="TypeORM" />
+  <img src="https://img.shields.io/badge/Stripe-8.0-635bff?logo=stripe&logoColor=white" alt="Stripe" />
+  <img src="https://img.shields.io/badge/JWT-Authentication-black?logo=jsonwebtokens" alt="JWT" />
+</p>
 
 ## 📋 Table of Contents
-
-- [System Overview](#-system-overview)
-- [System Features](#-system-features)
-- [Technologies](#-technologies)
-- [System Workflows](#-system-workflows)
-- [License](#-license)
+- [System Overview](#system-overview)
+- [Architecture](#architecture)
+- [Backend Features](#backend-features)
+- [Installation](#installation)
+- [API Documentation](#api-documentation)
+- [Database Schema](#database-schema)
+- [Authentication](#authentication)
+- [Payment Processing](#payment-processing)
+- [Email Notifications](#email-notifications)
+- [Testing](#testing)
+- [Deployment](#deployment)
 
 ## 🏢 System Overview
+AutoHub Backend is a comprehensive NestJS-based API that powers a modern vehicle rental management system. It provides robust, scalable, and secure backend services for managing vehicle rentals, user accounts, payments, and administrative functions.
 
-AutoHub is a full-stack application designed to efficiently manage vehicle rentals. The system provides an intuitive interface for customers to browse vehicles, make bookings, and manage rentals, while offering powerful administrative tools for fleet management, user administration, and business analytics.
+### Key Technologies:
+- **Framework**: NestJS 10.x with TypeScript
+- **Database**: PostgreSQL with TypeORM
+- **Authentication**: JWT with secure password hashing
+- **Payments**: Stripe integration
+- **Notifications**: NodeMailer for email services
+- **Validation**: Class validator and Zod
+- **API Documentation**: Swagger/OpenAPI
 
-The application consists of two main parts:
-- **Frontend**: React-based client application with TypeScript and TanStack Router
-- **Backend**: NestJS-based RESTful API with PostgreSQL database
+## 🏗️ Architecture
+### Module Structure
+```
+src/
+├── main.ts                      # Application entry point
+├── app.module.ts                # Root application module
+├── common/                      # Shared utilities and decorators
+│   ├── decorators/              # Custom decorators
+│   ├── filters/                 # Exception filters
+│   ├── interceptors/            # Response interceptors
+│   └── middleware/              # Custom middleware
+├── config/                      # Configuration management
+├── modules/                     # Feature modules
+│   ├── auth/                    # Authentication & authorization
+│   ├── users/                   # User management
+│   ├── vehicles/                # Vehicle inventory management
+│   ├── bookings/                # Booking reservations
+│   ├── payments/                # Payment processing
+│   ├── locations/               # Branch locations
+│   ├── support/                 # Customer support tickets
+│   └── fleet/                   # Fleet management
+├── database/                    # Database configuration
+│   ├── typeorm.config.ts        # TypeORM configuration
+│   ├── entities/                # Entity definitions
+│   └── migrations/              # Database migrations
+└── shared/                      # Shared resources
+    ├── dto/                     # Data transfer objects
+    ├── interfaces/              # TypeScript interfaces
+    └── types/                   # Common types
+```
 
-## ✨ System Features
+## ✨ Backend Features
 
-### Customer Portal
+### 🔐 Authentication Module
+- JWT-based authentication system
+- Role-based access control (User/Admin)
+- Secure password hashing with bcrypt
+- Refresh token mechanism
+- Guard protected routes
 
-#### Vehicle Management
-- **Interactive Vehicle Catalog**: Browse vehicles with high-quality images and detailed specifications
-- **Advanced Filtering System**: Filter vehicles by type, manufacturer, model, price range, features, and availability
-- **Vehicle Comparison**: Compare multiple vehicles side by side to make informed decisions
-- **Availability Calendar**: Real-time vehicle availability displayed in an interactive calendar
-- **Vehicle Reviews**: Customer reviews and ratings for each vehicle
+### 👥 Users Module
+- User registration and profile management
+- CRUD operations for user accounts
+- Admin user management capabilities
+- Profile update functionality
 
-#### Booking System
-- **Streamlined Booking Process**: Easy-to-use booking wizard with step-by-step guidance
-- **Flexible Date Selection**: Interactive date picker with availability highlighting
-- **Multiple Location Support**: Options for pickup and drop-off at different locations
-- **Add-on Services**: Selection of additional services (insurance, GPS, child seats, etc.)
-- **Real-time Pricing**: Dynamic pricing calculation based on duration and selected options
+### 🚗 Vehicles Module
+- Complete vehicle inventory management
+- Advanced filtering and search capabilities
+- Availability checking based on bookings
+- Vehicle specifications management
+- Rental rate configuration
 
-#### User Account Management
-- **Personalized User Dashboard**: Overview of past, current, and upcoming bookings
-- **Profile Management**: Update personal information, preferences, and payment methods
-- **Booking History**: Complete history with detailed information on past rentals
-- **Document Storage**: Upload and store driving licenses and identification documents
-- **Favorites System**: Save favorite vehicles for quick access in future visits
+### 📅 Bookings Module
+- Booking creation with date validation
+- Rental duration calculation
+- Automatic total amount computation
+- Booking status management (Pending, Confirmed, Completed, Cancelled)
+- Conflict detection for overlapping bookings
 
-#### Payment Processing
-- **Secure Payment Gateway**: PCI-compliant payment processing through Stripe
-- **Multiple Payment Options**: Credit/debit cards, digital wallets, and direct bank transfers
-- **Booking Deposit System**: Option for partial payment with security deposit
-- **Digital Receipts**: Automated email receipts for all transactions
-- **Flexible Cancellation**: Tiered cancellation policy with automatic refund processing
+### 💳 Payments Module
+- Stripe integration for payment processing
+- Payment intent creation
+- Webhook handling for payment confirmation
+- Payment status management
+- Transaction history
 
-#### Customer Support
-- **In-app Support Chat**: Real-time assistance through integrated chat system
-- **Support Ticket System**: Create and track support requests
-- **FAQ Knowledge Base**: Comprehensive self-service support resources
-- **Notification System**: SMS and email alerts for booking confirmations, reminders, and changes
-- **Feedback Mechanism**: Post-rental surveys to gather customer feedback
+### 🏢 Locations Module
+- Rental branch management
+- Location-based vehicle availability
+- Contact information management
 
-### Administration Portal
+### 🛠️ Support Module
+- Customer support ticket system
+- Ticket status tracking
+- Admin response management
 
-#### Dashboard & Analytics
-- **Business Intelligence Dashboard**: Real-time overview of key performance metrics
-- **Booking Analytics**: Detailed booking patterns, trends, and forecasts
-- **Revenue Reports**: Comprehensive financial reporting with breakdown by vehicle type, location, and time period
-- **Fleet Utilization Metrics**: Analytics on vehicle usage, idle time, and optimization opportunities
-- **Customer Insights**: User behavior analysis and demographic reporting
+### 🚛 Fleet Management Module
+- Vehicle acquisition tracking
+- Maintenance scheduling
+- Depreciation calculation
+- Fleet status monitoring
 
-#### Vehicle Fleet Management
-- **Centralized Inventory Control**: Complete fleet management with status tracking
-- **Maintenance Scheduling**: Automated maintenance reminders based on mileage or time intervals
-- **Vehicle Lifecycle Management**: Track acquisition, depreciation, and disposal
-- **Cost Analysis**: Monitor operating costs, maintenance expenses, and revenue per vehicle
-- **Location Management**: Track and manage vehicles across multiple locations
+### 📧 Email Services Module
+- Transactional emails for account verification
+- Booking confirmation notifications
+- Payment receipt delivery
+- Password reset instructions
+- Customized email templates
+- Email scheduling and queuing
 
-#### Reservation Management
-- **Comprehensive Booking Overview**: All reservations with filtering and search capabilities
-- **Calendar View**: Visual booking calendar with drag-and-drop functionality
-- **Conflict Resolution**: Tools to identify and resolve booking conflicts
-- **Bulk Operations**: Process multiple bookings simultaneously
-- **Custom Pricing Rules**: Set special rates, discounts, and seasonal pricing
+## 🚀 Installation
 
-#### User Administration
-- **User Management Console**: Manage customer accounts and staff permissions
-- **Role-based Access Control**: Granular permission settings for different staff roles
-- **User Verification System**: ID verification workflow for new customers
-- **Activity Logging**: Track user and admin actions for security and auditing
-- **Customer Communication Tools**: Direct messaging and email templates
+### Prerequisites
+- Node.js 18.0 or higher
+- PostgreSQL 12.0 or higher
+- pnpm package manager
 
-#### Financial Operations
-- **Automated Billing System**: Generate invoices and process payments automatically
-- **Revenue Management**: Tools for optimizing pricing and maximizing revenue
-- **Expense Tracking**: Monitor operational costs and vendor payments
-- **Financial Reporting**: Generate detailed financial statements and tax reports
-- **Accounting Integration**: Connect with popular accounting software
+### Step-by-Step Setup
+1. Clone the repository
+```bash
+git clone https://github.com/tmothykhalayi/AutoHub.git
+cd AutoHub/Server
+```
 
-#### System Configuration
-- **White-label Customization**: Brand customization options for franchise operations
-- **Email Template Editor**: Customize all system email communications
-- **Policy Management**: Configure rental policies, terms, and conditions
-- **Multi-language Support**: Localization options for international operations
-- **System Backup**: Automated backup and recovery procedures
+2. Install dependencies
+```bash
+pnpm install
+```
 
-## 🔧 Technologies
+3. Environment configuration
+```bash
+cp .env.example .env
+```
 
-### Frontend
-- React 18.x with TypeScript
-- TanStack Router for type-safe routing
-- Vite for fast development and building
-- Redux Toolkit with RTK Query for state management
-- Tailwind CSS for styling
-- React Hook Form with Zod validation
+Edit the .env file with your configuration:
+```env
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/autohub"
 
-### Backend
-- NestJS 10.x with TypeScript
-- PostgreSQL with TypeORM for database management
-- JWT for authentication and authorization
-- Stripe for payment processing
-- NodeMailer for email notifications
-- Swagger/OpenAPI for API documentation
+# JWT
+JWT_SECRET="your-super-secret-jwt-key-at-least-32-characters"
+JWT_EXPIRES_IN="7d"
+REFRESH_TOKEN_EXPIRES_IN="30d"
 
-## 📄 License
+# Stripe
+STRIPE_SECRET_KEY="sk_test_your-stripe-secret-key"
+STRIPE_WEBHOOK_SECRET="whsec_your-webhook-secret"
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+# Email Configuration
+EMAIL_HOST="smtp.example.com"
+EMAIL_PORT=587
+EMAIL_USER="your-email@example.com"
+EMAIL_PASSWORD="your-email-password"
+EMAIL_FROM="AutoHub <noreply@autohub.com>"
+EMAIL_SECURE=false
 
----
+# Application
+PORT=3001
+NODE_ENV=development
+CORS_ORIGIN="http://localhost:3000"
+```
 
-AutoHub - A comprehensive vehicle rental management system with React frontend and NestJS backend.
+4. Database setup
+```bash
+# Create database (ensure PostgreSQL is running)
+createdb autohub
 
-## 📊 System Workflows
+# Run TypeORM migrations
+pnpm run typeorm:migration:run
 
-### Admin User Flow
-![Admin Workflow Diagram](Adminflow.png)
-*This diagram illustrates the administrative user journey, showing the key interactions and processes for system administrators.*
+# Seed with sample data (optional)
+pnpm run seed
+```
 
-### Customer User Flow
-![Customer Workflow Diagram](customerflow.png)
-*This diagram shows the complete customer journey from registration to booking completion, highlighting the intuitive user experience.*
+5. Start the development server
+```bash
+# development
+pnpm run start
+
+# watch mode
+pnpm run start:dev
+
+# production mode
+pnpm run start:prod
+```
+
+The API will be available at http://localhost:3001
+
+## 📖 API Documentation
+
+### Interactive API Docs
+Once the server is running, access the auto-generated Swagger documentation at:
+```
+http://localhost:3001/api
+```
+
+### API Endpoints Overview
+
+#### Authentication Endpoints
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `POST /auth/logout` - User logout
+- `GET /auth/profile` - Get current user profile
+- `POST /auth/refresh` - Refresh access token
+- `POST /auth/forgot-password` - Request password reset
+- `POST /auth/reset-password` - Reset password with token
+
+#### Users Endpoints
+- `GET /users` - Get all users (Admin only)
+- `GET /users/:id` - Get user by ID
+- `PUT /users/:id` - Update user profile
+- `DELETE /users/:id` - Delete user (Admin only)
+
+#### Vehicles Endpoints
+- `GET /vehicles` - Get all vehicles with filtering
+- `GET /vehicles/:id` - Get vehicle by ID
+- `POST /vehicles` - Create new vehicle (Admin only)
+- `PUT /vehicles/:id` - Update vehicle (Admin only)
+- `DELETE /vehicles/:id` - Delete vehicle (Admin only)
+- `GET /vehicles/:id/availability` - Check vehicle availability
+
+#### Bookings Endpoints
+- `GET /bookings` - Get user's bookings
+- `POST /bookings` - Create new booking
+- `GET /bookings/:id` - Get booking details
+- `PUT /bookings/:id` - Update booking
+- `DELETE /bookings/:id` - Cancel booking
+- `GET /bookings/user/:userId` - Get bookings by user (Admin only)
+
+#### Payments Endpoints
+- `POST /payments/create-intent` - Create payment intent
+- `POST /payments/confirm` - Confirm payment
+- `GET /payments/:id` - Get payment details
+- `POST /payments/webhook` - Stripe webhook handler
+
+#### Admin Endpoints
+- `GET /admin/dashboard` - Admin dashboard statistics
+- `GET /admin/reports/bookings` - Booking reports
+- `GET /admin/reports/revenue` - Revenue reports
+- `GET /admin/support/tickets` - Support tickets management
+
+## 📊 Database Schema
+
+### Entity Relationships
+The database uses TypeORM to manage the following entities:
+
+```
+User Entity
+  ├── one-to-many → Bookings
+  └── one-to-many → Payments
+
+Vehicle Entity
+  ├── many-to-one → VehicleCategory
+  ├── one-to-many → Bookings
+  └── many-to-one → Location
+
+Booking Entity
+  ├── many-to-one → User
+  ├── many-to-one → Vehicle
+  └── one-to-one → Payment
+
+Payment Entity
+  ├── many-to-one → User
+  └── one-to-one → Booking
+
+Location Entity
+  └── one-to-many → Vehicles
+
+VehicleCategory Entity
+  └── one-to-many → Vehicles
+
+SupportTicket Entity
+  └── many-to-one → User
+```
+
+### Key TypeORM Entities
+
+```typescript
+// User Entity Example
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column({ default: 'user' })
+  role: 'user' | 'admin';
+
+  @Column({ nullable: true })
+  refreshToken: string;
+
+  @OneToMany(() => Booking, booking => booking.user)
+  bookings: Booking[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
+```
+
+## 🔐 Authentication System
+
+### JWT Implementation
+The authentication system uses JSON Web Tokens for secure stateless authentication:
+
+```typescript
+// Token payload structure
+interface JwtPayload {
+  userId: string;
+  email: string;
+  role: 'user' | 'admin';
+  iat?: number;
+  exp?: number;
+}
+```
+
+### Password Security
+- Passwords are hashed using bcrypt with salt rounds = 12
+- No plain text passwords are stored in the database
+- Password reset tokens are securely generated and hashed
+
+### Role-Based Access Control
+- User role: Can access personal bookings, profile management
+- Admin role: Full system access including user management, reports, and vehicle management
+
+## 💳 Payment Processing
+
+### Stripe Integration
+The system integrates with Stripe for secure payment processing:
+
+- Payment Intent Creation: When a booking is created
+- Client-Side Confirmation: Frontend confirms payment with Stripe Elements
+- Webhook Handling: Server listens for payment confirmation events
+- Booking Confirmation: Upon successful payment, booking status is updated
+
+## 📧 Email Notifications
+
+### NodeMailer Integration
+The system uses NodeMailer for sending transactional emails:
+
+```typescript
+// Email service implementation
+@Injectable()
+export class EmailService {
+  private readonly transporter: nodemailer.Transporter;
+
+  constructor(
+    private configService: ConfigService,
+  ) {
+    this.transporter = nodemailer.createTransport({
+      host: this.configService.get('EMAIL_HOST'),
+      port: this.configService.get('EMAIL_PORT'),
+      secure: this.configService.get('EMAIL_SECURE') === 'true',
+      auth: {
+        user: this.configService.get('EMAIL_USER'),
+        pass: this.configService.get('EMAIL_PASSWORD'),
+      },
+    });
+  }
+
+  async sendEmail(options: {
+    to: string;
+    subject: string;
+    template: string;
+    context: Record<string, any>;
+  }): Promise<void> {
+    // Email sending implementation
+  }
+}
+```
+
+### Email Templates
+The system includes pre-built templates for common notifications:
+
+- Welcome emails for new users
+- Booking confirmations with details
+- Payment receipts
+- Rental reminders
+- Return confirmations
+- Password reset instructions
+- Account verification links
+
+### Email Queue System
+To ensure reliable email delivery, the system implements a queue:
+
+- Failed email retry mechanism
+- Rate limiting to prevent spam detection
+- Email analytics and tracking
+- Scheduled emails for reminders
+
+## 🧪 Testing
+
+### Test Structure
+```
+test/
+├── e2e/                 # End-to-end tests
+├── integration/         # Integration tests
+├── unit/                # Unit tests
+└── jest.config.js       # Jest configuration
+```
+```bash
+# Run all tests
+pnpm run test
+
+# Run tests with coverage
+pnpm run test:cov
+
+# Run e2e tests
+pnpm run test:e2e
+
+# Run specific test file
+pnpm run test -- vehicles.service.spec.ts
+```
+
+### Test Coverage
+The project aims for 80%+ test coverage including:
+- Service layer unit tests
+- Controller endpoint tests
+- Database operation tests
+- Authentication flow tests
+- Payment processing tests
+
+## 🚀 Deployment
+
+### Production Environment Setup
+Environment Variables for production:
+
+```env
+NODE_ENV=production
+DATABASE_URL="postgresql://user:pass@production-db:5432/autohub"
+JWT_SECRET="strong-production-secret-minimum-32-chars"
+STRIPE_SECRET_KEY="sk_live_..."
+EMAIL_HOST="smtp.example.com"
+EMAIL_PORT=587
+EMAIL_USER="your-email@example.com"
+EMAIL_PASSWORD="your-email-password"
+EMAIL_FROM="AutoHub <noreply@autohub.com>"
+```
+
+Build the application:
+```bash
+pnpm run build
+```
+
+Start production server:
+```bash
+pnpm run start:prod
+```
+
+### Deployment to Render
+
+1. Create a new Web Service in your Render dashboard
+
+2. Connect your GitHub repository
+
+3. Configure the service:
+   - **Name**: autohub-api
+   - **Runtime**: Node
+   - **Build Command**: `pnpm install && pnpm run build`
+   - **Start Command**: `pnpm run start:prod`
+   - **Environment Variables**: Add all required environment variables as listed above
+
+4. Add a PostgreSQL database:
+   - Create a new PostgreSQL instance in Render
+   - Connect it to your web service
+   - Render will automatically add the `DATABASE_URL` environment variable
+
+5. Configure CORS:
+   - Add the `CORS_ORIGIN` environment variable with your frontend URL
+
+6. Deploy the service:
+   - Click "Create Web Service"
+   - The deployment will begin automatically
+
+7. Set up a custom domain (optional):
+   - Go to your service settings
+   - Click on "Custom Domain"
+   - Follow the instructions to connect your domain
+
+### Docker Deployment
+```dockerfile
+# Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN pnpm install --frozen-lockfile --prod
+
+COPY dist/ ./dist/
+COPY .env ./
+
+EXPOSE 3001
+
+USER node
+
+CMD ["node", "dist/src/main.js"]
+```
+
+### Deployment to Azure
+
+For Azure deployment options:
+
+```bash
+# Install Azure CLI if not already installed
+pnpm install -g azure-cli
+
+# Login to Azure
+az login
+
+# Create a resource group
+az group create --name AutoHubResourceGroup --location eastus
+
+# Create an App Service plan
+az appservice plan create --name AutoHubPlan --resource-group AutoHubResourceGroup --sku B1
+
+# Create a web app
+az webapp create --name autohub-api --resource-group AutoHubResourceGroup --plan AutoHubPlan
+```
+
+## License
+
+This project is licensed under the MIT License.
+
+
