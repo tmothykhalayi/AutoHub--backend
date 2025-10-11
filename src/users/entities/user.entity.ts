@@ -1,127 +1,59 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToOne,
-  OneToMany,
-  BeforeInsert,
-  BeforeUpdate
-} from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Booking } from './booking.entity';
+import { Payment } from './payment.entity';
+import { Support } from './support.entity';
 
-import { Booking } from '../../bookings/entities/booking.entity';
-import { Payment } from '../../payments/entities/payment.entity';
-import { Support } from '../../support/entities/support.entity';
-import { Role } from '../../auth/enums/role.enum';
-
-// For backward compatibility
-export const UserRole = Role;
-
-@Entity('users')
+@Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
-  full_name: string;
+  @Column()
+  firstName: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true, nullable: false })
+  @Column()
+  lastName: string;
+
+  @Column({ unique: true })
   email: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  @Exclude()
+  @Column()
   password: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: true })
-  contact_phone: string;
+  @Column({ nullable: true })
+  phone: string;
 
-  @Column({ type: 'text', nullable: true })
-  address: string;
+  @Column({ default: 'customer' })
+  role: string;
 
-  @Column({ type: 'enum', enum: Role, default: Role.USER })
-  role: Role;
-
-  @Column({ type: 'boolean', default: true })
-  is_active: boolean;
-
-  @Column({ type: 'boolean', default: false })
-  email_verified: boolean;
-
-  @Column({ type: 'timestamp', nullable: true })
-  last_login: Date;
-  
-  @Column({ type: 'varchar', nullable: true })
-  otp: string;
-  
-  @Column({ type: 'varchar', nullable: true })
-  secret: string;
-  
-  @Column({ type: 'timestamp', nullable: true })
-  otpExpiry: Date;
-  
-  @Column({ type: 'varchar', nullable: true })
-  hashedRefreshToken: string;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
-
-  // Relationships
-  // @OneToOne(() => Authentication, auth => auth.user, {
-  //   cascade: true,
-  //   onDelete: 'CASCADE'
-  // })
-  // authentication: Authentication;
-
-  @OneToMany(() => Booking, booking => booking.user, {
-    onDelete: 'SET NULL'
-  })
+  @OneToMany(() => Booking, booking => booking.user)
   bookings: Booking[];
 
-  @OneToMany(() => Payment, payment => payment.user, {
-    onDelete: 'SET NULL'
-  })
+  @OneToMany(() => Payment, payment => payment.user)
   payments: Payment[];
 
-  @OneToMany(() => Support, ticket => ticket.user, {
-    onDelete: 'SET NULL'
-  })
-  support_tickets: Support[];
+  @OneToMany(() => Support, support => support.user)
+  supportTickets: Support[];
 
-  // Hooks
-  @BeforeInsert()
-  @BeforeUpdate()
-  validateEmail(): void {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.email)) {
-      throw new Error('Invalid email format');
-    }
-  }
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @BeforeInsert()
-  setCreateDate(): void {
-    this.created_at = new Date();
-  }
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
 
-  @BeforeUpdate()
-  setUpdateDate(): void {
-    this.updated_at = new Date();
-  }
 
-  // Methods
-  getFullName(): string {
-    return this.full_name;
-  }
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  isAdmin(): boolean {
-    return this.role === Role.ADMIN;
-  }
+  @OneToMany(() => Booking, booking => booking.user)
+  bookings: Booking[];
 
-  canRentVehicle(): boolean {
-    return this.is_active && this.email_verified;
-  }
+  @OneToMany(() => Payment, payment => payment.user)
+  payments: Payment[];
+
+  @OneToMany(() => Support, support => support.user)
+  supportTickets: Support[];
 }

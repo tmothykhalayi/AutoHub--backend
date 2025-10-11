@@ -1,40 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { VehiclesModule } from './vehicles/vehicles.module';
+import { VehicleModule } from './vehicle/vehicle.module';
+import { VehicleSpecModule } from './vehicle-spec/vehicle-spec.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { PaymentsModule } from './payments/payments.module';
-import { LocationsModule } from './locations/locations.module';
+import { FleetManagementModule } from './fleet-management/fleet-management.module';
 import { SupportModule } from './support/support.module';
-//mport { FleetModule } from './fleet/fleet.module';
-import { MailModule } from './mail/mail.module';
-import { AuthModule } from './auth/auth.module';
-//import { VehicleCategoryModule } from './vehicle-category/vehicle-category.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
-import { LoggerMiddleware } from  './logger.middleware';
-import { AllExceptionsFilter } from './http-exception.filter';
-import { LogsModule } from './logs/logs.module';
+import { BranchesModule } from './branches/branches.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-    DatabaseModule,
-    LogsModule,
-    UsersModule, 
-    VehiclesModule, 
-    BookingsModule, 
-    PaymentsModule, 
-    LocationsModule, 
-    SupportModule, 
-    MailModule, 
-    AuthModule
-  ],
+  imports: [AuthModule, UsersModule, VehicleModule, VehicleSpecModule, BookingsModule, PaymentsModule, FleetManagementModule, SupportModule, BranchesModule],
   controllers: [AppController],
   providers: [AppService],
 })

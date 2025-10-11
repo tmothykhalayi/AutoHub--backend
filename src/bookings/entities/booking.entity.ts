@@ -1,89 +1,40 @@
-import { 
-  Entity, 
-  PrimaryGeneratedColumn, 
-  Column, 
-  ManyToOne, 
-  OneToOne, 
-  JoinColumn,
-  CreateDateColumn,
-  UpdateDateColumn 
-} from 'typeorm';
-import { Vehicle } from '../../vehicles/entities/vehicle.entity';
-import { Payment } from '../../payments/entities/payment.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Location } from '../../locations/entities/location.entity';
+import { Vehicle } from '../../vehicle/entities/vehicle.entity';
+import { Payment } from '../../payments/entities/payment.entity';
 
-export enum BookingStatus {
-  PENDING = 'pending',
-  CONFIRMED = 'confirmed',
-  ACTIVE = 'active',
-  COMPLETED = 'completed',
-  CANCELLED = 'cancelled'
-}
-
-@Entity('bookings')
+@Entity()
 export class Booking {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;  // Use this as your primary key
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({
-    type: 'enum',
-    enum: BookingStatus,
-    default: BookingStatus.PENDING,
-  })
-  booking_status: BookingStatus;
-
-  @Column({ type: 'timestamp' })
-  booking_date: Date;
-
-  @Column({ type: 'timestamp' })
-  return_date: Date;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  total_amount: number;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
-
-  @Column({ type: 'text', nullable: true })
-  special_requests?: string;
-
-  @Column({ type: 'text', nullable: true })
-  cancellation_reason?: string;
-
-  @Column({ type: 'text', nullable: true })
-  admin_notes?: string;
-
-  @Column({ type: 'text', nullable: true })
-  additional_drivers?: string;
-
-  // Foreign keys columns
-  @Column({ type: 'uuid' })
-  user_id: string;
-
-  @Column({ type: 'uuid' })
-  vehicle_id: string;
-
-  @Column({ type: 'uuid' })
-  location_id: string;
-
-  // Relationships
-  @ManyToOne(() => User, (user) => user.bookings)
-  @JoinColumn({ name: 'user_id' })
+  @ManyToOne(() => User, user => user.bookings)
   user: User;
 
-  @ManyToOne(() => Vehicle, (vehicle) => vehicle.bookings)
-  @JoinColumn({ name: 'vehicle_id' })
+  @ManyToOne(() => Vehicle, vehicle => vehicle.bookings)
   vehicle: Vehicle;
 
-  @ManyToOne(() => Location, (location) => location.bookings)
-  @JoinColumn({ name: 'location_id' })
-  location: Location;
+  @Column('timestamp')
+  startDate: Date;
 
-  @OneToOne(() => Payment, (payment) => payment.booking)
-  @JoinColumn()
+  @Column('timestamp')
+  endDate: Date;
+
+  @Column({ default: 'confirmed' })
+  status: string;
+
+  @OneToOne(() => Payment, payment => payment.booking)
   payment: Payment;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
 }
+
+
+
+
+

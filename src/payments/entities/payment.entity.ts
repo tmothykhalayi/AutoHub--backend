@@ -1,30 +1,67 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, OneToOne, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
-import { Booking } from '../../bookings/entities/booking.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { User } from './user.entity';
+import { Booking } from './booking.entity';
 
-@Entity('payments')
+@Entity()
 export class Payment {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @OneToOne(() => Booking, booking => booking.payment, { eager: true })
-  booking: Booking;
-
-  @ManyToOne(() => User, user => user.payments, { eager: true })
+  @ManyToOne(() => User, user => user.payments)
   user: User;
+
+  @OneToOne(() => Booking, booking => booking.payment)
+  @JoinColumn()
+  booking: Booking;
 
   @Column('decimal', { precision: 10, scale: 2 })
   amount: number;
 
-  @Column({ type: 'enum', enum: ['pending', 'completed', 'failed'], default: 'pending' })
-  status: 'pending' | 'completed' | 'failed';
-
   @Column()
-  paymentIntentId: string; // Stripe Payment Intent ID
+  paymentMethod: string;
+
+  @Column({ default: 'pending' })
+  status: string;
+
+  @Column({ nullable: true })
+  transactionId: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Entity()
+export class Payment {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToOne(() => User, user => user.payments)
+  user: User;
+
+  @OneToOne(() => Booking, booking => booking.payment)
+  @JoinColumn()
+  booking: Booking;
+
+  @Column()
+  amount: number;
+
+  @Column()
+  status: string; // e.g., "paid", "pending"
 }
