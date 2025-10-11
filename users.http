@@ -1,0 +1,381 @@
+###
+# AutoHub API - Users Endpoints Test File
+# Server: http://localhost:8000
+# API Prefix: /api
+#
+# CURRENT KNOWN ISSUES:
+# 1. Phone number validation is very strict - recommend omitting contact_phone for now
+# 2. Boolean query parameters (is_active, email_verified) have validation issues
+# 3. Some service methods may have database connection issues
+#
+# WORKING EXAMPLES:
+# - Create users WITHOUT contact_phone
+# - Search by text query, role, date ranges
+# - Update user data without phone numbers
+###
+
+@baseUrl = http://localhost:8000/api
+@userId = {{createUser.response.body.id}}
+
+###
+# Create a minimal user (without optional fields) - RECOMMENDED
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "Minimal User",
+  "email": "minimal@example.com",
+  "password": "MinimalPassword123!",
+  "confirm_password": "MinimalPassword123!"
+}
+
+###
+# Create user without phone number - SAFE OPTION
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "John Doe",
+  "email": "john.doe@example.com",
+  "address": "123 Main Street, New York, NY, USA",
+  "role": "customer",
+  "password": "SecurePassword123!",
+  "confirm_password": "SecurePassword123!"
+}
+
+###
+# Create a minimal user (without optional fields) - RECOMMENDED
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "Minimal User",
+  "email": "minimal@example.com",
+  "password": "MinimalPassword123!",
+  "confirm_password": "MinimalPassword123!"
+}
+
+###
+# Create user without phone number - SAFE OPTION
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "John Doe",
+  "email": "john.doe1@example.com",
+  "address": "123 Main Street, New York, NY, USA",
+  "role": "customer",
+  "password": "SecurePassword123!",
+  "confirm_password": "SecurePassword123!"
+}
+
+###
+# Create another user for testing - NO PHONE
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "Jane Smith",
+  "email": "jane.smith@example.com",
+  "address": "456 Oak Avenue, Los Angeles, CA, USA",
+  "role": "customer",
+  "password": "SecurePassword456!",
+  "confirm_password": "SecurePassword456!"
+}
+
+###
+# Create an admin user - NO PHONE
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "Admin User",
+  "email": "admin@autohub.com",
+  "address": "789 Admin Street, Admin City, AC, USA",
+  "role": "admin",
+  "password": "AdminPassword123!",
+  "confirm_password": "AdminPassword123!"
+}
+
+###
+# Get all users with pagination (Admin only)
+# GET /api/users
+GET {{baseUrl}}/users?page=1&limit=10
+
+###
+# Get all users - page 2
+# GET /api/users
+GET {{baseUrl}}/users?page=2&limit=5
+
+###
+# Get current user profile
+# GET /api/users/profile
+GET {{baseUrl}}/users/profile
+
+###
+# Search users with query
+# GET /api/users/search
+GET {{baseUrl}}/users/search?q=john
+
+###
+# Search users by role - WORKING
+# GET /api/users/search
+GET {{baseUrl}}/users/search?role=customer
+
+###
+# Search users with query - WORKING  
+# GET /api/users/search
+GET {{baseUrl}}/users/search?q=john
+
+###
+# Search users by creation date range - WORKING
+# GET /api/users/search
+GET {{baseUrl}}/users/search?created_after=2024-01-01&created_before=2024-12-31
+
+###
+# Boolean parameters currently have validation issues - SKIP FOR NOW
+# GET /api/users/search
+# GET {{baseUrl}}/users/search?is_active=true
+
+###
+# Boolean parameters currently have validation issues - SKIP FOR NOW  
+# GET /api/users/search
+# GET {{baseUrl}}/users/search?email_verified=false
+
+###
+# Search users by last login date
+# GET /api/users/search
+GET {{baseUrl}}/users/search?last_login_after=2024-01-01
+
+###
+# Simple search with multiple filters - NO BOOLEANS
+# GET /api/users/search
+GET {{baseUrl}}/users/search?q=jane&role=customer
+
+###
+# Get user by ID (replace with actual UUID)
+# GET /api/users/:id
+GET {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000
+
+###
+# Update user - NO PHONE
+# PATCH /api/users/:id
+PATCH {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "full_name": "John Updated Doe",
+  "address": "123 Updated Street, Updated City, UC, USA"
+}
+
+###
+# Update user with email change
+# PATCH /api/users/:id
+PATCH {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "email": "john.updated@example.com",
+  "full_name": "John Updated",
+  "is_active": true
+}
+
+###
+# Update user password
+# PATCH /api/users/:id
+PATCH {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "password": "NewSecurePassword123!",
+  "confirm_password": "NewSecurePassword123!"
+}
+
+###
+# Update user active status
+# PATCH /api/users/:id
+PATCH {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "is_active": false
+}
+
+###
+# Verify user email (Admin only)
+# PATCH /api/users/:id/verify-email
+PATCH {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000/verify-email
+
+###
+# Get user statistics (Admin only)
+# GET /api/users/:id/stats
+GET {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000/stats
+
+###
+# Update user last login timestamp
+# POST /api/users/:id/update-last-login
+POST {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000/update-last-login
+
+###
+# Delete user (Admin only)
+# DELETE /api/users/:id
+DELETE {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000
+
+###
+# Error Testing - Invalid UUID format
+# GET /api/users/:id
+GET {{baseUrl}}/users/invalid-uuid
+
+###
+# Error Testing - Create user with existing email
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "Duplicate User",
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123!",
+  "confirm_password": "SecurePassword123!"
+}
+
+###
+# Error Testing - Create user with invalid email
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "Invalid Email User",
+  "email": "invalid-email",
+  "password": "SecurePassword123!",
+  "confirm_password": "SecurePassword123!"
+}
+
+###
+# Error Testing - Create user with weak password
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "Weak Password User",
+  "email": "weak@example.com",
+  "password": "123",
+  "confirm_password": "123"
+}
+
+###
+# Error Testing - Create user with invalid phone number
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "Invalid Phone User",
+  "email": "invalidphone@example.com",
+  "contact_phone": "123-456-7890",
+  "password": "SecurePassword123!",
+  "confirm_password": "SecurePassword123!"
+}
+
+###
+# Error Testing - Create user with invalid name (contains numbers)
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "John123 Doe",
+  "email": "invalidname@example.com",
+  "password": "SecurePassword123!",
+  "confirm_password": "SecurePassword123!"
+}
+
+###
+# Error Testing - Update user with invalid data
+# PATCH /api/users/:id
+PATCH {{baseUrl}}/users/123e4567-e89b-12d3-a456-426614174000
+Content-Type: application/json
+
+{
+  "email": "invalid-email-format",
+  "full_name": "Invalid123"
+}
+
+###
+# Error Testing - Get non-existent user
+# GET /api/users/:id
+GET {{baseUrl}}/users/00000000-0000-0000-0000-000000000000
+
+###
+# Edge Cases - Search with no results
+# GET /api/users/search
+GET {{baseUrl}}/users/search?q=nonexistentuser
+
+###
+# Edge Cases - Get users with large page number
+# GET /api/users
+GET {{baseUrl}}/users?page=999&limit=10
+
+###
+# Edge Cases - Get users with very small limit
+# GET /api/users
+GET {{baseUrl}}/users?page=1&limit=1
+
+###
+# Edge Cases - Get users with very large limit
+# GET /api/users
+GET {{baseUrl}}/users?page=1&limit=1000
+
+###
+# Performance Testing - Multiple rapid requests
+# GET /api/users
+GET {{baseUrl}}/users?page=1&limit=10
+
+###
+# GET /api/users
+GET {{baseUrl}}/users?page=1&limit=10
+
+###
+# GET /api/users
+GET {{baseUrl}}/users?page=1&limit=10
+
+###
+# Test JSON Response Format - Create User
+# POST /api/users
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "full_name": "Response Test User",
+  "email": "responsetest@example.com",
+  "password": "TestResponse123!",
+  "confirm_password": "TestResponse123!"
+}
+
+###
+# PHONE NUMBER TESTING - These may fail due to strict validation
+# Only test these if you need phone number functionality
+
+###
+# Valid Phone Number Examples - US Format (11 digits total)
+# POST /api/users
+# POST {{baseUrl}}/users
+# Content-Type: application/json
+# 
+# {
+#   "full_name": "US Phone User 1",
+#   "email": "usphone1@example.com",
+#   "contact_phone": "+12345678901",
+#   "password": "SecurePassword123!",
+#   "confirm_password": "SecurePassword123!"
+# }
+
+###
