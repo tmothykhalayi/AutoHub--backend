@@ -1,34 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { BranchesService } from './branches.service';
+
+
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { BranchService } from './branches.service';
 import { CreateBranchDto } from './dto/create-branch.dto';
 import { UpdateBranchDto } from './dto/update-branch.dto';
 
 @Controller('branches')
-export class BranchesController {
-  constructor(private readonly branchesService: BranchesService) {}
+export class BranchController {
+  constructor(private readonly branchService: BranchService) {}
 
   @Post()
   create(@Body() createBranchDto: CreateBranchDto) {
-    return this.branchesService.create(createBranchDto);
+    return this.branchService.create(createBranchDto);
   }
 
   @Get()
   findAll() {
-    return this.branchesService.findAll();
+    return this.branchService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.branchesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.branchService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBranchDto: UpdateBranchDto) {
-    return this.branchesService.update(+id, updateBranchDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateBranchDto: UpdateBranchDto) {
+    return this.branchService.update(id, updateBranchDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.branchesService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.branchService.remove(id);
   }
 }

@@ -1,10 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Vehicle } from './vehicle.entity';
-
+import { Vehicle } from './../../vehicle/entities/vehicle.entity';
 @Entity()
 export class VehicleSpec {
+
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToMany(() => Vehicle, vehicle => vehicle.spec)
+  vehicles: Vehicle[];
+
 
   @Column()
   make: string;
@@ -23,10 +27,7 @@ export class VehicleSpec {
 
   @Column()
   fuelType: string;
-
-  @OneToMany(() => Vehicle, vehicle => vehicle.spec)
-  vehicles: Vehicle[];
-
+ 
   @CreateDateColumn()
   createdAt: Date;
 
@@ -36,11 +37,4 @@ export class VehicleSpec {
 
 
 
-@Entity()
-export class VehicleSpec {
-  @PrimaryGeneratedColumn()
-  id: number;
 
-  @OneToMany(() => Vehicle, vehicle => vehicle.spec)
-  vehicles: Vehicle[];
-}

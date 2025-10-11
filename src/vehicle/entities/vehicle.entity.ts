@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Branch } from './branch.entity';
-import { VehicleSpec } from './vehicleSpec.entity';
-import { FleetManagement } from './fleetManagement.entity';
-import { Booking } from './booking.entity';
+import { Branch } from '../../branches/entities/branch.entity';
+import { VehicleSpec } from '../../vehicle-spec/entities/vehicle-spec.entity';
+import { FleetManagement } from '../../fleet-management/entities/fleet-management.entity';
+import { Booking } from '../../bookings/entities/booking.entity';
 
 @Entity()
 export class Vehicle {
@@ -11,6 +11,8 @@ export class Vehicle {
 
   @Column({ unique: true })
   licensePlate: string;
+@Column()
+registrationNumber: string;
 
   @ManyToOne(() => VehicleSpec, spec => spec.vehicles)
   spec: VehicleSpec;
@@ -26,6 +28,9 @@ export class Vehicle {
 
   @Column({ default: 0 })
   mileage: number;
+  
+  @Column({ default: true })
+  isAvailable: boolean;
 
   @OneToMany(() => Booking, booking => booking.vehicle)
   bookings: Booking[];
@@ -35,27 +40,5 @@ export class Vehicle {
 
   @UpdateDateColumn()
   updatedAt: Date;
-}
-
-
-
-
-
-@Entity()
-export class Vehicle {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ManyToOne(() => Branch, branch => branch.vehicles)
-  branch: Branch;
-
-  @ManyToOne(() => VehicleSpec, spec => spec.vehicles)
-  spec: VehicleSpec;
-
-  @OneToMany(() => Booking, booking => booking.vehicle)
-  bookings: Booking[];
-
-  @ManyToOne(() => FleetManagement, fleet => fleet.vehicles)
-fleet: FleetManagement;
 
 }

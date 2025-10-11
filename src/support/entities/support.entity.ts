@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Support {
@@ -8,6 +8,11 @@ export class Support {
 
   @ManyToOne(() => User, user => user.supportTickets)
   user: User;
+
+
+
+  @Column({ default: 'open' })
+  status: string; // "open", "closed", etc.
 
   @Column()
   subject: string;
@@ -15,30 +20,10 @@ export class Support {
   @Column('text')
   message: string;
 
-  @Column({ default: 'open' })
-  status: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-}
-
-@Entity()
-export class Support {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ManyToOne(() => User, user => user.supportTickets)
-  user: User;
-
-  @Column()
-  subject: string;
-
-  @Column()
-  message: string;
-
-  @Column({ default: 'open' })
-  status: string; // "open", "closed", etc.
 }

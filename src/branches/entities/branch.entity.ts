@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Vehicle } from './vehicle.entity';
+import { Vehicle } from '../../vehicle/entities/vehicle.entity';
 
 @Entity()
 export class Branch {
@@ -26,15 +26,4 @@ export class Branch {
 
   @UpdateDateColumn()
   updatedAt: Date;
-}
-
-
-
-@Entity()
-export class Branch {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @OneToMany(() => Vehicle, vehicle => vehicle.branch)
-  vehicles: Vehicle[];
 }

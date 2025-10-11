@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Booking } from './booking.entity';
-import { Payment } from './payment.entity';
-import { Support } from './support.entity';
+import { Booking } from '../../bookings/entities/booking.entity';
+import { Payment } from '../../payments/entities/payment.entity';
+import { Support } from '../../support/entities/support.entity';
 
 @Entity()
 export class User {
@@ -29,11 +29,13 @@ export class User {
   @OneToMany(() => Booking, booking => booking.user)
   bookings: Booking[];
 
+
   @OneToMany(() => Payment, payment => payment.user)
   payments: Payment[];
 
   @OneToMany(() => Support, support => support.user)
   supportTickets: Support[];
+
 
   @CreateDateColumn()
   createdAt: Date;
@@ -42,18 +44,3 @@ export class User {
   updatedAt: Date;
 }
 
-
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @OneToMany(() => Booking, booking => booking.user)
-  bookings: Booking[];
-
-  @OneToMany(() => Payment, payment => payment.user)
-  payments: Payment[];
-
-  @OneToMany(() => Support, support => support.user)
-  supportTickets: Support[];
-}

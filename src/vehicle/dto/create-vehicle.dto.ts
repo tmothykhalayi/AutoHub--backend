@@ -1,5 +1,5 @@
 // create-vehicle.dto.ts
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsBoolean ,IsString } from 'class-validator';
 
 export class CreateVehicleDto {
   @IsNotEmpty()
@@ -9,10 +9,23 @@ export class CreateVehicleDto {
   @IsNotEmpty()
   @IsNumber()
   specId: number;
+  @IsNotEmpty()
+  @IsString()
+  registrationNumber: string;
 
+  
   @IsNotEmpty()
   @IsNumber()
   branchId: number;
+
+  
+
+
+  @IsOptional()
+  @IsBoolean()
+  isAvailable?: boolean; 
+
+
 
   @IsOptional()
   @IsNumber()

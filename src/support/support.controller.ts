@@ -1,4 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+
+
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { SupportService } from './support.service';
 import { CreateSupportDto } from './dto/create-support.dto';
 import { UpdateSupportDto } from './dto/update-support.dto';
@@ -18,17 +20,17 @@ export class SupportController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.supportService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.supportService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSupportDto: UpdateSupportDto) {
-    return this.supportService.update(+id, updateSupportDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateSupportDto: UpdateSupportDto) {
+    return this.supportService.update(id, updateSupportDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.supportService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.supportService.remove(id);
   }
 }

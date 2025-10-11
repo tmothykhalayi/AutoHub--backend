@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { User } from './user.entity';
-import { Booking } from './booking.entity';
+import { User } from '../../users/entities/user.entity';
+import { Booking } from '../../bookings/entities/booking.entity';
 
 @Entity()
 export class Payment {
@@ -19,9 +19,10 @@ export class Payment {
 
   @Column()
   paymentMethod: string;
+  
 
-  @Column({ default: 'pending' })
-  status: string;
+  @Column()
+  status: string; // e.g., "paid", "pending"
 
   @Column({ nullable: true })
   transactionId: string;
@@ -46,22 +47,3 @@ export class Payment {
 
 
 
-
-@Entity()
-export class Payment {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ManyToOne(() => User, user => user.payments)
-  user: User;
-
-  @OneToOne(() => Booking, booking => booking.payment)
-  @JoinColumn()
-  booking: Booking;
-
-  @Column()
-  amount: number;
-
-  @Column()
-  status: string; // e.g., "paid", "pending"
-}

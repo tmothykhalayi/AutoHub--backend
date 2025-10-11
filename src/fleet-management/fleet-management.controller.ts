@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { FleetManagementService } from './fleet-management.service';
 import { CreateFleetManagementDto } from './dto/create-fleet-management.dto';
 import { UpdateFleetManagementDto } from './dto/update-fleet-management.dto';
@@ -18,17 +19,20 @@ export class FleetManagementController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.fleetManagementService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.fleetManagementService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFleetManagementDto: UpdateFleetManagementDto) {
-    return this.fleetManagementService.update(+id, updateFleetManagementDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateFleetManagementDto: UpdateFleetManagementDto,
+  ) {
+    return this.fleetManagementService.update(id, updateFleetManagementDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.fleetManagementService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.fleetManagementService.remove(id);
   }
 }
