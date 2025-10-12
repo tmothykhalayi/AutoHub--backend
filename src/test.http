@@ -1,0 +1,259 @@
+
+##user
+### Create user
+POST http://localhost:8000/users
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com",
+  "password": "SecurePass123",
+  "phone": "+1234567890",
+  "role": "admin"
+}
+
+###
+
+### Get all users
+GET http://localhost:8000/users
+
+###
+
+### Get user by ID
+GET http://localhost:8000/users/1
+
+###
+
+### Update user by ID
+PATCH http://localhost:8000/users/1
+Content-Type: application/json
+
+{
+  "phone": "+9876543210"
+}
+
+###
+
+### Delete user by ID
+DELETE http://localhost:3000/users/1
+
+
+##SUPPORT
+### Create a new support ticket
+POST http://localhost:8000/support
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "subject": "Unable to make a booking",
+  "message": "I'm having trouble booking a vehicle. Please help.",
+  "status": "open"
+}
+
+###
+
+### Get all support tickets
+GET http://localhost:8000/support
+
+###
+
+### Get a support ticket by ID
+GET http://localhost:8000/support/1
+
+###
+
+### Update a support ticket by ID
+PATCH http://localhost:8000/support/1
+Content-Type: application/json
+
+{
+  "status": "resolved"
+}
+
+###
+
+### Delete a support ticket by ID
+DELETE http://localhost:3000/support/1
+
+
+##BRANCH
+### Create a new branch
+POST http://localhost:8000/branches
+Content-Type: application/json
+
+{
+  "name": "Main City Branch",
+  "address": "123 Main Street, Springfield",
+  "phone": "+1234567890",
+  "email": "mainbranch@autohub.com"
+}
+
+###
+
+### Get all branches
+GET http://localhost:8000/branches
+
+###
+
+### Get a branch by ID
+GET http://localhost:8000/branches/1
+
+###
+
+### Update a branch by ID
+PATCH http://localhost:8000/branches/1
+Content-Type: application/json
+
+{
+  "phone": "+1987654321",
+  "address": "456 Updated Ave, Newtown"
+}
+
+###
+
+### Delete a branch by ID
+DELETE http://localhost:3000/branches/1
+
+
+##VEHICLE SPEC
+### Create a new vehicle specification
+POST http://localhost:8000/vehicle-specs
+Content-Type: application/json
+
+{
+  "make": "Toyota",
+  "model": "Corolla",
+  "year": 2022,
+  "seats": 5,
+  "transmission": "Automatic",
+  "fuelType": "Petrol"
+}
+
+###
+
+### Get all vehicle specs
+GET http://localhost:8000/vehicle-specs
+
+###
+
+### Get a vehicle spec by ID
+GET http://localhost:8000/vehicle-specs/1
+
+###
+
+### Update a vehicle spec by ID
+PATCH http://localhost:8000/vehicle-specs/1
+Content-Type: application/json
+
+{
+  "model": "Corolla Hybrid",
+  "fuelType": "Hybrid"
+}
+
+###
+
+### Delete a vehicle spec by ID
+DELETE http://localhost:3000/vehicle-spec/1
+
+
+
+##VEHICLE
+### Create a new vehicle
+POST http://localhost:8000/vehicle
+Content-Type: application/json
+
+{
+  "licensePlate": "ABC-1234",
+  "specId": 1,
+  "registrationNumber": "REG-5678",
+  "branchId": 1,
+  "isAvailable": true,
+  "fleetId": 1,
+  "status": "active",
+  "mileage": 12000
+}
+
+### Get all vehicles
+GET http://localhost:8000/vehicle
+
+### Get a vehicle by ID
+GET http://localhost:8000/vehicle/1
+
+### Update a vehicle
+PATCH http://localhost:8000/vehicle/1
+Content-Type: application/json
+
+{
+  "status": "inactive",
+  "isAvailable": true,
+  "mileage": 13000
+}
+
+### Delete a vehicle
+DELETE http://localhost:8000/vehicle/1
+
+
+
+##FLEET
+### Create a new fleet management record
+POST http://localhost:8000/fleet-management
+Content-Type: application/json
+
+{
+  "managerName": "John Doe",
+  "maintenanceSchedule": "Every Monday",
+  "contactInfo": "john.doe@example.com"
+}
+
+### Get all fleet management records
+GET http://localhost:8000/fleet-management
+
+### Get a fleet management record by ID
+GET http://localhost:8000/fleet-management/1
+
+### Update a fleet management record
+PATCH http://localhost:8000/fleet-management/1
+Content-Type: application/json
+
+{
+  "maintenanceSchedule": "Every Friday",
+  "contactInfo": "manager@example.com"
+}
+
+### Delete a fleet management record
+DELETE http://localhost:8000/fleet-management/1
+
+
+##BOOKING
+### Create a new booking
+POST http://localhost:8000/bookings
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "vehicleId": 1,
+  "startDate": "2025-11-01T10:00:00Z",
+  "endDate": "2025-11-05T10:00:00Z",
+  "status": "confirmed"
+}
+
+### Get all bookings
+GET http://localhost:8000/bookings
+
+### Get a booking by ID
+GET http://localhost:8000/bookings/1
+
+### Update a booking
+PATCH http://localhost:8000/bookings/1
+Content-Type: application/json
+
+{
+  "status": "cancelled"
+}
+
+### Delete a booking
+DELETE http://localhost:8000/bookings/1
+
+
+##

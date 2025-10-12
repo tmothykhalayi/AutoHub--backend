@@ -1,4 +1,3 @@
-
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -30,8 +29,8 @@ export class BookingService {
     const vehicle = await this.vehicleRepository.findOne({ where: { id: vehicleId } });
     if (!vehicle) throw new NotFoundException('Vehicle not found');
 
-    // Basic availability check example
-    if (vehicle.status !== 'available') {
+    // Use boolean isAvailable here:
+    if (!vehicle.isAvailable) {
       throw new BadRequestException('Vehicle not available');
     }
 
@@ -43,8 +42,8 @@ export class BookingService {
       status: status ?? 'confirmed',
     });
 
-    // Optionally update vehicle status
-    vehicle.status = 'rented';
+    // Update vehicle availability
+    vehicle.isAvailable = false;
     await this.vehicleRepository.save(vehicle);
 
     return this.bookingRepository.save(booking);
@@ -90,10 +89,10 @@ export class BookingService {
   async remove(id: number): Promise<void> {
     const booking = await this.findOne(id);
 
-    // Optionally set vehicle back to 'available'
+    // Set vehicle back to available
     const vehicle = booking.vehicle;
     if (vehicle) {
-      vehicle.status = 'available';
+      vehicle.isAvailable = true;
       await this.vehicleRepository.save(vehicle);
     }
 
