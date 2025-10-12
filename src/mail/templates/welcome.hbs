@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Welcome to AutoHub!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background-color: #0066cc;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      border-radius: 5px 5px 0 0;
+    }
+    .content {
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-top: none;
+      border-radius: 0 0 5px 5px;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      margin-top: 20px;
+    }
+    .button {
+      display: inline-block;
+      background-color: #0066cc;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Welcome to AutoHub!</h1>
+  </div>
+  <div class="content">
+    <p>Hello {{name}},</p>
+    <p>Welcome to AutoHub - your premier car rental service! We're thrilled to have you join our community.</p>
+    <p>With AutoHub, you can:</p>
+    <ul>
+      <li>Browse our extensive fleet of vehicles</li>
+      <li>Book rentals with ease</li>
+      <li>Manage your bookings and payments</li>
+      <li>Access 24/7 customer support</li>
+    </ul>
+    <p>Ready to get started? Explore our available vehicles and book your first rental today!</p>
+    <a href="#" class="button">Browse Vehicles</a>
+    <p>If you have any questions or need assistance, our support team is always here to help.</p>
+    <p>Happy driving!</p>
+    <p>The AutoHub Team</p>
+  </div>
+  <div class="footer">
+    <p>&copy; {{date}} AutoHub. All rights reserved.</p>
+    <p>This email was sent to you as part of your AutoHub account registration.</p>
+  </div>
+</body>
+</html>

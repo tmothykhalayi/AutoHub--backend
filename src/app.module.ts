@@ -16,6 +16,7 @@ import { LoggerMiddleware } from './logger.middleware';
 import { LogsModule } from './logs/logs.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import { APP_GUARD } from '@nestjs/core';
     FleetManagementModule, 
     SupportModule,
     BranchModule,
-    LogsModule
+    LogsModule,
+    MailModule
   ],
   controllers: [AppController],
   providers: [
