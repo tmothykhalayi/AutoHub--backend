@@ -188,4 +188,128 @@ export class MailService {
       throw error;
     }
   }
+
+  /**
+   * Send booking update email
+   * @param email User's email address
+   * @param bookingDetails Updated booking information
+   */
+  async sendBookingUpdate(email: string, bookingDetails: {
+    name: string;
+    bookingId: string;
+    vehicleName: string;
+    startDate: Date;
+    endDate: Date;
+    totalPrice: number;
+    pickupLocation: string;
+    changes: string[];
+  }): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        subject: 'Your AutoHub Booking Has Been Updated',
+        template: 'booking-update',
+        context: {
+          ...bookingDetails,
+          startDate: bookingDetails.startDate.toLocaleDateString(),
+          endDate: bookingDetails.endDate.toLocaleDateString(),
+          totalPrice: bookingDetails.totalPrice.toFixed(2),
+        },
+      });
+      this.logger.log(`Booking update email sent to ${email}`);
+    } catch (error) {
+      this.logger.error(`Failed to send booking update email to ${email}`, error.stack);
+      throw error;
+    }
+  }
+
+  /**
+   * Send booking cancellation email
+   * @param email User's email address
+   * @param bookingDetails Booking information
+   */
+  async sendBookingCancellation(email: string, bookingDetails: {
+    name: string;
+    bookingId: string;
+    vehicleName: string;
+    startDate: Date;
+    endDate: Date;
+    cancellationReason?: string;
+    refundAmount?: number;
+  }): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        subject: 'AutoHub Booking Cancellation Confirmation',
+        template: 'booking-cancellation',
+        context: {
+          ...bookingDetails,
+          startDate: bookingDetails.startDate.toLocaleDateString(),
+          endDate: bookingDetails.endDate.toLocaleDateString(),
+          refundAmount: bookingDetails.refundAmount?.toFixed(2),
+          cancellationDate: new Date().toLocaleDateString(),
+        },
+      });
+      this.logger.log(`Booking cancellation email sent to ${email}`);
+    } catch (error) {
+      this.logger.error(`Failed to send booking cancellation email to ${email}`, error.stack);
+      throw error;
+    }
+  }
+
+  /**
+   * Send vehicle return reminder email
+   * @param email User's email address
+   * @param reminderDetails Reminder information
+   */
+  async sendReturnReminder(email: string, reminderDetails: {
+    name: string;
+    bookingId: string;
+    vehicleName: string;
+    returnDate: Date;
+    returnLocation: string;
+    contactNumber: string;
+  }): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        subject: 'Reminder: Your AutoHub Vehicle Return Tomorrow',
+        template: 'return-reminder',
+        context: {
+          ...reminderDetails,
+          returnDate: reminderDetails.returnDate.toLocaleDateString(),
+        },
+      });
+      this.logger.log(`Vehicle return reminder email sent to ${email}`);
+    } catch (error) {
+      this.logger.error(`Failed to send vehicle return reminder email to ${email}`, error.stack);
+      throw error;
+    }
+  }
+
+  /**
+   * Send support ticket response email
+   * @param email User's email address
+   * @param ticketDetails Support ticket details
+   */
+  async sendSupportTicketResponse(email: string, ticketDetails: {
+    name: string;
+    ticketId: string;
+    subject: string;
+    response: string;
+    status: string;
+  }): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        subject: `Response to Your Support Ticket: ${ticketDetails.subject}`,
+        template: 'support-ticket-response',
+        context: ticketDetails,
+      });
+      this.logger.log(`Support ticket response email sent to ${email}`);
+    } catch (error) {
+      this.logger.error(`Failed to send support ticket response email to ${email}`, error.stack);
+      throw error;
+    }
+  }
 }

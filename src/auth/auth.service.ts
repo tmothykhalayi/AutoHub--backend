@@ -37,10 +37,10 @@ export class AuthService {
     accessToken: string;
     refreshToken: string;
     user: {
-      id: string;
+      id: number;
       email: string;
       full_name: string;
-      role: Role;
+      role: string;
     };
   }> {
     // 1. Check if user already exists
@@ -63,11 +63,11 @@ export class AuthService {
 
     // 3. Generate tokens
     const { accessToken, refreshToken } = await this.getTokens(
-      user.id,
+      user.id.toString(),
       user.email,
-      user.role,
+      user.role as Role,
     );
-    await this.updateRefreshToken(user.id, refreshToken);
+    await this.updateRefreshToken(user.id.toString(), refreshToken);
 
     // 4. Return tokens and user info
     return {
@@ -76,7 +76,7 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        full_name: user.full_name,
+        full_name: `${user.firstName} ${user.lastName}`,
         role: user.role,
       },
     };
@@ -87,21 +87,21 @@ export class AuthService {
     accessToken: string;
     refreshToken: string;
     user: {
-      id: string;
+      id: number;
       email: string;
       full_name: string;
-      role: Role;
+      role: string;
     };
   }> {
     try {
       const user = await this.userRepository.findOne({
         where: { email: loginAuthDto.email },
-
         select: [
           'id',
           'email',
           'password',
-          'full_name',
+          'firstName',
+          'lastName',
           'role',
           'hashedRefreshToken',
         ],
@@ -127,12 +127,12 @@ export class AuthService {
       }
 
       const { accessToken, refreshToken, role } = await this.getTokens(
-        user.id,
+        user.id.toString(),
         user.email,
-        user.role,
+        user.role as Role,
       );
 
-      await this.updateRefreshToken(user.id, refreshToken);
+      await this.updateRefreshToken(user.id.toString(), refreshToken);
 
       // Login notification email disabled
       // try {
@@ -148,13 +148,15 @@ export class AuthService {
 
       this.logger.log(`User logged in successfully: ${user.email}`);
 
+      const fullName = `${user.firstName} ${user.lastName}`;
+
       return {
         accessToken,
         refreshToken,
         user: {
           id: user.id,
           email: user.email,
-          full_name: user.full_name,
+          full_name: fullName,
           role: user.role,
         },
       };
@@ -169,7 +171,7 @@ export class AuthService {
     try {
       const user = await this.userRepository.findOne({
         where: { email },
-        select: ['id', 'email', 'full_name', 'role'],
+        select: ['id', 'email', 'firstName', 'lastName', 'role'],
       });
       if (!user) {
         this.logger.warn(
@@ -177,7 +179,8 @@ export class AuthService {
         );
         throw new NotFoundException('User not found');
       }
-      await this.mailService.sendWelcomeEmail(email, user.full_name);
+      const fullName = `${user.firstName} ${user.lastName}`;
+      await this.mailService.sendWelcomeEmail(email, fullName);
       this.logger.log(`Welcome email sent to ${email}`);
     } catch (error) {
       this.logger.error(`Failed to send welcome email: ${error.message}`);
@@ -193,7 +196,7 @@ export class AuthService {
       }
 
       const user = await this.userRepository.findOne({
-        where: { id: userId },
+        where: { id: parseInt(userId) },
         select: ['id', 'email', 'role', 'hashedRefreshToken'],
       });
 
@@ -216,8 +219,8 @@ export class AuthService {
         throw new UnauthorizedException('Access Denied');
       }
 
-      const tokens = await this.getTokens(user.id, user.email, user.role);
-      await this.updateRefreshToken(user.id, tokens.refreshToken);
+      const tokens = await this.getTokens(user.id.toString(), user.email, user.role as Role);
+      await this.updateRefreshToken(user.id.toString(), tokens.refreshToken);
 
       this.logger.log(`Tokens refreshed successfully for user ID: ${userId}`);
 
@@ -248,14 +251,16 @@ export class AuthService {
   // ===== SIGN OUT =====
   async signOut(userId: string) {
     try {
-      const user = await this.userRepository.findOne({ where: { id: userId } });
+      const user = await this.userRepository.findOne({ 
+        where: { id: parseInt(userId) } 
+      });
 
       if (!user) {
         this.logger.warn(`Sign out failed - user not found: ID ${userId}`);
         throw new NotFoundException(`User not found: ${userId}`);
       }
 
-      await this.userRepository.update(userId, {
+      await this.userRepository.update(parseInt(userId), {
         hashedRefreshToken: undefined,
       });
 
@@ -276,7 +281,7 @@ export class AuthService {
   ): Promise<{
     accessToken: string;
     refreshToken: string;
-    role: Role | undefined;
+    role: Role;
   }> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
@@ -303,7 +308,7 @@ export class AuthService {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
     this.logger.log(`Updating hashed refresh token for user ID: ${userId}`);
 
-    const result = await this.userRepository.update(userId, {
+    const result = await this.userRepository.update(parseInt(userId), {
       hashedRefreshToken,
     });
     if (result.affected === 0) {
@@ -331,7 +336,7 @@ export class AuthService {
     try {
       const user = await this.userRepository.findOne({
         where: { email },
-        select: ['id', 'email', 'full_name', 'role'],
+        select: ['id', 'email', 'firstName', 'lastName', 'role'],
       });
 
       if (!user) {
@@ -342,6 +347,7 @@ export class AuthService {
       }
 
       const { otp, secret } = this.generateOtp();
+      const fullName = `${user.firstName} ${user.lastName}`;
 
       // Store OTP and secret in user record
       await this.userRepository.update(user.id, {
@@ -351,7 +357,7 @@ export class AuthService {
       });
 
       // Send password reset email with OTP as the resetLink
-      await this.mailService.sendPasswordReset(email, user.full_name, otp);
+      await this.mailService.sendPasswordReset(email, fullName, otp);
 
       this.logger.log(`Password reset email sent to ${email}`);
 
@@ -375,7 +381,8 @@ export class AuthService {
         select: [
           'id',
           'email',
-          'full_name',
+          'firstName',
+          'lastName',
           'role',
           'otp',
           'secret',
@@ -421,9 +428,11 @@ export class AuthService {
         otpExpiry: undefined,
       });
 
+      const fullName = `${user.firstName} ${user.lastName}`;
+
       // Send password reset success email
       try {
-        await this.mailService.sendPasswordResetSuccessEmail(email, user.full_name);
+        await this.mailService.sendPasswordResetSuccessEmail(email, fullName);
       } catch (emailError) {
         this.logger.warn(
           `Failed to send password reset success email: ${emailError.message}`,

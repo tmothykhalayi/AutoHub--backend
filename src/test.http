@@ -7,7 +7,7 @@ Content-Type: application/json
 {
   "firstName": "Jane",
   "lastName": "Doe",
-  "email": "jane.doe@example.com",
+  "email": "jane.doe577@example.com",
   "password": "SecurePass123",
   "phone": "+1234567890",
   "role": "admin"
@@ -45,7 +45,7 @@ POST http://localhost:8000/support
 Content-Type: application/json
 
 {
-  "userId": 1,
+  "userId": 3,
   "subject": "Unable to make a booking",
   "message": "I'm having trouble booking a vehicle. Please help.",
   "status": "open"

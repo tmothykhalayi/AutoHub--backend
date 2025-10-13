@@ -45,7 +45,7 @@ export class RfStrategy extends PassportStrategy(Strategy, 'jwt-rt') {
     console.log('Auth header:', authHeader);
     console.log('Decoded payload:', payload);
     const user = await this.userRepository.findOne({
-      where: { id: payload.sub },
+      where: { id: parseInt(payload.sub, 10) },
       select: ['id', 'email', 'role', 'hashedRefreshToken'],
     });
     console.log('User from DB:', user);
