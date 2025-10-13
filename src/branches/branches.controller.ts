@@ -4,6 +4,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from 
 import { BranchService } from './branches.service';
 import { CreateBranchDto } from './dto/create-branch.dto';
 import { UpdateBranchDto } from './dto/update-branch.dto';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('branches')
 export class BranchController {
@@ -14,11 +15,13 @@ export class BranchController {
     return this.branchService.create(createBranchDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.branchService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.branchService.findOne(id);

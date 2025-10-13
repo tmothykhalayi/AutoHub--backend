@@ -7,7 +7,7 @@ Content-Type: application/json
 {
   "firstName": "Jane",
   "lastName": "Doe",
-  "email": "jane.doe577@example.com",
+  "email": "jane.doe8577@example.com",
   "password": "SecurePass123",
   "phone": "+1234567890",
   "role": "admin"
@@ -164,8 +164,8 @@ POST http://localhost:8000/vehicle
 Content-Type: application/json
 
 {
-  "licensePlate": "ABC-1234",
-  "specId": 1,
+  "licensePlate": "ABCR-81234",
+  "specId": 2,
   "registrationNumber": "REG-5678",
   "branchId": 1,
   "isAvailable": true,
@@ -181,7 +181,7 @@ GET http://localhost:8000/vehicle
 GET http://localhost:8000/vehicle/1
 
 ### Update a vehicle
-PATCH http://localhost:8000/vehicle/1
+PATCH http://localhost:8000/vehicle/2
 Content-Type: application/json
 
 {
@@ -232,7 +232,7 @@ Content-Type: application/json
 
 {
   "userId": 1,
-  "vehicleId": 1,
+  "vehicleId": 9,
   "startDate": "2025-11-01T10:00:00Z",
   "endDate": "2025-11-05T10:00:00Z",
   "status": "confirmed"

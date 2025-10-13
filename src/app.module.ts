@@ -17,6 +17,7 @@ import { LogsModule } from './logs/logs.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MailModule } from './mail/mail.module';
+import { AtGuard } from './auth/guards';
 
 @Module({
   imports: [
@@ -51,6 +52,10 @@ import { MailModule } from './mail/mail.module';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
     },
   ],
 })

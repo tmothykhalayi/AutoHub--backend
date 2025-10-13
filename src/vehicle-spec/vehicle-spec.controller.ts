@@ -4,6 +4,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from 
 import { VehicleSpecService } from './vehicle-spec.service';
 import { CreateVehicleSpecDto } from './dto/create-vehicle-spec.dto';
 import { UpdateVehicleSpecDto } from './dto/update-vehicle-spec.dto';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('vehicle-specs')
 export class VehicleSpecController {
@@ -14,11 +15,13 @@ export class VehicleSpecController {
     return this.vehicleSpecService.create(createDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.vehicleSpecService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.vehicleSpecService.findOne(id);
