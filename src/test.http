@@ -1,15 +1,124 @@
 
+#######################
+## AUTHENTICATION
+#######################
 
-##BRANCH
+### Sign up a new user
+POST http://localhost:8000/auth/signup
+Content-Type: application/json
+
+{
+  "email": "newuser@example.com",
+  "password": "Test1234!",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phoneNumber": "+12345678901"
+}
+
+###
+
+### Login
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+  "email": "newuser@example.com",
+  "password": "Test1234!"
+}
+
+###
+
+### Forgot password
+POST http://localhost:8000/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "newuser@example.com"
+}
+
+###
+
+### Reset password (requires token from email)
+POST http://localhost:8000/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "your-reset-token-here",
+  "newPassword": "NewTest1234!"
+}
+
+###
+
+### Refresh token
+POST http://localhost:8000/auth/refresh
+Content-Type: application/json
+Authorization: Bearer your-refresh-token-here
+
+{}
+
+###
+
+### Logout
+POST http://localhost:8000/auth/logout
+Authorization: Bearer your-access-token-here
+
+###
+
+#######################
+## USERS
+#######################
+
+### Get all users
+GET http://localhost:8000/users
+Authorization: Bearer your-access-token-here
+
+###
+
+### Get user by ID
+GET http://localhost:8000/users/1
+Authorization: Bearer your-access-token-here
+
+###
+
+### Update user
+PATCH http://localhost:8000/users/1
+Content-Type: application/json
+Authorization: Bearer your-access-token-here
+
+{
+  "firstName": "Updated",
+  "lastName": "Name",
+  "phoneNumber": "+19876543210"
+}
+
+###
+
+### Delete user
+DELETE http://localhost:8000/users/1
+Authorization: Bearer your-access-token-here
+
+###
+
+#######################
+## BRANCHES
+#######################
+
 ### Create a new branch
 POST http://localhost:8000/branches
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "name": "Main City Branch",
   "address": "123 Main Street, Springfield",
-  "phone": "+1234567890",
-  "email": "mainbranch@autohub.com"
+  "phone": "+12634567890",
+  "email": "mainbranch56@autohub.com",
+  "isActive": true,
+  "branchCode": "MCB001",
+  "city": "Springfield",
+  "country": "United States",
+  "latitude": 40.7128,
+  "longitude": -74.0060
 }
 
 ###
@@ -20,13 +129,14 @@ GET http://localhost:8000/branches
 ###
 
 ### Get a branch by ID
-GET http://localhost:8000/branches/1
+GET http://localhost:8000/branches/4
 
 ###
 
 ### Update a branch by ID
 PATCH http://localhost:8000/branches/1
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "phone": "+1987654321",
@@ -36,13 +146,18 @@ Content-Type: application/json
 ###
 
 ### Delete a branch by ID
-DELETE http://localhost:3000/branches/1
+DELETE http://localhost:8000/branches/1
+Authorization: Bearer your-access-token-here
 
 
-##VEHICLE SPEC
+#######################
+## VEHICLE SPECIFICATIONS
+#######################
+
 ### Create a new vehicle specification
 POST http://localhost:8000/vehicle-specs
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "make": "Toyota",
@@ -68,6 +183,7 @@ GET http://localhost:8000/vehicle-specs/1
 ### Update a vehicle spec by ID
 PATCH http://localhost:8000/vehicle-specs/1
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "model": "Corolla Hybrid",
@@ -77,14 +193,19 @@ Content-Type: application/json
 ###
 
 ### Delete a vehicle spec by ID
-DELETE http://localhost:3000/vehicle-spec/1
+DELETE http://localhost:8000/vehicle-specs/1
+Authorization: Bearer your-access-token-here
 
 
 
-##VEHICLE
+#######################
+## VEHICLES
+#######################
+
 ### Create a new vehicle
 POST http://localhost:8000/vehicle
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "licensePlate": "ABCR-81234",
@@ -97,15 +218,22 @@ Content-Type: application/json
   "mileage": 12000
 }
 
+###
+
 ### Get all vehicles
 GET http://localhost:8000/vehicle
+
+###
 
 ### Get a vehicle by ID
 GET http://localhost:8000/vehicle/1
 
+###
+
 ### Update a vehicle
 PATCH http://localhost:8000/vehicle/2
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "status": "inactive",
@@ -113,15 +241,22 @@ Content-Type: application/json
   "mileage": 13000
 }
 
+###
+
 ### Delete a vehicle
 DELETE http://localhost:8000/vehicle/1
+Authorization: Bearer your-access-token-here
 
 
 
-##FLEET
+#######################
+## FLEET MANAGEMENT
+#######################
+
 ### Create a new fleet management record
 POST http://localhost:8000/fleet-management
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "managerName": "John Doe",
@@ -129,29 +264,43 @@ Content-Type: application/json
   "contactInfo": "john.doe@example.com"
 }
 
+###
+
 ### Get all fleet management records
 GET http://localhost:8000/fleet-management
+
+###
 
 ### Get a fleet management record by ID
 GET http://localhost:8000/fleet-management/1
 
+###
+
 ### Update a fleet management record
 PATCH http://localhost:8000/fleet-management/1
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "maintenanceSchedule": "Every Friday",
   "contactInfo": "manager@example.com"
 }
 
+###
+
 ### Delete a fleet management record
 DELETE http://localhost:8000/fleet-management/1
+Authorization: Bearer your-access-token-here
 
 
-##BOOKING
+#######################
+## BOOKINGS
+#######################
+
 ### Create a new booking
 POST http://localhost:8000/bookings
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "userId": 1,
@@ -161,22 +310,126 @@ Content-Type: application/json
   "status": "confirmed"
 }
 
+###
+
 ### Get all bookings
 GET http://localhost:8000/bookings
+Authorization: Bearer your-access-token-here
+
+###
 
 ### Get a booking by ID
 GET http://localhost:8000/bookings/1
+Authorization: Bearer your-access-token-here
+
+###
 
 ### Update a booking
 PATCH http://localhost:8000/bookings/1
 Content-Type: application/json
+Authorization: Bearer your-access-token-here
 
 {
   "status": "cancelled"
 }
 
+###
+
 ### Delete a booking
 DELETE http://localhost:8000/bookings/1
+Authorization: Bearer your-access-token-here
 
+###
 
-##
+#######################
+## PAYMENTS
+#######################
+
+### Create a new payment
+POST http://localhost:8000/payments
+Content-Type: application/json
+Authorization: Bearer your-access-token-here
+
+{
+  "bookingId": 1,
+  "amount": 250.00,
+  "paymentMethod": "credit_card",
+  "paymentStatus": "completed"
+}
+
+###
+
+### Get all payments
+GET http://localhost:8000/payments
+Authorization: Bearer your-access-token-here
+
+###
+
+### Get a payment by ID
+GET http://localhost:8000/payments/1
+Authorization: Bearer your-access-token-here
+
+###
+
+### Update a payment
+PATCH http://localhost:8000/payments/1
+Content-Type: application/json
+Authorization: Bearer your-access-token-here
+
+{
+  "paymentStatus": "refunded"
+}
+
+###
+
+### Delete a payment
+DELETE http://localhost:8000/payments/1
+Authorization: Bearer your-access-token-here
+
+###
+
+#######################
+## SUPPORT
+#######################
+
+### Create a new support ticket
+POST http://localhost:8000/support
+Content-Type: application/json
+Authorization: Bearer your-access-token-here
+
+{
+  "userId": 1,
+  "subject": "Issue with my booking",
+  "message": "I need to modify my booking dates.",
+  "priority": "medium"
+}
+
+###
+
+### Get all support tickets
+GET http://localhost:8000/support
+Authorization: Bearer your-access-token-here
+
+###
+
+### Get a support ticket by ID
+GET http://localhost:8000/support/1
+Authorization: Bearer your-access-token-here
+
+###
+
+### Update a support ticket
+PATCH http://localhost:8000/support/1
+Content-Type: application/json
+Authorization: Bearer your-access-token-here
+
+{
+  "status": "resolved",
+  "response": "Your booking has been updated as requested."
+}
+
+###
+
+### Delete a support ticket
+DELETE http://localhost:8000/support/1
+Authorization: Bearer your-access-token-here

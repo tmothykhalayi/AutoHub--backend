@@ -23,6 +23,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
           // ✅ FORCE schema sync for first deploy
           synchronize: true, // <<< changed from !isProduction to true
+          dropSchema: true, // TEMPORARILY drop all tables to resolve constraint issues
 
           // ✅ Render-specific SSL for PostgreSQL
           ssl: isProduction ? { rejectUnauthorized: false } : false,

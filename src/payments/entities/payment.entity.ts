@@ -31,16 +31,16 @@ export class Payment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   fullName: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   phoneNumber: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   amount: number;
 
   @Column({
@@ -56,7 +56,7 @@ export class Payment {
   })
   type: PaymentType;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   paystackReference: string;
 
   @Column({ nullable: true })
@@ -72,18 +72,18 @@ export class Payment {
   @JoinColumn({ name: 'userId' })
   user: User;
 
+  @Column({ nullable: true })
   bookingId: number;
 
-  @Column()
+  @Column({ nullable: true })
   stripePaymentIntentId: string; // To link with Stripe payment intent
 
 
-  @Column()
+  @Column({ nullable: true })
   currency: string;
 
 
-  @OneToOne(() => Booking, (booking) => booking.payment)
-  @JoinColumn()
+  @OneToOne(() => Booking, (booking) => booking.payment, { nullable: true })
   booking: Booking;
 
   @CreateDateColumn()

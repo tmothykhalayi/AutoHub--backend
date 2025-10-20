@@ -53,7 +53,7 @@ get full_name(): string {
 
   
 
-  @OneToMany(() => Booking, booking => booking.user)
+  @OneToMany(() => Booking, booking => booking.user, { cascade: true })
   bookings: Booking[];
 
 
