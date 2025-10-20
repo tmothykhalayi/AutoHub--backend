@@ -102,9 +102,7 @@ export class PaymentsController {
     status: 200,
     description: 'Branch payments retrieved successfully',
   })
-  async getPaymentsByBranch(@Param('branchId') branchId: string) {
-    return this.paymentsService.getPaymentsByBranch(+branchId);
-  }
+  
 
   @Get(':id')
   @Roles(Role.ADMIN, Role.CUSTOMER)

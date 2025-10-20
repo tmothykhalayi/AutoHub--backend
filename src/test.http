@@ -1,41 +1,4 @@
 
-##SUPPORT
-### Create a new support ticket
-POST http://localhost:8000/support
-Content-Type: application/json
-
-{
-  "userId": 6,
-  "subject": "Unable to make a booking",
-  "message": "I'm having trouble booking a vehicle. Please help.",
-  "status": "open"
-}
-
-###
-
-### Get all support tickets
-GET http://localhost:8000/support
-
-###
-
-### Get a support ticket by ID
-GET http://localhost:8000/support/1
-
-###
-
-### Update a support ticket by ID
-PATCH http://localhost:8000/support/1
-Content-Type: application/json
-
-{
-  "status": "resolved"
-}
-
-###
-
-### Delete a support ticket by ID
-DELETE http://localhost:3000/support/1
-
 
 ##BRANCH
 ### Create a new branch
