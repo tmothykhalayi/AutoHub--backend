@@ -1,7 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, BeforeInsert, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Booking } from '../../bookings/entities/booking.entity';
 import { Payment } from '../../payments/entities/payment.entity';
 import { Support } from '../../support/entities/support.entity';
+import { Exclude } from 'class-transformer';
+import * as bcrypt from 'bcrypt';
+import { Role } from '../../auth/enums/role.enum';
 
 @Entity()
 export class User {
@@ -14,17 +17,26 @@ export class User {
   @Column()
   lastName: string;
 @Column({ nullable: true })
+@Exclude({ toPlainOnly: true })
 hashedRefreshToken?: string;
 
 @Column({ nullable: true })
+@Exclude({ toPlainOnly: true })
 otp?: string;
 
 @Column({ nullable: true })
+@Exclude({ toPlainOnly: true })
 otpExpiry?: Date;
 
 @Column({ nullable: true })
+@Exclude({ toPlainOnly: true })
 secret?: string;
+// Add to your User entity if using IP tracking:
+@Column({ nullable: true })
+registrationIp: string;
 
+@Column({ default: false })
+emailVerified: boolean;
 // You may need this instead of `full_name`
 get full_name(): string {
   return `${this.firstName} ${this.lastName}`;
@@ -33,13 +45,13 @@ get full_name(): string {
   email: string;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   password: string;
 
   @Column({ nullable: true })
   phone: string;
 
-  @Column({ default: 'customer' })
-  role: string;
+  
 
   @OneToMany(() => Booking, booking => booking.user)
   bookings: Booking[];
@@ -57,5 +69,19 @@ get full_name(): string {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.CUSTOMER
+  })
+  role: Role;
+
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 }
+
 

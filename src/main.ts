@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { AllExceptionsFilter } from './http-exception.filter';
-import { HttpAdapterHost } from '@nestjs/core';
+import { HttpAdapterHost, Reflector } from '@nestjs/core';
 import { LogsService } from './logs/logs.service';
 
 async function bootstrap() {
@@ -28,6 +28,9 @@ async function bootstrap() {
     transform: true,
     forbidNonWhitelisted: true,
   }));
+  
+  // Apply global class serializer interceptor to exclude password from responses
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   
   // Apply rate limiting is done via ThrottlerModule in the AppModule
   // The guard is registered there as a global provider

@@ -1,6 +1,7 @@
 // src/users/users.service.ts
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MoreThan } from 'typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,56 +16,281 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const existingUser = await this.usersRepository.findOne({ where: { email: createUserDto.email } });
-    if (existingUser) {
-      throw new BadRequestException('Email already in use');
+  async create(createUserDto: CreateUserDto, currentUser?: User, ipAddress?: string): Promise<User> {
+  // Validate email format
+  this.validateEmailFormat(createUserDto.email);
+
+  // Check for existing user by email
+  const existingUser = await this.usersRepository.findOne({
+    where: { email: createUserDto.email },
+  });
+
+  if (existingUser) {
+    throw new BadRequestException('Email already in use');
+  }
+
+  // Validate password strength
+  this.validatePasswordStrength(createUserDto.password);
+
+  // Restrict roles to only 'customer' and 'admin'
+  if (createUserDto.role && ![Role.CUSTOMER, Role.ADMIN].includes(createUserDto.role as Role)) {
+    throw new BadRequestException('Invalid role. Allowed roles: customer, admin');
+  }
+
+  // Set default role to 'customer'
+  const userRole = createUserDto.role || Role.CUSTOMER;
+
+  // Prevent non-admins from creating users (only allow if no currentUser = public registration, or if admin)
+  if (currentUser && currentUser.role !== Role.ADMIN) {
+    throw new BadRequestException('Only administrators can create users');
+  }
+
+  // Prevent non-admins from creating admin users
+  if (userRole === Role.ADMIN) {
+    if (!currentUser || currentUser.role !== Role.ADMIN) {
+      throw new BadRequestException('Only administrators can create admin users');
+    }
+  }
+
+  // Prevent too many registrations from same IP within last hour
+  if (ipAddress) {
+    await this.checkRegistrationLimit(ipAddress);
+  }
+
+  const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+
+  const user = this.usersRepository.create({
+    email: createUserDto.email,
+    firstName: createUserDto.firstName,
+    lastName: createUserDto.lastName,
+    phone: createUserDto.phone,
+    password: hashedPassword, // Using password as defined in the User entity
+    role: userRole as Role, // Explicitly cast to Role enum
+    registrationIp: ipAddress,
+    emailVerified: false,
+  });
+
+  return this.usersRepository.save(user);
+}
+
+private validateEmailFormat(email: string): void {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    throw new BadRequestException('Invalid email format');
+  }
+}
+
+private validatePasswordStrength(password: string): void {
+  if (password.length < 8) {
+    throw new BadRequestException('Password must be at least 8 characters long');
+  }
+
+  if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+    throw new BadRequestException('Password must contain at least one uppercase letter, one lowercase letter, and one number');
+  }
+}
+
+private async checkRegistrationLimit(ipAddress: string): Promise<void> {
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  
+  const registrationsCount = await this.usersRepository.count({
+    where: {
+      registrationIp: ipAddress,
+      createdAt: MoreThan(oneHourAgo)
+    }
+  });
+  
+  if (registrationsCount >= 5) {
+    throw new BadRequestException('Too many registration attempts from this IP address. Please try again in an hour.');
+  }
+}
+
+  async findAll(currentUser?: User): Promise<User[]> {
+  // Non-admin users (customers) can only see limited information
+  if (currentUser && currentUser.role !== Role.ADMIN) {
+    return this.usersRepository.find({
+      select: [
+        'id', 
+        'firstName', 
+        'lastName', 
+        'role'
+      ],
+      order: { createdAt: 'DESC' }
+    });
+  }
+
+  // Admins get full access (without passwords)
+  return this.usersRepository.find({
+    select: [
+      'id', 
+      'email', 
+      'firstName', 
+      'lastName', 
+      'phone', 
+      'role', 
+      'createdAt', 
+      'updatedAt', 
+      'emailVerified'
+    ],
+    order: { createdAt: 'DESC' }
+  });
+}
+
+  // Find user by ID with error handling
+  async findById(id: number, currentUser?: User): Promise<User> {
+  const user = await this.usersRepository.findOne({ where: { id } });
+  
+  if (!user) {
+    throw new NotFoundException(`User with id ${id} not found`);
+  }
+
+  // Non-admin users can only see limited information
+  if (currentUser && currentUser.role !== Role.ADMIN) {
+    // Return limited data for non-admin users
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role
+    } as User;
+  }
+
+  // Admins get full access (without password)
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword as User;
+}
+
+  async findByEmail(email: string, currentUser?: User): Promise<Partial<User> | null> {
+  const user = await this.usersRepository.findOne({ 
+    where: { email } 
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  // Non-admin users can only see limited information
+  if (currentUser && currentUser.role !== Role.ADMIN) {
+    // Return limited data for non-admin users
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role
+    };
+  }
+
+  // Admins get full access (without password)
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+}
+
+  // Update user with email uniqueness check
+  async update(id: number, updateUserDto: UpdateUserDto, currentUser?: User): Promise<User> {
+  const user = await this.findById(id);
+
+  // Authorization checks
+  if (currentUser) {
+    // Non-admin users can only update their own profile
+    if (currentUser.role !== Role.ADMIN && currentUser.id !== id) {
+      throw new BadRequestException('You can only update your own profile');
     }
 
-    const user = this.usersRepository.create(createUserDto);
-    return this.usersRepository.save(user);
-  }
+    // Prevent non-admin users from updating roles
+    if (updateUserDto.role && currentUser.role !== Role.ADMIN) {
+      throw new BadRequestException('Only administrators can update user roles');
+    }
 
-  async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
-  }
-
-  async findById(id: number): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
-    if (!user) throw new NotFoundException(`User with id ${id} not found`);
-    return user;
-  }
-
-  async findByEmail(email: string): Promise<User | null> {
-    return this.usersRepository.findOne({ where: { email } });
-  }
-
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.findById(id);
-
-    if (updateUserDto.email && updateUserDto.email !== user.email) {
-      const emailExists = await this.usersRepository.findOne({ where: { email: updateUserDto.email } });
-      if (emailExists) {
-        throw new BadRequestException('Email already in use');
+    // Prevent non-admin users from updating sensitive fields
+    if (currentUser.role !== Role.ADMIN) {
+      const restrictedFields = ['emailVerified', 'registrationIp'];
+      const hasRestrictedFields = Object.keys(updateUserDto).some(field => 
+        restrictedFields.includes(field)
+      );
+      
+      if (hasRestrictedFields) {
+        throw new BadRequestException('You are not allowed to update restricted fields');
       }
     }
 
-    if (updateUserDto.password) {
-      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+    // Only admins can update other admin users
+    if (user.role === Role.ADMIN && currentUser.id !== id && currentUser.role !== Role.ADMIN) {
+      throw new BadRequestException('Only administrators can update admin users');
     }
-
-    await this.usersRepository.update(id, updateUserDto);
-    return this.findById(id);
   }
 
-  async remove(id: number): Promise<void> {
-    const user = await this.findById(id);
-    await this.usersRepository.remove(user);
+  // Email uniqueness check
+  if (updateUserDto.email && updateUserDto.email !== user.email) {
+    const emailExists = await this.usersRepository.findOne({ 
+      where: { email: updateUserDto.email } 
+    });
+    if (emailExists) {
+      throw new BadRequestException('Email already in use');
+    }
   }
 
+  // Password hashing
+  if (updateUserDto.password) {
+    updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+  }
+
+  // Role validation - only allow 'customer' and 'admin' roles
+  if (updateUserDto.role && ![Role.CUSTOMER, Role.ADMIN].includes(updateUserDto.role as Role)) {
+    throw new BadRequestException('Invalid role. Allowed roles: customer, admin');
+  }
+
+  // Prevent role escalation restrictions
+  if (updateUserDto.role === Role.ADMIN && currentUser && currentUser.role !== Role.ADMIN) {
+    throw new BadRequestException('Only administrators can assign admin role');
+  }
+
+  // Create a safe copy of the DTO with proper type casting
+  const updateData: Partial<User> = { 
+    ...updateUserDto,
+    // Remove role from the spread to handle it separately
+    role: undefined
+  };
+  
+  if (updateUserDto.role) {
+    updateData.role = updateUserDto.role as Role;
+  }
+
+  await this.usersRepository.update(id, updateData);
+  
+  // Return updated user (with role-based data filtering)
+  return this.findById(id, currentUser);
+}
+  // Delete user with protections
+  async remove(id: number, currentUserId?: number): Promise<{ message: string }> {
+  // Prevent self-deletion
+  if (currentUserId && id === currentUserId) {
+    throw new BadRequestException('You cannot delete your own account');
+  }
+
+  const user = await this.findById(id);
+
+  // Protect admin users from being deleted
+  if (user.role === Role.ADMIN) {
+    throw new BadRequestException('Admin users cannot be deleted');
+  }
+  // Get current user to check if they are admin (authorization check)
+  if (currentUserId) {
+    const currentUser = await this.findById(currentUserId);
+    if (currentUser.role !== Role.ADMIN) {
+      throw new BadRequestException('Only administrators can delete users');
+    }
+  }
+
+  await this.usersRepository.remove(user);
+  
+  return { message: `User ${user.email} has been successfully deleted` };
+}
+
+
+// Password validation
   async validateUserPassword(email: string, plainPassword: string): Promise<User | null> {
-    const user = await this.findByEmail(email);
-    if (!user) return null;
+    const user = await this.usersRepository.findOne({ where: { email } });
+    if (!user || !user.password) return null;
 
     const passwordMatches = await bcrypt.compare(plainPassword, user.password);
     if (!passwordMatches) return null;

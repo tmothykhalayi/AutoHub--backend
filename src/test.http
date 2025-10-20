@@ -1,42 +1,119 @@
 
-##user
-### Create user
+### Register a new test user for login testing
+# @name register
+POST http://localhost:8000/auth/register
+Content-Type: application/json
+
+{
+  "email": "logintest1@example.com",
+  "firstName": "Login",
+  "lastName": "Test",
+  "phoneNumber": "1234567890",
+  "password": "Password123",
+  "role": "customer"
+}
+
+### Login with newly registered user - CORRECT PASSWORD
+# @name login
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+  "email": "logintes3t@example.com",
+  "password": "Password123"
+}
+
+### Login with INCORRECT password (for testing error handling)
+# @name loginWrongPassword
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+  "email": "loginte3st@example.com",
+  "password": "wrongpassword123"
+}
+
+### Alternative login - try with existing user 
+# @name loginAlt
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test6@example.com",
+  "password": "Password123"
+}
+
+### Store authentication token for subsequent requests
+# Uncomment and use these after successful login
+# @authToken = {{login.response.body.accessToken}}
+# @refreshToken = {{login.response.body.refreshToken}}
+
+### Refresh token (should provide new tokens)
+POST http://localhost:8000/auth/refresh
+Content-Type: application/json
+Authorization: Bearer YOUR_REFRESH_TOKEN_HERE
+
+### Sign out (requires authentication)
+POST http://localhost:8000/auth/signout
+Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
+
+### Forgot password request
+POST http://localhost:8000/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "test@example.com"
+}
+
+### Reset password with OTP
+POST http://localhost:8000/auth/reset-password
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "otp": "123456",
+  "newPassword": "newPassword123"
+}
+
+## USER ENDPOINTS
+### Create a new user (Password should NOT be returned)
 POST http://localhost:8000/users
 Content-Type: application/json
 
 {
   "firstName": "Jane",
   "lastName": "Doe",
-  "email": "jane.doe8577@example.com",
+  "email": "janedoe1223@example.com",
   "password": "SecurePass123",
   "phone": "+1234567890",
   "role": "admin"
 }
 
-###
-
-### Get all users
+### Get all users (Passwords should NOT be returned)
 GET http://localhost:8000/users
 
-###
-
-### Get user by ID
+### Get user by ID (Password should NOT be returned)
 GET http://localhost:8000/users/1
 
-###
+### Get user by ID with a more recent user
+GET http://localhost:8000/users/8
 
 ### Update user by ID
 PATCH http://localhost:8000/users/1
 Content-Type: application/json
 
 {
+  "firstName": "Jane Updated",
   "phone": "+9876543210"
 }
 
-###
+### Update user password (should NOT return password in response)
+PATCH http://localhost:8000/users/1
+Content-Type: application/json
 
-### Delete user by ID
-DELETE http://localhost:3000/users/1
+{
+  "password": "NewSecurePass456"
+}
 
 
 ##SUPPORT

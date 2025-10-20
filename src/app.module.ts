@@ -14,8 +14,8 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './logger.middleware';
 import { LogsModule } from './logs/logs.module';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule } from '@nestjs/throttler';
+//import { APP_GUARD } from '@nestjs/core';
 import { MailModule } from './mail/mail.module';
 import { AtGuard } from './auth/guards';
 
@@ -40,7 +40,7 @@ import { AtGuard } from './auth/guards';
     VehicleSpecModule,
     BookingModule, 
     PaymentsModule,
-    FleetManagementModule, 
+    FleetManagementModule,
     SupportModule,
     BranchModule,
     LogsModule,
@@ -49,14 +49,14 @@ import { AtGuard } from './auth/guards';
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AtGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AtGuard,
+    // },
   ],
 })
 export class AppModule implements NestModule {
