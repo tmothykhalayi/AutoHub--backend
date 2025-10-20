@@ -6,13 +6,15 @@ export class Support {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, user => user.supportTickets)
+  conversation?: any[];
+  metadata?: {
+    isOverdue?: boolean;
+    responseTime?: string | null;
+    priorityLabel?: string;
+  };
+
+  @ManyToOne(() => User)
   user: User;
-
-
-
-  @Column({ default: 'open' })
-  status: string; // "open", "closed", etc.
 
   @Column()
   subject: string;
@@ -20,10 +22,34 @@ export class Support {
   @Column('text')
   message: string;
 
+  @Column({ default: 'open' })
+  status: string;
+
+  @Column({ default: 'low' })
+  priority: string;
+
+  @Column({ default: 'general' })
+  category: string;
+
+  @Column({ nullable: true })
+  assignedTo: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column({ default: false })
+  deleted: boolean;
+
+  @Column({ nullable: true })
+  deletedAt: Date;
+
+  @Column({ nullable: true })
+  deletedBy: number;
+
+  @Column({ nullable: true })
+  deletionReason: string;
+
   @UpdateDateColumn()
-  updatedAt: Date;
+updatedAt: Date;
+
 }

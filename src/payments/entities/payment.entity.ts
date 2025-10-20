@@ -1,49 +1,98 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToOne,
+} from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Booking } from '../../bookings/entities/booking.entity';
+import { Booking } from 'src/bookings/entities/booking.entity';
+
+//import { Appointment } from 'src/appointments/entities/appointment.entity';
+
+export enum PaymentStatus {
+  PENDING = 'pending',
+  SUCCESS = 'success',
+  FAILED = 'failed',
+  CANCELLED = 'cancelled',
+  REFUNDED = 'refunded',
+}
+export enum PaymentType {
+  BOOKING = 'BOOKING'
+}
+
+
 
 @Entity()
 export class Payment {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @ManyToOne(() => User, user => user.payments)
-  user: User;
+  @Column()
+  fullName: string;
 
-  @OneToOne(() => Booking, booking => booking.payment)
-  @JoinColumn()
-  booking: Booking;
+  @Column()
+  email: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column()
+  phoneNumber: string;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   amount: number;
 
-  @Column()
-  paymentMethod: string;
-  
+  @Column({
+    type: 'enum',
+    enum: PaymentStatus,
+    default: PaymentStatus.PENDING,
+  })
+  status: PaymentStatus;
 
-  @Column()
-  status: string; // e.g., "paid", "pending"
+  @Column({
+    type: 'enum',
+    enum: PaymentType,
+  })
+  type: PaymentType;
+
+  @Column({ unique: true })
+  paystackReference: string;
 
   @Column({ nullable: true })
-  transactionId: string;
+  paystackAccessCode: string;
+
+  @Column({ nullable: true })
+  paystackAuthorizationUrl: string;
+
+  @Column({ nullable: true })
+  userId: number;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'userId' })
+  user: User;
+
+  bookingId: number;
+
+  @Column()
+  stripePaymentIntentId: string; // To link with Stripe payment intent
+
+
+  @Column()
+  currency: string;
+
+
+  @OneToOne(() => Booking, (booking) => booking.payment)
+  @JoinColumn()
+  booking: Booking;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+
+  @Column({ type: 'text', nullable: true })
+  notes: string;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

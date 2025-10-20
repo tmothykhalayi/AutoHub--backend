@@ -11,6 +11,10 @@ export class Booking {
   @ManyToOne(() => User, user => user.bookings)
   user: User;
 
+  @OneToOne(() => Payment, (payment) => payment.booking, { cascade: true, nullable: true })
+  @JoinColumn()
+  payment: Payment;
+
   @ManyToOne(() => Vehicle, vehicle => vehicle.bookings)
   vehicle: Vehicle;
 
@@ -23,8 +27,6 @@ export class Booking {
   @Column({ default: 'confirmed' })
   status: string;
 
-  @OneToOne(() => Payment, payment => payment.booking)
-  payment: Payment;
 
   @CreateDateColumn()
   createdAt: Date;
