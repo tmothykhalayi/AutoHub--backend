@@ -208,7 +208,7 @@ Content-Type: application/json
 Authorization: Bearer your-access-token-here
 
 {
-  "licensePlate": "ABCR-81234",
+  "licensePlate": "AB5CR-81234",
   "specId": 2,
   "registrationNumber": "REG-5678",
   "branchId": 1,
@@ -303,11 +303,13 @@ Content-Type: application/json
 Authorization: Bearer your-access-token-here
 
 {
-  "userId": 1,
-  "vehicleId": 9,
+  "userId": 3,
+  "vehicleId": 1,
   "startDate": "2025-11-01T10:00:00Z",
   "endDate": "2025-11-05T10:00:00Z",
-  "status": "confirmed"
+  "status": "confirmed",
+  "pickupLocation": "Main Branch - Manhattan Downtown",
+  "dropoffLocation": "Main Branch - Manhattan Downtown"
 }
 
 ###
@@ -330,8 +332,39 @@ Content-Type: application/json
 Authorization: Bearer your-access-token-here
 
 {
-  "status": "cancelled"
+  "status": "cancelled",
+  "cancellationReason": "Change of plans"
 }
+
+###
+
+### Cancel a booking
+PATCH http://localhost:8000/bookings/1/cancel
+Content-Type: application/json
+Authorization: Bearer your-access-token-here
+
+{
+  "cancellationReason": "Emergency situation",
+  "cancellationFee": 50.00
+}
+
+###
+
+### Get user bookings
+GET http://localhost:8000/bookings/user/1
+Authorization: Bearer your-access-token-here
+
+###
+
+### Get upcoming bookings
+GET http://localhost:8000/bookings/upcoming
+Authorization: Bearer your-access-token-here
+
+###
+
+### Get completed bookings
+GET http://localhost:8000/bookings/completed
+Authorization: Bearer your-access-token-here
 
 ###
 
