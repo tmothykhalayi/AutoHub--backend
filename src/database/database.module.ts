@@ -21,11 +21,11 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
           database: configService.get<string>('DB_NAME'),
           entities: [__dirname + '/../**/*.entity{.ts,.js}'],
 
-          // ✅ FORCE schema sync for first deploy
-          synchronize: true, // <<< changed from !isProduction to true
-          dropSchema: false, // TEMPORARILY drop all tables to resolve constraint issues
+          synchronize: true,
+          //drops all schema incase there are constraints in the relationship among entities
+          dropSchema: false, 
 
-          // ✅ Render-specific SSL for PostgreSQL
+          //  Render SSL to PostgreSQL
           ssl: isProduction ? { rejectUnauthorized: false } : false,
           autoLoadEntities: true,
         };

@@ -116,7 +116,7 @@ export class BookingController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Booking not found' })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: 'Unauthorized access to this booking' })
   findOne(@Param('id', ParseIntPipe) id: number, @Request() req) {
-    // For customers, ensure they can only access their own bookings
+  
     if (req.user?.role === Role.CUSTOMER) {
       return this.bookingService.getUserBookingById(id, req.user.id);
     }
@@ -154,7 +154,7 @@ export class BookingController {
     @Request() req
   ) {
     const { reason } = body;
-    // For customers, ensure they can only cancel their own bookings
+  
     if (req.user?.role === Role.CUSTOMER) {
       return this.bookingService.cancelUserBooking(id, req.user.id, reason);
     }

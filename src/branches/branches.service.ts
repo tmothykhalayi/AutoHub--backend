@@ -17,12 +17,12 @@ export class BranchService {
   ) {}
 
   async create(createBranchDto: CreateBranchDto, currentUser?: User): Promise<Branch> {
-    // 1. Authorization Logic - Only admins can create branches
+    //  Only admins can create branches
     if (currentUser && currentUser.role !== 'admin') {
       throw new BadRequestException('Only administrators can create branches');
     }
 
-    // 2. Unique Branch Name Validation
+    //  branch validation in the db
     const existingBranchByName = await this.branchRepository.findOne({
       where: { name: createBranchDto.name }
     });
@@ -30,7 +30,7 @@ export class BranchService {
       throw new ConflictException(`Branch with name "${createBranchDto.name}" already exists`);
     }
 
-    // 3. Unique Branch Code Validation
+    // Unique Branch Code Validation
     if (createBranchDto.branchCode) {
       const existingBranchByCode = await this.branchRepository.findOne({
         where: { branchCode: createBranchDto.branchCode }
@@ -40,12 +40,12 @@ export class BranchService {
       }
     }
 
-    // 4. Auto-generate Branch Code if not provided
+    //  generate code automatically if not provided
     if (!createBranchDto.branchCode) {
       createBranchDto.branchCode = await this.generateUniqueBranchCode(createBranchDto.city);
     }
 
-    // 5. Geographic Validation - Prevent nearby branches
+    //Prevent nearby branches
     if (createBranchDto.latitude && createBranchDto.longitude) {
       const nearbyBranch = await this.checkNearbyBranches(createBranchDto.latitude, createBranchDto.longitude, 2); // 2km radius
       if (nearbyBranch) {
@@ -62,12 +62,12 @@ export class BranchService {
       await this.validateBranchPhone(createBranchDto.phone);
     }
 
-    // 7. Validate Operating Hours Format
+    // Validate Operating Hours Format
     if (createBranchDto.operatingHours) {
       this.validateOperatingHours(createBranchDto.operatingHours);
     }
 
-    // 8. Create branch with enhanced data
+    // Create branch with enhanced data
     const branch = this.branchRepository.create({
       ...createBranchDto,
       isActive: createBranchDto.isActive !== undefined ? createBranchDto.isActive : true, // Default to active
@@ -75,10 +75,8 @@ export class BranchService {
 
     const savedBranch = await this.branchRepository.save(branch);
 
-    // 9. Log the creation
     this.logger.log(`Branch created - ID: ${savedBranch.id}, Name: "${savedBranch.name}", Code: ${savedBranch.branchCode}, By: ${currentUser?.id}`);
-
-    // 10. Send notifications (optional)
+// Send notifications 
     await this.notifyBranchCreation(savedBranch, currentUser);
 
     return savedBranch;
@@ -113,7 +111,7 @@ export class BranchService {
   private async generateUniqueBranchCode(city: string): Promise<string> {
     const cityCode = city.substring(0, 3).toUpperCase();
     let attempt = 1;
-    let branchCode = `${cityCode}01`; // Initialize with a default value
+    let branchCode = `${cityCode}01`; 
     let isUnique = false;
 
     while (!isUnique && attempt <= 10) {
@@ -205,7 +203,6 @@ export class BranchService {
   private async notifyBranchCreation(branch: Branch, currentUser?: User): Promise<void> {
     try {
       this.logger.log(`New branch created: ${branch.name} (${branch.branchCode})`);
-      // Add your notification logic here (email, slack, etc.)
     } catch (error) {
       this.logger.error(`Failed to send branch creation notification: ${error.message}`);
     }

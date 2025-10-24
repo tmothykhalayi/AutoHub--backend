@@ -65,14 +65,14 @@ export class BookingService {
       throw new BadRequestException('End date must be after start date');
     }
 
-    // 6. Maximum Rental Duration (e.g., 30 days)
+    //  Maximum Rental Duration   maximum 30 days
     const maxRentalDays = 30;
     const rentalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
     if (rentalDays > maxRentalDays) {
       throw new BadRequestException(`Maximum rental duration is ${maxRentalDays} days`);
     }
 
-    // 7. Minimum Rental Duration (e.g., 1 day)
+    // Minimum Rental Duration  minimum is 24hrs
     const minRentalDays = 1;
     if (rentalDays < minRentalDays) {
       throw new BadRequestException(`Minimum rental duration is ${minRentalDays} day`);
@@ -107,7 +107,7 @@ export class BookingService {
     // 9. Calculate Actual Price
     const actualPricePerDay = vehicle.spec?.dailyRate || 50;
     const totalPrice = actualPricePerDay * rentalDays;
-    // Use default security deposit since property doesn't exist in VehicleSpec
+    // Use default security deposit since property in VehicleSpec
     const securityDeposit = 100;
 
     // 10. Create Booking
@@ -131,7 +131,7 @@ export class BookingService {
 
     const savedBooking = await this.bookingRepository.save(booking);
 
-    // 12. Enhanced Email with Actual Pricing
+    //  Enhanced Email with Actual Pricing
     try {
       await this.mailService.sendBookingConfirmation(user.email, {
         name: user.firstName || 'Valued Customer',
@@ -150,7 +150,6 @@ export class BookingService {
       this.logger.error(`Failed to send booking confirmation email: ${error.message}`);
     }
 
-    // 13. Audit Logging
     this.logger.log(`Booking created - ID: ${savedBooking.id}, User: ${user.id}, Vehicle: ${vehicle.id}, Total: $${totalPrice}`);
 
     return savedBooking;
@@ -237,7 +236,7 @@ export class BookingService {
     const booking = await this.findOne(id);
     const changes: string[] = [];
 
-    // 14. Prevent updates on completed or cancelled bookings
+    // Prevent updates on completed or cancelled bookings
     if (['completed', 'cancelled'].includes(booking.status)) {
       throw new BadRequestException(`Cannot update ${booking.status} booking`);
     }
@@ -253,7 +252,7 @@ export class BookingService {
       changes.push('User changed');
     }
 
-    // 16. Vehicle Update with Conflict Check
+    // Vehicle Update
     if (updateBookingDto.vehicleId && updateBookingDto.vehicleId !== booking.vehicle.id) {
       const newVehicle = await this.vehicleRepository.findOne({ 
         where: { id: updateBookingDto.vehicleId },
@@ -348,7 +347,6 @@ export class BookingService {
         datesChanged = true;
       }
 
-      // Recalculate price if dates changed
       if (datesChanged) {
         const rentalDays = Math.ceil((booking.endDate.getTime() - booking.startDate.getTime()) / (1000 * 60 * 60 * 24));
         booking.rentalDays = rentalDays;
@@ -388,7 +386,6 @@ export class BookingService {
 
     const updatedBooking = await this.bookingRepository.save(booking);
 
-    // 19. Enhanced Update Notification
     if (changes.length > 0) {
       try {
         await this.mailService.sendBookingUpdate(booking.user.email, {
@@ -460,7 +457,6 @@ export class BookingService {
     return { message: `Booking #${id} has been successfully deleted` };
   }
 
-  // 21. Additional Business Methods
   async getUserBookings(userId: number): Promise<Booking[]> {
     const bookings = await this.bookingRepository.find({
       where: { user: { id: userId } },
@@ -468,7 +464,6 @@ export class BookingService {
       order: { createdAt: 'DESC' },
     });
 
-    // Add calculated fields
     const today = new Date();
     return bookings.map(booking => ({
       ...booking,
@@ -479,7 +474,6 @@ export class BookingService {
     }));
   }
   
-  // Fixed method to get a specific booking for a user, ensuring they can only access their own bookings
   async getUserBookingById(bookingId: number, userId: number): Promise<Booking> {
     const booking = await this.bookingRepository.findOne({
       where: { 
@@ -536,16 +530,15 @@ export class BookingService {
     let cancellationFee = 0;
 
     if (daysUntilStart < 1) {
-      cancellationFee = booking.totalPrice * 0.5; // 50% fee if cancelled within 24 hours
+      cancellationFee = booking.totalPrice * 0.5; 
     } else if (daysUntilStart < 3) {
-      cancellationFee = booking.totalPrice * 0.25; // 25% fee if cancelled within 3 days
+      cancellationFee = booking.totalPrice * 0.25;
     }
 
     booking.status = 'cancelled';
     booking.cancellationReason = reason || 'User cancelled';
     booking.cancellationFee = cancellationFee;
 
-    // Free up vehicle
     booking.vehicle.isAvailable = true;
     booking.vehicle.status = 'available';
     await this.vehicleRepository.save(booking.vehicle);
@@ -620,9 +613,9 @@ export class BookingService {
     let cancellationFee = 0;
 
     if (daysUntilStart < 1) {
-      cancellationFee = booking.totalPrice * 0.5; // 50% fee if cancelled within 24 hours
+      cancellationFee = booking.totalPrice * 0.5; 
     } else if (daysUntilStart < 3) {
-      cancellationFee = booking.totalPrice * 0.25; // 25% fee if cancelled within 3 days
+      cancellationFee = booking.totalPrice * 0.25; 
     }
 
     booking.status = 'cancelled';

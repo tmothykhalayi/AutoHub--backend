@@ -1,4 +1,3 @@
-// src/users/users.service.ts
 import { Injectable, NotFoundException, BadRequestException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan } from 'typeorm';
@@ -29,30 +28,22 @@ export class UsersService {
     throw new BadRequestException('Email already in use');
   }
 
-  // Validate password strength
   this.validatePasswordStrength(createUserDto.password);
-
-  // Restrict roles to only 'customer' and 'admin'
   if (createUserDto.role && ![Role.CUSTOMER, Role.ADMIN].includes(createUserDto.role as Role)) {
     throw new BadRequestException('Invalid role. Allowed roles: customer, admin');
   }
 
   // Set default role to 'customer'
   const userRole = createUserDto.role || Role.CUSTOMER;
-
-  // Prevent non-admins from creating users (only allow if no currentUser = public registration, or if admin)
   if (currentUser && currentUser.role !== Role.ADMIN) {
     throw new BadRequestException('Only administrators can create users');
   }
-
-  // Prevent non-admins from creating admin users
   if (userRole === Role.ADMIN) {
     if (!currentUser || currentUser.role !== Role.ADMIN) {
       throw new BadRequestException('Only administrators can create admin users');
     }
   }
 
-  // Prevent too many registrations from same IP within last hour
   if (ipAddress) {
     await this.checkRegistrationLimit(ipAddress);
   }
@@ -64,8 +55,8 @@ export class UsersService {
     firstName: createUserDto.firstName,
     lastName: createUserDto.lastName,
     phone: createUserDto.phone,
-    password: hashedPassword, // Using password as defined in the User entity
-    role: userRole as Role, // Explicitly cast to Role enum
+    password: hashedPassword, 
+    role: userRole as Role, 
     registrationIp: ipAddress,
     emailVerified: false,
   });
@@ -106,7 +97,6 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
 }
 
   async findAll(currentUser?: User): Promise<User[]> {
-  // Non-admin users (customers) can only see limited information
   if (currentUser && currentUser.role !== Role.ADMIN) {
     return this.usersRepository.find({
       select: [
@@ -119,7 +109,7 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
     });
   }
 
-  // Admins get full access (without passwords)
+
   return this.usersRepository.find({
     select: [
       'id', 
@@ -135,18 +125,13 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
     order: { createdAt: 'DESC' }
   });
 }
-
-  // Find user by ID with error handling
   async findById(id: number, currentUser?: User): Promise<User> {
   const user = await this.usersRepository.findOne({ where: { id } });
   
   if (!user) {
     throw new NotFoundException(`User with id ${id} not found`);
   }
-
-  // Non-admin users can only see limited information
   if (currentUser && currentUser.role !== Role.ADMIN) {
-    // Return limited data for non-admin users
     return {
       id: user.id,
       firstName: user.firstName,
@@ -155,7 +140,7 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
     } as User;
   }
 
-  // Admins get full access (without password)
+  // Admins get full access 
   const { password, ...userWithoutPassword } = user;
   return userWithoutPassword as User;
 }
@@ -169,9 +154,9 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
     return null;
   }
 
-  // Non-admin users can only see limited information
+  // Non-admin users can only limited info
   if (currentUser && currentUser.role !== Role.ADMIN) {
-    // Return limited data for non-admin users
+  
     return {
       id: user.id,
       firstName: user.firstName,
@@ -185,11 +170,10 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
   return userWithoutPassword;
 }
 
-  // Update user with email uniqueness check
+  // Update user with email
   async update(id: number, updateUserDto: UpdateUserDto, currentUser?: User): Promise<User> {
   const user = await this.findById(id);
 
-  // Authorization checks
   if (currentUser) {
     // Non-admin users can only update their own profile
     if (currentUser.role !== Role.ADMIN && currentUser.id !== id) {
@@ -212,14 +196,10 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
         throw new BadRequestException('You are not allowed to update restricted fields');
       }
     }
-
-    // Only admins can update other admin users
     if (user.role === Role.ADMIN && currentUser.id !== id && currentUser.role !== Role.ADMIN) {
       throw new BadRequestException('Only administrators can update admin users');
     }
   }
-
-  // Email uniqueness check
   if (updateUserDto.email && updateUserDto.email !== user.email) {
     const emailExists = await this.usersRepository.findOne({ 
       where: { email: updateUserDto.email } 
@@ -234,7 +214,7 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
     updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
   }
 
-  // Role validation - only allow 'customer' and 'admin' roles
+  // Role validation
   if (updateUserDto.role && ![Role.CUSTOMER, Role.ADMIN].includes(updateUserDto.role as Role)) {
     throw new BadRequestException('Invalid role. Allowed roles: customer, admin');
   }
@@ -247,7 +227,6 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
   // Create a safe copy of the DTO with proper type casting
   const updateData: Partial<User> = { 
     ...updateUserDto,
-    // Remove role from the spread to handle it separately
     role: undefined
   };
   
@@ -262,18 +241,17 @@ private async checkRegistrationLimit(ipAddress: string): Promise<void> {
 }
   // Delete user with protections
   async remove(id: number, currentUserId?: number): Promise<{ message: string }> {
-  // Prevent self-deletion
   if (currentUserId && id === currentUserId) {
     throw new BadRequestException('You cannot delete your own account');
   }
 
   const user = await this.findById(id);
 
-  // Protect admin users from being deleted
+  // Protect admin users deletion
   if (user.role === Role.ADMIN) {
     throw new BadRequestException('Admin users cannot be deleted');
   }
-  // Get current user to check if they are admin (authorization check)
+  // Get current user to check if they are admin
   if (currentUserId) {
     const currentUser = await this.findById(currentUserId);
     if (currentUser.role !== Role.ADMIN) {

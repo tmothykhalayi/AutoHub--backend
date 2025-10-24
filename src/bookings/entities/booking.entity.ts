@@ -34,7 +34,6 @@ rentalDays: number;
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  // Breaking the circular dependency by making payment field nullable and with no cascade
   @OneToOne(() => Payment, (payment) => payment.booking, { nullable: true })
   @JoinColumn({ name: 'paymentId' }) 
   payment: Payment;

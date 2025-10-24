@@ -27,13 +27,13 @@ export class SupportService {
   const overdueTime = new Date();
   switch (ticket.priority) {
     case 'high':
-      overdueTime.setHours(overdueTime.getHours() - 24); // 24 hours for high priority
+      overdueTime.setHours(overdueTime.getHours() - 24);
       break;
     case 'medium':
-      overdueTime.setHours(overdueTime.getHours() - 48); // 48 hours for medium
+      overdueTime.setHours(overdueTime.getHours() - 48); 
       break;
     default:
-      overdueTime.setHours(overdueTime.getHours() - 72); // 72 hours for low
+      overdueTime.setHours(overdueTime.getHours() - 72);
   }
   return ticket.createdAt < overdueTime;
 }
@@ -105,12 +105,10 @@ private async checkRateLimit(userId: number): Promise<void> {
 }
 
 private async autoAssignAgent(category: string, priority: string): Promise<string | undefined> {
-  // Logic to auto-assign to appropriate support agent based on category/priority
-  // This could integrate with your team management system
   if (priority === 'high') return 'senior-support';
   if (category === 'technical') return 'tech-team';
   if (category === 'billing') return 'billing-team';
-  return undefined; // Manual assignment needed
+  return undefined; 
 }
 
 private getEstimatedResponseTime(priority: string): string {
@@ -123,21 +121,16 @@ private getEstimatedResponseTime(priority: string): string {
 }
 
 private async notifySupportTeam(ticket: Support): Promise<void> {
-  // Logic to notify support team (Slack, internal dashboard, etc.)
   this.logger.log(`New support ticket #${ticket.id} created - Priority: ${ticket.priority}, Category: ${ticket.category}`);
 }
 
   private logTicketCreationMetrics(ticket: Support): void {
-  // Log metrics for analytics
   this.logger.log(`TicketCreated - ID: ${ticket.id}, Priority: ${ticket.priority}, Category: ${ticket.category}, User: ${ticket.user.id}`);
 }
 
 private async getTicketConversation(ticketId: number): Promise<any[]> {
-  // Placeholder for ticket conversation history
-  // This should be replaced with actual implementation fetching replies/conversation
-  // from your database based on the ticketId
   this.logger.log(`Fetching conversation history for ticket: ${ticketId}`);
-  return []; // Return empty array for now
+  return []; 
 }
 
 private getPriorityLabel(priority: string): string {
@@ -152,24 +145,21 @@ private getPriorityLabel(priority: string): string {
   async create(createSupportDto: CreateSupportDto): Promise<Support> {
   const { userId, subject, message, priority, category } = createSupportDto;
   
-  // 1. User Validation Logic
+  //User Validation Logic
   const user = await this.userRepository.findOne({ where: { id: userId } });
   if (!user) throw new NotFoundException('User not found');
 
-  // 2. Auto-Priority Detection Logic
+  // Priority Detection Logic
   const detectedPriority = priority || this.autoDetectPriority(subject, message);
-  
-  // 3. Auto-Category Detection Logic
   const detectedCategory = category || this.autoDetectCategory(subject, message);
   
-  // 4. Duplicate Ticket Prevention Logic
+  // Duplicate Ticket
   const recentDuplicate = await this.checkForDuplicateTickets(userId, subject);
   if (recentDuplicate) {
     this.logger.warn(`Possible duplicate ticket detected for user ${userId}: ${subject}`);
-    // Optionally: throw error or merge with existing ticket
   }
 
-  // 5. Support Ticket Creation with Enhanced Data
+  //  Support Ticket Creation
   const supportTicket = this.supportRepository.create({
     user,
     subject: subject.trim(),
@@ -182,10 +172,10 @@ private getPriorityLabel(priority: string): string {
 
   const savedTicket = await this.supportRepository.save(supportTicket);
   
-  // 6. Rate Limiting Logic (Prevent spam)
+  // Rate Limiting Logic 
   await this.checkRateLimit(userId);
 
-  // 7. Enhanced Email Notification Logic
+  // Email Notification Logic
   try {
     await this.mailService.sendSupportTicketConfirmation(user.email, {
       name: user.firstName || user.full_name || 'Valued Customer',
@@ -195,20 +185,16 @@ private getPriorityLabel(priority: string): string {
       priority: detectedPriority,
       category: detectedCategory,
       estimatedResponseTime: this.getEstimatedResponseTime(detectedPriority)
-    } as any); // Using type assertion as a temporary fix
+    } as any);
     this.logger.log(`Support ticket #${savedTicket.id} confirmation email sent to ${user.email}`);
   } catch (error) {
     this.logger.error(`Failed to send support ticket confirmation email: ${error.message}`);
   }
-
-  // 8. Internal Notification Logic (Notify support team)
   try {
     await this.notifySupportTeam(savedTicket);
   } catch (error) {
     this.logger.error(`Failed to notify support team: ${error.message}`);
   }
-
-  // 9. Analytics Logging Logic
   this.logTicketCreationMetrics(savedTicket);
 
   return savedTicket;
@@ -222,16 +208,13 @@ private getPriorityLabel(priority: string): string {
   category?: string;
   assignedTo?: string;
 }): Promise<Support[]> {
-  
-  // 1. Basic Role-Based Access Control
   const whereConditions: any = {};
 
   if (currentUser && currentUser.role !== Role.ADMIN && currentUser.role !== Role.SUPPORT_AGENT) {
-    // Regular users only see their own tickets
+    // users only see their own tickets
     whereConditions.user = { id: currentUser.id };
   }
 
-  // 2. Apply filters
   if (filters?.status) {
     whereConditions.status = filters.status;
   }
@@ -248,7 +231,7 @@ private getPriorityLabel(priority: string): string {
     whereConditions.assignedTo = filters.assignedTo;
   }
 
-    // 3. Secure data selection
+    // data selection
   const tickets = await this.supportRepository.find({
     where: whereConditions,
     relations: ['user'],
@@ -261,7 +244,6 @@ private getPriorityLabel(priority: string): string {
       category: true,
       assignedTo: true,
       createdAt: true,
-      // Removing updatedAt as it's not defined in the FindOptionsSelect type
       user: {
         id: true,
         firstName: true,
@@ -277,7 +259,6 @@ private getPriorityLabel(priority: string): string {
 
 //find one support ticket by id
   async findOne(id: number, currentUser?: User): Promise<Support> {
-  // 1. Basic Role-Based Access Control
   const whereConditions: any = { id };
 
   if (currentUser && currentUser.role !== Role.ADMIN && currentUser.role !== Role.SUPPORT_AGENT) {
@@ -304,12 +285,12 @@ private getPriorityLabel(priority: string): string {
         firstName: true,
         lastName: true,
         email: true,
-        phone: true // Include phone for support context
+        phone: true 
       }
     }
   });
 
-  // 3. Enhanced Error Handling
+  
   if (!ticket) {
     if (currentUser) {
       this.logger.warn(`Ticket access denied or not found - ID: ${id}, User: ${currentUser.id}`);
@@ -319,7 +300,6 @@ private getPriorityLabel(priority: string): string {
     }
   }
 
-  // 4. Add Conversation History (if you have replies)
   const conversation = await this.getTicketConversation(id);
   
   return {
@@ -333,7 +313,7 @@ private getPriorityLabel(priority: string): string {
   };
 }
 
-//async update support ticket
+// update support ticket
   async update(id: number, updateSupportDto: UpdateSupportDto): Promise<Support> {
     const ticket = await this.findOne(id);
     const previousStatus = ticket.status;
@@ -367,22 +347,21 @@ private getPriorityLabel(priority: string): string {
   async remove(id: number, currentUser?: User): Promise<{ message: string }> {
   const ticket = await this.findOne(id, currentUser);
 
-  // Authorization
+  // only admins 
   if (!currentUser || currentUser.role !== Role.ADMIN) {
     throw new ForbiddenException('Only administrators can delete support tickets');
   }
 
-  // Business rules
   if (ticket.status === 'open') {
     throw new BadRequestException('Please close the ticket before deletion');
   }
 
-  // Soft delete implementation
+  // Soft delete
   await this.supportRepository.update(id, {
     deleted: true,
     deletedAt: new Date(),
     deletedBy: currentUser.id,
-    deletionReason: 'Admin deletion' // You could make this a parameter
+    deletionReason: 'Admin deletion'
   });
 
   this.logger.log(`Ticket soft-deleted - ID: ${id}, By: ${currentUser.id}`);

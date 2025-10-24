@@ -22,7 +22,7 @@ export class VehicleSpecService {
   ) {}
 
   async create(createDto: CreateVehicleSpecDto, currentUser?: User): Promise<VehicleSpec> {
-    // 1. Authorization Logic - Only admins can create specs
+    // 1. Authorization Logic
     if (currentUser && currentUser.role !== 'admin') {
       throw new BadRequestException('Only administrators can create vehicle specifications');
     }
@@ -46,14 +46,10 @@ export class VehicleSpecService {
     }
 
     // 3. Data Validation Logic
-    this.validateVehicleSpecData(createDto);
-
-    // 4. Auto-generate name if not provided
+    this.validateVehicleSpecData(createDto)
     if (!createDto.name && createDto.make && createDto.model && createDto.year) {
       createDto.name = `${createDto.make} ${createDto.model} ${createDto.year}`;
     }
-
-    // 5. Calculate derived fields
     const enhancedData = {
       ...createDto,
       fuelEfficiency: this.calculateFuelEfficiency(createDto),
@@ -62,8 +58,6 @@ export class VehicleSpecService {
 
     const vehicleSpec = this.vehicleSpecRepository.create(enhancedData);
     const savedSpec = await this.vehicleSpecRepository.save(vehicleSpec);
-
-    // 6. Audit Logging
     this.logger.log(`Vehicle spec created - ID: ${savedSpec.id}, Name: "${savedSpec.name}", By: ${currentUser?.id}`);
 
     return savedSpec;
@@ -77,7 +71,6 @@ export class VehicleSpecService {
     maxSeats?: number;
     search?: string;
   }): Promise<VehicleSpec[]> {
-    // 7. Build where conditions
     const whereConditions: any = {};
 
     if (options?.category) {
@@ -102,7 +95,6 @@ export class VehicleSpecService {
       }
     }
 
-    // 8. Find with relations and filters
     const specs = await this.vehicleSpecRepository.find({
       where: whereConditions,
       relations: ['vehicles'],
@@ -111,8 +103,6 @@ export class VehicleSpecService {
         model: 'ASC'
       }
     });
-
-    // 9. Apply search filter in memory (for simple cases)
     if (options?.search) {
       const searchTerm = options.search.toLowerCase();
       return specs.filter(spec =>
@@ -138,8 +128,6 @@ export class VehicleSpecService {
     if (!spec) {
       throw new NotFoundException(`Vehicle specification with id ${id} not found`);
     }
-
-    // 10. Add calculated fields for response
     return {
       ...spec,
       rentalSuitability: this.calculateRentalSuitability(spec),
@@ -150,8 +138,6 @@ export class VehicleSpecService {
 
   async update(id: number, updateDto: UpdateVehicleSpecDto, currentUser?: User): Promise<VehicleSpec> {
     const spec = await this.findOne(id);
-
-    // 11. Authorization Logic
     if (currentUser && currentUser.role !== 'admin') {
       throw new BadRequestException('Only administrators can update vehicle specifications');
     }
@@ -179,8 +165,6 @@ export class VehicleSpecService {
         );
       }
     }
-
-    // 14. Recalculate derived fields if relevant data changed
     const updatedData = { ...updateDto };
     if (updateDto.engineSize || updateDto.fuelType) {
       updatedData['fuelEfficiency'] = this.calculateFuelEfficiency({ ...spec, ...updateDto });
@@ -200,13 +184,10 @@ export class VehicleSpecService {
 
   async remove(id: number, currentUser?: User): Promise<{ message: string }> {
     const spec = await this.findOne(id);
-
-    // 15. Authorization Logic
     if (currentUser && currentUser.role !== 'admin') {
       throw new BadRequestException('Only administrators can delete vehicle specifications');
     }
-
-    // 16. Business Logic - Prevent deletion if vehicles are using this spec
+    //  Prevent deletion if vehicles are using this spec
     if (spec.vehicles && spec.vehicles.length > 0) {
       throw new BadRequestException(
         `Cannot delete specification used by ${spec.vehicles.length} vehicles. Reassign vehicles first.`
@@ -214,14 +195,10 @@ export class VehicleSpecService {
     }
 
     await this.vehicleSpecRepository.remove(spec);
-
-    // 17. Audit Logging
     this.logger.log(`Vehicle spec deleted - ID: ${id}, Name: "${spec.name}", By: ${currentUser?.id}`);
 
     return { message: `Vehicle specification "${spec.name}" has been deleted` };
   }
-
-  // 18. Additional Business Methods
   async findByCategory(category: string): Promise<VehicleSpec[]> {
     return this.vehicleSpecRepository.find({
       where: { category },
@@ -242,8 +219,6 @@ export class VehicleSpecService {
     const allSpecs = await this.vehicleSpecRepository.find({
       relations: ['vehicles']
     });
-
-    // Sort by number of vehicles (descending) and take top N
     return allSpecs
       .sort((a, b) => (b.vehicles?.length || 0) - (a.vehicles?.length || 0))
       .slice(0, limit);
@@ -266,26 +241,17 @@ export class VehicleSpecService {
     return categories.sort();
   }
 
-  // ========== SUPPORTING PRIVATE METHODS ==========
-
   private validateVehicleSpecData(dto: CreateVehicleSpecDto | UpdateVehicleSpecDto): void {
-    // Validate engine size
     if (dto.engineSize && (dto.engineSize < 0.5 || dto.engineSize > 10)) {
       throw new BadRequestException('Engine size must be between 0.5L and 10L');
     }
-
-    // Validate seating capacity
     if (dto.seats && (dto.seats < 1 || dto.seats > 20)) {
       throw new BadRequestException('Seating capacity must be between 1 and 20');
     }
-
-    // Validate year
     const currentYear = new Date().getFullYear();
     if (dto.year && (dto.year < 1990 || dto.year > currentYear + 1)) {
       throw new BadRequestException(`Vehicle year must be between 1990 and ${currentYear + 1}`);
     }
-
-    // Validate rates
     if (dto.dailyRate && dto.dailyRate < 0) {
       throw new BadRequestException('Daily rate cannot be negative');
     }
@@ -293,8 +259,6 @@ export class VehicleSpecService {
     if (dto.weeklyRate && dto.weeklyRate < 0) {
       throw new BadRequestException('Weekly rate cannot be negative');
     }
-
-    // Validate weekly rate is better than daily
     if (dto.dailyRate && dto.weeklyRate && dto.weeklyRate >= dto.dailyRate * 7) {
       throw new BadRequestException('Weekly rate should be less than 7 times daily rate');
     }
