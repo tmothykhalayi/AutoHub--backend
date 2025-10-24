@@ -1,0 +1,83 @@
+10/12/25, 1:24 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot POST /vehicle","error":"Not Found","statusCode":404} - Path: /vehicle
+10/12/25, 1:25 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":["property fullName should not exist","property phoneNumber should not exist","firstName must be a string","firstName should not be empty","lastName must be a string","lastName should not be empty"],"error":"Bad Request","statusCode":400} - Path: /users
+10/12/25, 1:33 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot POST /vehicle","error":"Not Found","statusCode":404} - Path: /vehicle
+10/12/25, 1:33 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot POST /vehicle","error":"Not Found","statusCode":404} - Path: /vehicle
+10/12/25, 1:35 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot POST /vehicle-spec","error":"Not Found","statusCode":404} - Path: /vehicle-spec
+10/12/25, 1:35 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot GET /vehicle-spec","error":"Not Found","statusCode":404} - Path: /vehicle-spec
+10/12/25, 1:37 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot POST /vehicle","error":"Not Found","statusCode":404} - Path: /vehicle
+10/12/25, 1:38 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":["licensePlate must be a string","licensePlate should not be empty"],"error":"Bad Request","statusCode":400} - Path: /vehicle
+10/12/25, 1:40 PM - IP: ::ffff:127.0.0.1 - ERROR: duplicate key value violates unique constraint "UQ_a654a0355ae4c5ba31c5f6c8925" - Path: /vehicle
+10/12/25, 1:44 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not found","error":"Not Found","statusCode":404} - Path: /bookings
+10/12/25, 1:44 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not found","error":"Not Found","statusCode":404} - Path: /bookings
+10/12/25, 1:44 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not available","error":"Bad Request","statusCode":400} - Path: /bookings
+10/12/25, 1:45 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not available","error":"Bad Request","statusCode":400} - Path: /bookings
+10/12/25, 1:46 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not available","error":"Bad Request","statusCode":400} - Path: /bookings
+10/12/25, 8:37 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Email already in use","error":"Bad Request","statusCode":400} - Path: /users
+10/13/25, 2:00 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Email already in use","error":"Bad Request","statusCode":400} - Path: /users
+10/13/25, 2:01 PM - IP: ::ffff:127.0.0.1 - ERROR: duplicate key value violates unique constraint "UQ_a654a0355ae4c5ba31c5f6c8925" - Path: /vehicle
+10/13/25, 2:01 PM - IP: ::ffff:127.0.0.1 - ERROR: duplicate key value violates unique constraint "UQ_a654a0355ae4c5ba31c5f6c8925" - Path: /vehicle
+10/13/25, 2:01 PM - IP: ::ffff:127.0.0.1 - ERROR: duplicate key value violates unique constraint "UQ_a654a0355ae4c5ba31c5f6c8925" - Path: /vehicle
+10/13/25, 2:01 PM - IP: ::ffff:127.0.0.1 - ERROR: duplicate key value violates unique constraint "UQ_a654a0355ae4c5ba31c5f6c8925" - Path: /vehicle
+10/13/25, 2:02 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not available","error":"Bad Request","statusCode":400} - Path: /bookings
+10/13/25, 2:02 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not found","error":"Not Found","statusCode":404} - Path: /bookings
+10/13/25, 2:02 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle with id 2 not found","error":"Not Found","statusCode":404} - Path: /vehicle/2
+10/13/25, 2:02 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle with id 2 not found","error":"Not Found","statusCode":404} - Path: /vehicle/2
+10/13/25, 2:02 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not found","error":"Not Found","statusCode":404} - Path: /bookings
+10/13/25, 2:03 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle with id 2 not found","error":"Not Found","statusCode":404} - Path: /vehicle/2
+10/13/25, 2:04 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not available","error":"Bad Request","statusCode":400} - Path: /bookings
+10/13/25, 2:11 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle not available","error":"Bad Request","statusCode":400} - Path: /bookings
+10/13/25, 2:12 PM - IP: ::ffff:127.0.0.1 - ERROR: duplicate key value violates unique constraint "UQ_a654a0355ae4c5ba31c5f6c8925" - Path: /vehicle
+10/20/25, 5:18 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /users
+10/20/25, 5:18 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /users
+10/20/25, 5:19 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /users
+10/20/25, 5:38 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Email already in use","error":"Bad Request","statusCode":400} - Path: /users
+10/20/25, 5:43 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+10/20/25, 5:43 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Email already in use","error":"Bad Request","statusCode":400} - Path: /users
+10/20/25, 6:27 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+10/20/25, 6:27 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+10/20/25, 6:29 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Expected double-quoted property name in JSON at position 150 (line 6 column 31)","error":"Bad Request","statusCode":400} - Path: /auth/register
+10/20/25, 6:30 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Expected double-quoted property name in JSON at position 150 (line 6 column 31)","error":"Bad Request","statusCode":400} - Path: /auth/register
+10/20/25, 6:31 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+10/20/25, 6:33 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register
+10/20/25, 6:34 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register
+10/20/25, 6:35 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+10/20/25, 6:35 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+10/20/25, 6:35 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+10/20/25, 6:37 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Only administrators can create admin users","error":"Bad Request","statusCode":400} - Path: /users
+10/20/25, 6:37 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Only administrators can create admin users","error":"Bad Request","statusCode":400} - Path: /users
+10/20/25, 6:37 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot GET /users/email/janedoe123@example.com","error":"Not Found","statusCode":404} - Path: /users/email/janedoe123@example.com
+10/20/25, 7:13 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Too many support tickets created recently. Please wait before submitting another.","error":"Bad Request","statusCode":400} - Path: /support
+10/20/25, 11:50 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":["City name cannot exceed 50 characters","City name must be at least 2 characters long","city must be a string","Country name cannot exceed 50 characters","Country name must be at least 2 characters long","country must be a string","Latitude must be between -90 and 90","Latitude must be between -90 and 90","Invalid latitude value","Latitude must be a number","Longitude must be between -180 and 180","Longitude must be between -180 and 180","Invalid longitude value","Longitude must be a number"],"error":"Bad Request","statusCode":400} - Path: /branches
+10/20/25, 11:52 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot POST /auth/signup","error":"Not Found","statusCode":404} - Path: /auth/signup
+10/20/25, 11:53 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+10/20/25, 11:53 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":["City name cannot exceed 50 characters","City name must be at least 2 characters long","city must be a string","Country name cannot exceed 50 characters","Country name must be at least 2 characters long","country must be a string","Latitude must be between -90 and 90","Latitude must be between -90 and 90","Invalid latitude value","Latitude must be a number","Longitude must be between -180 and 180","Longitude must be between -180 and 180","Invalid longitude value","Longitude must be a number"],"error":"Bad Request","statusCode":400} - Path: /branches
+10/20/25, 11:55 PM - IP: ::ffff:127.0.0.1 - ERROR: column branch.latitude does not exist - Path: /branches
+10/20/25, 11:56 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":["City name cannot exceed 50 characters","City name must be at least 2 characters long","city must be a string","Country name cannot exceed 50 characters","Country name must be at least 2 characters long","country must be a string","Latitude must be between -90 and 90","Latitude must be between -90 and 90","Invalid latitude value","Latitude must be a number","Longitude must be between -180 and 180","Longitude must be between -180 and 180","Invalid longitude value","Longitude must be a number"],"error":"Bad Request","statusCode":400} - Path: /branches
+10/21/25, 12:03 AM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Email mainbranch@autohub.com is already registered to branch \"Default Branch Name\"","error":"Conflict","statusCode":409} - Path: /branches
+10/21/25, 12:04 AM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Phone +1234567890 is already registered to branch \"Default Branch Name\"","error":"Conflict","statusCode":409} - Path: /branches
+10/21/25, 10:03 AM - IP: ::1 - ERROR: {"message":"Cannot GET /favicon.ico","error":"Not Found","statusCode":404} - Path: /favicon.ico
+10/21/25, 10:03 AM - IP: ::1 - ERROR: {"message":"Cannot GET /api","error":"Not Found","statusCode":404} - Path: /api
+10/21/25, 10:04 AM - IP: ::ffff:127.0.0.1 - ERROR: {"message":["property weeklyRate should not exist","property dailyRate should not exist","name must be shorter than or equal to 100 characters","name must be longer than or equal to 2 characters","name must be a string","fuelType must be one of the following values: petrol, diesel, electric, hybrid","transmission must be one of the following values: manual, automatic"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+10/21/25, 10:05 AM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle specification not found","error":"Not Found","statusCode":404} - Path: /vehicle
+10/21/25, 10:05 AM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle specification not found","error":"Not Found","statusCode":404} - Path: /vehicle
+10/21/25, 10:05 AM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle specification not found","error":"Not Found","statusCode":404} - Path: /vehicle
+10/21/25, 10:05 AM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Vehicle specification not found","error":"Not Found","statusCode":404} - Path: /vehicle
+10/21/25, 10:05 AM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User not found","error":"Not Found","statusCode":404} - Path: /bookings
+10/21/25, 12:11 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /bookings
+10/21/25, 12:53 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /bookings
+10/21/25, 12:54 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":["property rentalDays should not exist","property totalPrice should not exist","property securityDeposit should not exist"],"error":"Bad Request","statusCode":400} - Path: /bookings
+10/21/25, 12:57 PM - IP: ::ffff:127.0.0.1 - ERROR: Cannot read properties of undefined (reading 'id') - Path: /bookings
+10/21/25, 12:58 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User not found","error":"Not Found","statusCode":404} - Path: /bookings
+10/21/25, 12:59 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User not found","error":"Not Found","statusCode":404} - Path: /bookings
+10/21/25, 1:00 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot POST /auth/signup","error":"Not Found","statusCode":404} - Path: /auth/signup
+10/21/25, 1:00 PM - IP: ::ffff:127.0.0.1 - ERROR: Cannot read properties of undefined (reading 'role') - Path: /bookings/1
+10/21/25, 1:00 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Cannot POST /payments","error":"Not Found","statusCode":404} - Path: /payments
+10/21/25, 1:01 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /payments
+10/22/25, 3:35 PM - IP: ::1 - ERROR: {"message":"Invalid role. Allowed roles: customer, admin","error":"Bad Request","statusCode":400} - Path: /users
+10/22/25, 3:36 PM - IP: ::1 - ERROR: {"message":"Invalid role. Allowed roles: customer, admin","error":"Bad Request","statusCode":400} - Path: /users
+10/22/25, 3:36 PM - IP: ::1 - ERROR: {"message":"Invalid role. Allowed roles: customer, admin","error":"Bad Request","statusCode":400} - Path: /users
+10/22/25, 3:36 PM - IP: ::1 - ERROR: {"message":"Invalid role. Allowed roles: customer, admin","error":"Bad Request","statusCode":400} - Path: /users
+10/22/25, 3:37 PM - IP: ::1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+10/22/25, 3:37 PM - IP: ::1 - ERROR: {"message":["role must be one of the following values: admin, customer, support_agent, staff"],"error":"Bad Request","statusCode":400} - Path: /auth/register
+10/22/25, 3:39 PM - IP: ::1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register
+10/22/25, 3:41 PM - IP: ::1 - ERROR: {"message":"User with id 6 not found","error":"Not Found","statusCode":404} - Path: /users/6
