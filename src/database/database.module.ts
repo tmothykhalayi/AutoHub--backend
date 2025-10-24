@@ -21,7 +21,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
           database: configService.get<string>('DB_NAME'),
           entities: [__dirname + '/../**/*.entity{.ts,.js}'],
 
-          synchronize: true,
+          synchronize: false,
           //drops all schema incase there are constraints in the relationship among entities
           dropSchema: false, 
 

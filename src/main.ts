@@ -75,8 +75,9 @@ async function bootstrap() {
   });
   
   // Get port from config with fallback
-  const port = configService.get<number>('PORT') || 3000;
-  await app.listen(port);
+  const port = process.env.PORT || configService.get<string>('PORT') || '3000';
+await app.listen(parseInt(port, 10), '0.0.0.0');
+
   console.log(`Application is running on: http://localhost:${port}`);
   console.log(`Swagger documentation is available at: http://localhost:${port}/api/docs`);
 }
