@@ -81,3 +81,16 @@
 10/22/25, 3:37 PM - IP: ::1 - ERROR: {"message":["role must be one of the following values: admin, customer, support_agent, staff"],"error":"Bad Request","statusCode":400} - Path: /auth/register
 10/22/25, 3:39 PM - IP: ::1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register
 10/22/25, 3:41 PM - IP: ::1 - ERROR: {"message":"User with id 6 not found","error":"Not Found","statusCode":404} - Path: /users/6
+12/20/25, 11:19 PM - IP: 127.0.0.1 - ERROR: {"message":["role must be one of the following values: admin, customer, support_agent, staff"],"error":"Bad Request","statusCode":400} - Path: /auth/register
+12/20/25, 11:19 PM - IP: 127.0.0.1 - ERROR: {"message":["role must be one of the following values: admin, customer, support_agent, staff"],"error":"Bad Request","statusCode":400} - Path: /auth/register
+12/20/25, 11:20 PM - IP: 127.0.0.1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register
+12/20/25, 11:44 PM - IP: 127.0.0.1 - ERROR: relation "user" does not exist - Path: /auth/register
+12/20/25, 11:44 PM - IP: 127.0.0.1 - ERROR: relation "user" does not exist - Path: /auth/register
+12/20/25, 11:45 PM - IP: 127.0.0.1 - ERROR: relation "user" does not exist - Path: /auth/register
+12/20/25, 11:48 PM - IP: 127.0.0.1 - ERROR: {"message":["role must be one of the following values: admin, customer, support_agent, staff"],"error":"Bad Request","statusCode":400} - Path: /auth/register
+12/20/25, 11:49 PM - IP: 127.0.0.1 - ERROR: relation "user" does not exist - Path: /auth/register
+12/20/25, 11:52 PM - IP: 127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+12/20/25, 11:55 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/signout
+12/20/25, 11:56 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/20/25, 11:56 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/20/25, 11:57 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh

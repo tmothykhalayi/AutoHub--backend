@@ -63,14 +63,13 @@ export class UsersService {
       await this.checkRegistrationLimit(ipAddress);
     }
 
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-
+    // Don't hash password here - let the @BeforeInsert hook handle it
     const user = this.usersRepository.create({
       email: createUserDto.email,
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       phone: createUserDto.phone,
-      password: hashedPassword,
+      password: createUserDto.password,
       role: userRole as Role,
       registrationIp: ipAddress,
       emailVerified: false,
@@ -344,16 +343,13 @@ export class UsersService {
     const firstName = nameParts[0];
     const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-
-    // Create user object
+    // Create user object (password will be hashed by @BeforeInsert hook)
     const user = this.usersRepository.create({
       email: userData.email,
       firstName,
       lastName,
       phone: userData.contact_phone,
-      password: hashedPassword,
+      password: userData.password, // Don't hash here, let @BeforeInsert hook handle it
       role: userData.role,
     });
 

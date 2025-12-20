@@ -50,8 +50,8 @@ export class CreateAuthDto {
   phoneNumber: string;
 
   @ApiProperty({
-    example: 'patient',
-    description: 'The role of the user',
+    example: 'customer',
+    description: 'The role of the user (admin, customer, support_agent, staff)',
     required: true,
     enum: Role,
   })
