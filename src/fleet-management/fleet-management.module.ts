@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FleetManagementService } from './fleet-management.service';
@@ -12,4 +11,3 @@ import { FleetManagement } from './entities/fleet-management.entity';
   exports: [FleetManagementService],
 })
 export class FleetManagementModule {}
-

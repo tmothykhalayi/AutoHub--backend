@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -14,7 +13,7 @@ import { MailModule } from '../mail/mail.module';
   imports: [
     TypeOrmModule.forFeature([Booking, User, Vehicle]),
     ScheduleModule.forRoot(),
-    MailModule
+    MailModule,
   ],
   controllers: [BookingController],
   providers: [BookingService, BookingReminderService],

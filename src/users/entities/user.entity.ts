@@ -1,4 +1,12 @@
-import { Entity, BeforeInsert, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  BeforeInsert,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Booking } from '../../bookings/entities/booking.entity';
 import { Payment } from '../../payments/entities/payment.entity';
 import { Support } from '../../support/entities/support.entity';
@@ -16,31 +24,31 @@ export class User {
 
   @Column()
   lastName: string;
-@Column({ nullable: true })
-@Exclude({ toPlainOnly: true })
-hashedRefreshToken?: string;
+  @Column({ nullable: true })
+  @Exclude({ toPlainOnly: true })
+  hashedRefreshToken?: string;
 
-@Column({ nullable: true })
-@Exclude({ toPlainOnly: true })
-otp?: string;
+  @Column({ nullable: true })
+  @Exclude({ toPlainOnly: true })
+  otp?: string;
 
-@Column({ nullable: true })
-@Exclude({ toPlainOnly: true })
-otpExpiry?: Date;
+  @Column({ nullable: true })
+  @Exclude({ toPlainOnly: true })
+  otpExpiry?: Date;
 
-@Column({ nullable: true })
-@Exclude({ toPlainOnly: true })
-secret?: string;
-// Add to your User entity if using IP tracking:
-@Column({ nullable: true })
-registrationIp: string;
+  @Column({ nullable: true })
+  @Exclude({ toPlainOnly: true })
+  secret?: string;
+  // Add to your User entity if using IP tracking:
+  @Column({ nullable: true })
+  registrationIp: string;
 
-@Column({ default: false })
-emailVerified: boolean;
-// You may need this instead of `full_name`
-get full_name(): string {
-  return `${this.firstName} ${this.lastName}`;
-}
+  @Column({ default: false })
+  emailVerified: boolean;
+  // You may need this instead of `full_name`
+  get full_name(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
   @Column({ unique: true })
   email: string;
 
@@ -51,18 +59,14 @@ get full_name(): string {
   @Column({ nullable: true })
   phone: string;
 
-  
-
-  @OneToMany(() => Booking, booking => booking.user, { cascade: true })
+  @OneToMany(() => Booking, (booking) => booking.user, { cascade: true })
   bookings: Booking[];
 
-
-  @OneToMany(() => Payment, payment => payment.user)
+  @OneToMany(() => Payment, (payment) => payment.user)
   payments: Payment[];
 
-  @OneToMany(() => Support, support => support.user)
+  @OneToMany(() => Support, (support) => support.user)
   supportTickets: Support[];
-
 
   @CreateDateColumn()
   createdAt: Date;
@@ -73,15 +77,12 @@ get full_name(): string {
   @Column({
     type: 'enum',
     enum: Role,
-    default: Role.CUSTOMER
+    default: Role.CUSTOMER,
   })
   role: Role;
-
 
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 }
-
-

@@ -1,4 +1,3 @@
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -22,12 +21,24 @@ export class VehicleService {
   ) {}
 
   async create(createVehicleDto: CreateVehicleDto): Promise<Vehicle> {
-    const { licensePlate, registrationNumber, specId, branchId, isAvailable, status, mileage } = createVehicleDto;
+    const {
+      licensePlate,
+      registrationNumber,
+      specId,
+      branchId,
+      isAvailable,
+      status,
+      mileage,
+    } = createVehicleDto;
 
-    const spec = await this.vehicleSpecRepository.findOne({ where: { id: specId } });
+    const spec = await this.vehicleSpecRepository.findOne({
+      where: { id: specId },
+    });
     if (!spec) throw new NotFoundException('Vehicle specification not found');
 
-    const branch = await this.branchRepository.findOne({ where: { id: branchId } });
+    const branch = await this.branchRepository.findOne({
+      where: { id: branchId },
+    });
     if (!branch) throw new NotFoundException('Branch not found');
 
     // Create a new vehicle with all required properties
@@ -37,11 +48,11 @@ export class VehicleService {
     newVehicle.spec = spec;
     newVehicle.branch = branch;
     newVehicle.isAvailable = isAvailable ?? true;
-    
+
     if (status) {
       newVehicle.status = status;
     }
-    
+
     if (mileage !== undefined) {
       newVehicle.mileage = mileage;
     }
@@ -59,21 +70,29 @@ export class VehicleService {
       where: { id },
       relations: ['spec', 'branch'],
     });
-    if (!vehicle) throw new NotFoundException(`Vehicle with id ${id} not found`);
+    if (!vehicle)
+      throw new NotFoundException(`Vehicle with id ${id} not found`);
     return vehicle;
   }
 
-  async update(id: number, updateVehicleDto: UpdateVehicleDto): Promise<Vehicle> {
+  async update(
+    id: number,
+    updateVehicleDto: UpdateVehicleDto,
+  ): Promise<Vehicle> {
     const vehicle = await this.findOne(id);
 
     if (updateVehicleDto.specId) {
-      const spec = await this.vehicleSpecRepository.findOne({ where: { id: updateVehicleDto.specId } });
+      const spec = await this.vehicleSpecRepository.findOne({
+        where: { id: updateVehicleDto.specId },
+      });
       if (!spec) throw new NotFoundException('Vehicle specification not found');
       vehicle.spec = spec;
     }
 
     if (updateVehicleDto.branchId) {
-      const branch = await this.branchRepository.findOne({ where: { id: updateVehicleDto.branchId } });
+      const branch = await this.branchRepository.findOne({
+        where: { id: updateVehicleDto.branchId },
+      });
       if (!branch) throw new NotFoundException('Branch not found');
       vehicle.branch = branch;
     }

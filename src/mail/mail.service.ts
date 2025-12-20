@@ -25,7 +25,10 @@ export class MailService {
       });
       this.logger.log(`Welcome email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send welcome email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send welcome email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -35,15 +38,18 @@ export class MailService {
    * @param email User's email address
    * @param bookingDetails Booking information
    */
-  async sendBookingConfirmation(email: string, bookingDetails: {
-    name: string;
-    bookingId: string;
-    vehicleName: string;
-    startDate: Date;
-    endDate: Date;
-    totalPrice: number;
-    pickupLocation: string;
-  }): Promise<void> {
+  async sendBookingConfirmation(
+    email: string,
+    bookingDetails: {
+      name: string;
+      bookingId: string;
+      vehicleName: string;
+      startDate: Date;
+      endDate: Date;
+      totalPrice: number;
+      pickupLocation: string;
+    },
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -58,7 +64,10 @@ export class MailService {
       });
       this.logger.log(`Booking confirmation email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send booking confirmation email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send booking confirmation email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -68,14 +77,17 @@ export class MailService {
    * @param email User's email address
    * @param paymentDetails Payment information
    */
-  async sendPaymentReceipt(email: string, paymentDetails: {
-    name: string;
-    paymentId: string;
-    bookingId: string;
-    amount: number;
-    paymentMethod: string;
-    paymentDate: Date;
-  }): Promise<void> {
+  async sendPaymentReceipt(
+    email: string,
+    paymentDetails: {
+      name: string;
+      paymentId: string;
+      bookingId: string;
+      amount: number;
+      paymentMethod: string;
+      paymentDate: Date;
+    },
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -89,7 +101,10 @@ export class MailService {
       });
       this.logger.log(`Payment receipt email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send payment receipt email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send payment receipt email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -99,7 +114,11 @@ export class MailService {
    * @param email User's email address
    * @param resetLink Password reset link
    */
-  async sendPasswordReset(email: string, name: string, resetLink: string): Promise<void> {
+  async sendPasswordReset(
+    email: string,
+    name: string,
+    resetLink: string,
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -113,7 +132,10 @@ export class MailService {
       });
       this.logger.log(`Password reset email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send password reset email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send password reset email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -123,13 +145,16 @@ export class MailService {
    * @param email User's email address
    * @param ticketDetails Support ticket details
    */
-  async sendSupportTicketConfirmation(email: string, ticketDetails: {
-    name: string;
-    ticketId: string;
-    subject: string;
-    message: string;
-    priority: string;
-  }): Promise<void> {
+  async sendSupportTicketConfirmation(
+    email: string,
+    ticketDetails: {
+      name: string;
+      ticketId: string;
+      subject: string;
+      message: string;
+      priority: string;
+    },
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -139,7 +164,10 @@ export class MailService {
       });
       this.logger.log(`Support ticket confirmation email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send support ticket confirmation email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send support ticket confirmation email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -149,7 +177,10 @@ export class MailService {
    * @param email User's email address
    * @param name User's name
    */
-  async sendPasswordResetSuccessEmail(email: string, name: string): Promise<void> {
+  async sendPasswordResetSuccessEmail(
+    email: string,
+    name: string,
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -162,7 +193,10 @@ export class MailService {
       });
       this.logger.log(`Password reset success email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send password reset success email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send password reset success email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -174,7 +208,12 @@ export class MailService {
    * @param template Template name
    * @param context Template context data
    */
-  async sendEmail(to: string, subject: string, template: string, context: any): Promise<void> {
+  async sendEmail(
+    to: string,
+    subject: string,
+    template: string,
+    context: any,
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to,
@@ -194,16 +233,19 @@ export class MailService {
    * @param email User's email address
    * @param bookingDetails Updated booking information
    */
-  async sendBookingUpdate(email: string, bookingDetails: {
-    name: string;
-    bookingId: string;
-    vehicleName: string;
-    startDate: Date;
-    endDate: Date;
-    totalPrice: number;
-    pickupLocation: string;
-    changes: string[];
-  }): Promise<void> {
+  async sendBookingUpdate(
+    email: string,
+    bookingDetails: {
+      name: string;
+      bookingId: string;
+      vehicleName: string;
+      startDate: Date;
+      endDate: Date;
+      totalPrice: number;
+      pickupLocation: string;
+      changes: string[];
+    },
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -218,7 +260,10 @@ export class MailService {
       });
       this.logger.log(`Booking update email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send booking update email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send booking update email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -228,15 +273,18 @@ export class MailService {
    * @param email User's email address
    * @param bookingDetails Booking information
    */
-  async sendBookingCancellation(email: string, bookingDetails: {
-    name: string;
-    bookingId: string;
-    vehicleName: string;
-    startDate: Date;
-    endDate: Date;
-    cancellationReason?: string;
-    refundAmount?: number;
-  }): Promise<void> {
+  async sendBookingCancellation(
+    email: string,
+    bookingDetails: {
+      name: string;
+      bookingId: string;
+      vehicleName: string;
+      startDate: Date;
+      endDate: Date;
+      cancellationReason?: string;
+      refundAmount?: number;
+    },
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -252,7 +300,10 @@ export class MailService {
       });
       this.logger.log(`Booking cancellation email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send booking cancellation email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send booking cancellation email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -262,14 +313,17 @@ export class MailService {
    * @param email User's email address
    * @param reminderDetails Reminder information
    */
-  async sendReturnReminder(email: string, reminderDetails: {
-    name: string;
-    bookingId: string;
-    vehicleName: string;
-    returnDate: Date;
-    returnLocation: string;
-    contactNumber: string;
-  }): Promise<void> {
+  async sendReturnReminder(
+    email: string,
+    reminderDetails: {
+      name: string;
+      bookingId: string;
+      vehicleName: string;
+      returnDate: Date;
+      returnLocation: string;
+      contactNumber: string;
+    },
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -282,7 +336,10 @@ export class MailService {
       });
       this.logger.log(`Vehicle return reminder email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send vehicle return reminder email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send vehicle return reminder email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }
@@ -292,13 +349,16 @@ export class MailService {
    * @param email User's email address
    * @param ticketDetails Support ticket details
    */
-  async sendSupportTicketResponse(email: string, ticketDetails: {
-    name: string;
-    ticketId: string;
-    subject: string;
-    response: string;
-    status: string;
-  }): Promise<void> {
+  async sendSupportTicketResponse(
+    email: string,
+    ticketDetails: {
+      name: string;
+      ticketId: string;
+      subject: string;
+      response: string;
+      status: string;
+    },
+  ): Promise<void> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -308,7 +368,10 @@ export class MailService {
       });
       this.logger.log(`Support ticket response email sent to ${email}`);
     } catch (error) {
-      this.logger.error(`Failed to send support ticket response email to ${email}`, error.stack);
+      this.logger.error(
+        `Failed to send support ticket response email to ${email}`,
+        error.stack,
+      );
       throw error;
     }
   }

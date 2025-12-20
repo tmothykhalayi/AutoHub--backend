@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Vehicle } from '../../vehicle/entities/vehicle.entity';
 
 @Entity()
@@ -15,9 +22,8 @@ export class FleetManagement {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => Vehicle, vehicle => vehicle.fleet)
+  @OneToMany(() => Vehicle, (vehicle) => vehicle.fleet)
   vehicles: Vehicle[];
-
 
   @CreateDateColumn()
   createdAt: Date;

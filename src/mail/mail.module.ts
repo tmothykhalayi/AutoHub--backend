@@ -7,7 +7,7 @@ import { MailService } from './mail.service';
 import * as Handlebars from 'handlebars';
 
 // Register custom Handlebars helpers
-Handlebars.registerHelper('eq', function(v1, v2) {
+Handlebars.registerHelper('eq', function (v1, v2) {
   return v1 === v2;
 });
 @Module({
@@ -19,13 +19,13 @@ Handlebars.registerHelper('eq', function(v1, v2) {
         // Determine if we're in production/built mode or development mode
         const templateDir = join(
           process.cwd(),
-          process.env.NODE_ENV === 'production' ? 
-          'dist/mail/templates' : 
-          'src/mail/templates'
+          process.env.NODE_ENV === 'production'
+            ? 'dist/mail/templates'
+            : 'src/mail/templates',
         );
-        
+
         console.log(`Email template directory: ${templateDir}`);
-        
+
         return {
           transport: {
             host: config.get('MAIL_HOST'),

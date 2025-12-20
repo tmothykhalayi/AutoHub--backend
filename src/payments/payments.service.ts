@@ -139,8 +139,6 @@ export class PaymentsService {
 
       let booking: Booking | null = null;
 
-    
-
       if (
         createPaymentDto.type === PaymentType.BOOKING &&
         createPaymentDto.bookingId
@@ -164,7 +162,7 @@ export class PaymentsService {
         phoneNumber: createPaymentDto.phoneNumber,
         amount: createPaymentDto.amount,
         type: createPaymentDto.type,
-        user: user ,
+        user: user,
         booking: booking || undefined, // Use undefined instead of null
         paystackReference: reference,
         paystackAccessCode: paystackResponse.data.access_code,

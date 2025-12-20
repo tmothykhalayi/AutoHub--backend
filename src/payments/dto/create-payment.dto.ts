@@ -27,9 +27,10 @@ export class CreatePaymentDto {
   @ApiProperty()
   @IsEmail()
   email: string;
-@Type(() => Number)
   @Type(() => Number)
-  @IsInt() @ApiProperty({ required: false })
+  @Type(() => Number)
+  @IsInt()
+  @ApiProperty({ required: false })
   @IsOptional()
   bookingId?: number;
   @ApiProperty()
@@ -43,11 +44,6 @@ export class CreatePaymentDto {
   @ApiProperty({ enum: PaymentType })
   @IsEnum(PaymentType)
   type: PaymentType;
-
- 
-
-   
-
 
   @ApiProperty({ required: false })
   @IsOptional()

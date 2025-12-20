@@ -20,21 +20,23 @@ export class BookingReminderService {
   @Cron(CronExpression.EVERY_DAY_AT_10AM)
   async sendReturnReminders() {
     this.logger.log('Running return reminder check...');
-    
+
     const tomorrow = moment().add(1, 'days').startOf('day');
     const dayAfterTomorrow = moment(tomorrow).add(1, 'days').endOf('day');
-    
+
     // Find bookings that end tomorrow
     const bookingsEndingTomorrow = await this.bookingRepository.find({
       where: {
         endDate: Between(tomorrow.toDate(), dayAfterTomorrow.toDate()),
-        status: 'confirmed'
+        status: 'confirmed',
       },
-      relations: ['user', 'vehicle', 'vehicle.branch', 'vehicle.spec']
+      relations: ['user', 'vehicle', 'vehicle.branch', 'vehicle.spec'],
     });
-    
-    this.logger.log(`Found ${bookingsEndingTomorrow.length} bookings ending tomorrow`);
-    
+
+    this.logger.log(
+      `Found ${bookingsEndingTomorrow.length} bookings ending tomorrow`,
+    );
+
     // Send email reminders
     for (const booking of bookingsEndingTomorrow) {
       try {
@@ -42,16 +44,20 @@ export class BookingReminderService {
         await this.mailService.sendReturnReminder(booking.user.email, {
           name: fullName || 'Valued Customer',
           bookingId: booking.id.toString(),
-          vehicleName: booking.vehicle?.spec ? 
-            `${booking.vehicle.spec.make} ${booking.vehicle.spec.model} (${booking.vehicle.spec.year})` : 
-            'Your vehicle',
+          vehicleName: booking.vehicle?.spec
+            ? `${booking.vehicle.spec.make} ${booking.vehicle.spec.model} (${booking.vehicle.spec.year})`
+            : 'Your vehicle',
           returnDate: booking.endDate,
           returnLocation: booking.vehicle?.branch?.name || 'Main Branch',
-          contactNumber: '123-456-7890' // This should come from actual branch data
+          contactNumber: '123-456-7890', // This should come from actual branch data
         });
-        this.logger.log(`Vehicle return reminder sent to ${booking.user.email}`);
+        this.logger.log(
+          `Vehicle return reminder sent to ${booking.user.email}`,
+        );
       } catch (error) {
-        this.logger.error(`Failed to send vehicle return reminder: ${error.message}`);
+        this.logger.error(
+          `Failed to send vehicle return reminder: ${error.message}`,
+        );
       }
     }
   }

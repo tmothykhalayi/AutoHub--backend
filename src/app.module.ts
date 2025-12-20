@@ -5,7 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { VehicleSpecModule } from './vehicle-spec/vehicle-spec.module';
-import {BookingModule } from './bookings/bookings.module';
+import { BookingModule } from './bookings/bookings.module';
 import { PaymentsModule } from './payments/payments.module';
 import { FleetManagementModule } from './fleet-management/fleet-management.module';
 import { SupportModule } from './support/support.module';
@@ -36,15 +36,15 @@ import { AtGuard } from './auth/guards';
     DatabaseModule, // Add DatabaseModule first so TypeORM is initialized before other modules
     AuthModule,
     UsersModule,
-    VehicleModule, 
+    VehicleModule,
     VehicleSpecModule,
-    BookingModule, 
+    BookingModule,
     PaymentsModule,
     FleetManagementModule,
     SupportModule,
     BranchModule,
     LogsModule,
-    MailModule
+    MailModule,
   ],
   controllers: [AppController],
   providers: [

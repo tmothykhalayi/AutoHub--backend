@@ -1,4 +1,3 @@
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,8 +12,12 @@ export class FleetManagementService {
     private fleetManagementRepository: Repository<FleetManagement>,
   ) {}
 
-  async create(createFleetManagementDto: CreateFleetManagementDto): Promise<FleetManagement> {
-    const fleetMgmt = this.fleetManagementRepository.create(createFleetManagementDto);
+  async create(
+    createFleetManagementDto: CreateFleetManagementDto,
+  ): Promise<FleetManagement> {
+    const fleetMgmt = this.fleetManagementRepository.create(
+      createFleetManagementDto,
+    );
     return this.fleetManagementRepository.save(fleetMgmt);
   }
 
@@ -23,12 +26,18 @@ export class FleetManagementService {
   }
 
   async findOne(id: number): Promise<FleetManagement> {
-    const fleetMgmt = await this.fleetManagementRepository.findOne({ where: { id } });
-    if (!fleetMgmt) throw new NotFoundException(`FleetManagement with id ${id} not found`);
+    const fleetMgmt = await this.fleetManagementRepository.findOne({
+      where: { id },
+    });
+    if (!fleetMgmt)
+      throw new NotFoundException(`FleetManagement with id ${id} not found`);
     return fleetMgmt;
   }
 
-  async update(id: number, updateFleetManagementDto: UpdateFleetManagementDto): Promise<FleetManagement> {
+  async update(
+    id: number,
+    updateFleetManagementDto: UpdateFleetManagementDto,
+  ): Promise<FleetManagement> {
     const fleetMgmt = await this.findOne(id);
     Object.assign(fleetMgmt, updateFleetManagementDto);
     return this.fleetManagementRepository.save(fleetMgmt);

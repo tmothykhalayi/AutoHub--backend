@@ -21,10 +21,8 @@ export enum PaymentStatus {
   REFUNDED = 'refunded',
 }
 export enum PaymentType {
-  BOOKING = 'BOOKING'
+  BOOKING = 'BOOKING',
 }
-
-
 
 @Entity()
 export class Payment {
@@ -78,10 +76,8 @@ export class Payment {
   @Column({ nullable: true })
   stripePaymentIntentId: string; // To link with Stripe payment intent
 
-
   @Column({ nullable: true })
   currency: string;
-
 
   @OneToOne(() => Booking, (booking) => booking.payment, { nullable: true })
   booking: Booking;
@@ -91,7 +87,6 @@ export class Payment {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
 
   @Column({ type: 'text', nullable: true })
   notes: string;

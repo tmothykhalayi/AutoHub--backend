@@ -1,4 +1,3 @@
-
 // create-user.dto.ts
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -14,31 +13,36 @@ export class CreateUserDto {
   @IsString()
   lastName: string;
 
-  @ApiProperty({ description: 'Email address of the user', example: 'john.doe@example.com' })
+  @ApiProperty({
+    description: 'Email address of the user',
+    example: 'john.doe@example.com',
+  })
   @IsEmail()
   email: string;
 
-  @ApiProperty({ 
-    description: 'Password for the user account', 
+  @ApiProperty({
+    description: 'Password for the user account',
     example: 'StrongP@ssw0rd',
-    format: 'password' 
+    format: 'password',
   })
   @IsNotEmpty()
   @IsString()
   password: string;
 
-  @ApiPropertyOptional({ description: 'Phone number of the user', example: '+1234567890' })
+  @ApiPropertyOptional({
+    description: 'Phone number of the user',
+    example: '+1234567890',
+  })
   @IsOptional()
   @IsString()
   phone?: string;
 
-  @ApiPropertyOptional({ 
-    description: 'Role of the user', 
+  @ApiPropertyOptional({
+    description: 'Role of the user',
     example: 'CUSTOMER',
-    enum: ['CUSTOMER', 'ADMIN', 'STAFF'] 
+    enum: ['CUSTOMER', 'ADMIN', 'STAFF'],
   })
   @IsOptional()
   @IsString()
   role?: string;
 }
-

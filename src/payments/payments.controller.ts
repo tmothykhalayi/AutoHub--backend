@@ -96,14 +96,12 @@ export class PaymentsController {
   }
 
   @Get('branch/:branchId')
-   @Roles(Role.ADMIN, Role.CUSTOMER)
+  @Roles(Role.ADMIN, Role.CUSTOMER)
   @ApiOperation({ summary: 'Get payments for a specific branch' })
   @ApiResponse({
     status: 200,
     description: 'Branch payments retrieved successfully',
   })
-  
-
   @Get(':id')
   @Roles(Role.ADMIN, Role.CUSTOMER)
   @ApiOperation({ summary: 'Get payment by ID' })
@@ -147,8 +145,6 @@ export class PaymentsController {
   async deletePayment(@Param('id') id: string, @UserDecorator() user: User) {
     return this.paymentsService.deletePayment(id, user);
   }
-
-  
 
   @Post('webhook')
   @HttpCode(HttpStatus.OK)

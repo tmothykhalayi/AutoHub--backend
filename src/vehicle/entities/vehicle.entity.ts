@@ -1,12 +1,12 @@
-import { 
-  Entity, 
-  PrimaryGeneratedColumn, 
-  Column, 
-  ManyToOne, 
-  OneToMany, 
-  CreateDateColumn, 
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
   UpdateDateColumn,
-  JoinColumn 
+  JoinColumn,
 } from 'typeorm';
 import { Branch } from '../../branches/entities/branch.entity';
 import { VehicleSpec } from '../../vehicle-spec/entities/vehicle-spec.entity';
@@ -25,9 +25,9 @@ export class Vehicle {
   registrationNumber: string;
 
   // ✅ FIXED: Added @JoinColumn and proper configuration
-  @ManyToOne(() => VehicleSpec, spec => spec.vehicles, { 
+  @ManyToOne(() => VehicleSpec, (spec) => spec.vehicles, {
     nullable: true,
-    onDelete: 'SET NULL' // or 'RESTRICT' based on your needs
+    onDelete: 'SET NULL', // or 'RESTRICT' based on your needs
   })
   @JoinColumn({ name: 'specId' }) // ✅ ADD THIS
   spec: VehicleSpec;
@@ -36,20 +36,20 @@ export class Vehicle {
   specId: number;
 
   // ✅ FIXED: Added @JoinColumn
-  @ManyToOne(() => Branch, branch => branch.vehicles, { 
+  @ManyToOne(() => Branch, (branch) => branch.vehicles, {
     nullable: true,
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'branchId' }) // ✅ ADD THIS
   branch: Branch;
-  
+
   @Column({ nullable: true })
   branchId: number;
 
   // ✅ FIXED: Added @JoinColumn
-  @ManyToOne(() => FleetManagement, fleet => fleet.vehicles, { 
+  @ManyToOne(() => FleetManagement, (fleet) => fleet.vehicles, {
     nullable: true,
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'fleetId' }) // ✅ ADD THIS
   fleet: FleetManagement;
@@ -62,11 +62,11 @@ export class Vehicle {
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   mileage: number;
-  
+
   @Column({ default: true })
   isAvailable: boolean;
 
-  @OneToMany(() => Booking, booking => booking.vehicle)
+  @OneToMany(() => Booking, (booking) => booking.vehicle)
   bookings: Booking[];
 
   @CreateDateColumn()

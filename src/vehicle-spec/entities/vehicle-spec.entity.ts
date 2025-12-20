@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Vehicle } from '../../vehicle/entities/vehicle.entity';
 
 @Entity('vehicle_specs')
@@ -18,10 +25,10 @@ export class VehicleSpec {
   @Column('int')
   year: number;
 
-  @Column({ 
-    type: 'enum', 
+  @Column({
+    type: 'enum',
     enum: ['petrol', 'diesel', 'electric', 'hybrid'],
-    default: 'petrol'
+    default: 'petrol',
   })
   fuelType: string;
 
@@ -31,10 +38,10 @@ export class VehicleSpec {
   @Column('int')
   seats: number;
 
-  @Column({ 
-    type: 'enum', 
+  @Column({
+    type: 'enum',
     enum: ['manual', 'automatic'],
-    default: 'manual'
+    default: 'manual',
   })
   transmission: string;
 
@@ -44,10 +51,10 @@ export class VehicleSpec {
   @Column('int', { nullable: true })
   horsepower: number;
 
-  @Column({ 
-    type: 'enum', 
+  @Column({
+    type: 'enum',
     enum: ['Compact', 'Sedan', 'SUV', 'Luxury', 'Sports', 'Electric'],
-    default: 'Sedan'
+    default: 'Sedan',
   })
   category: string;
 
@@ -72,10 +79,10 @@ export class VehicleSpec {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ nullable: true }) 
+  @Column({ nullable: true })
   fuelEfficiency: string;
 
   // ✅ MUST MATCH Vehicle entity's relationship
-  @OneToMany(() => Vehicle, vehicle => vehicle.spec)
+  @OneToMany(() => Vehicle, (vehicle) => vehicle.spec)
   vehicles: Vehicle[];
 }

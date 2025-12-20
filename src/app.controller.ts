@@ -10,8 +10,15 @@ export class AppController {
 
   @Public()
   @Get()
-  @ApiOperation({ summary: 'Get hello message', description: 'Returns a welcome message' })
-  @ApiResponse({ status: 200, description: 'Returns the hello message', schema: { example: 'Welcome to AutoHub API!' } })
+  @ApiOperation({
+    summary: 'Get hello message',
+    description: 'Returns a welcome message',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the hello message',
+    schema: { example: 'Welcome to AutoHub API!' },
+  })
   getHello(): string {
     return this.appService.getHello();
   }

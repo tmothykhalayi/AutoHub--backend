@@ -65,7 +65,7 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.getTokens(
       user.id.toString(),
       user.email,
-      user.role as Role,
+      user.role,
     );
     await this.updateRefreshToken(user.id.toString(), refreshToken);
 
@@ -129,7 +129,7 @@ export class AuthService {
       const { accessToken, refreshToken, role } = await this.getTokens(
         user.id.toString(),
         user.email,
-        user.role as Role,
+        user.role,
       );
 
       await this.updateRefreshToken(user.id.toString(), refreshToken);
@@ -219,7 +219,11 @@ export class AuthService {
         throw new UnauthorizedException('Access Denied');
       }
 
-      const tokens = await this.getTokens(user.id.toString(), user.email, user.role as Role);
+      const tokens = await this.getTokens(
+        user.id.toString(),
+        user.email,
+        user.role,
+      );
       await this.updateRefreshToken(user.id.toString(), tokens.refreshToken);
 
       this.logger.log(`Tokens refreshed successfully for user ID: ${userId}`);
@@ -251,8 +255,8 @@ export class AuthService {
   // ===== SIGN OUT =====
   async signOut(userId: string) {
     try {
-      const user = await this.userRepository.findOne({ 
-        where: { id: parseInt(userId) } 
+      const user = await this.userRepository.findOne({
+        where: { id: parseInt(userId) },
       });
 
       if (!user) {

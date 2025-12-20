@@ -1,5 +1,16 @@
 // create-vehicleSpec.dto.ts
-import { IsInt, IsNotEmpty, IsString, MinLength, MaxLength, IsNumber, Min, Max, IsIn, IsOptional } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+  MaxLength,
+  IsNumber,
+  Min,
+  Max,
+  IsIn,
+  IsOptional,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateVehicleSpecDto {
@@ -14,10 +25,16 @@ export class CreateVehicleSpecDto {
   @MaxLength(100)
   name: string;
 
-  @ApiPropertyOptional({ description: 'Weekly rate for the vehicle', example: 350 })
+  @ApiPropertyOptional({
+    description: 'Weekly rate for the vehicle',
+    example: 350,
+  })
   weeklyRate?: number;
 
-  @ApiPropertyOptional({ description: 'Daily rate for the vehicle', example: 70 })
+  @ApiPropertyOptional({
+    description: 'Daily rate for the vehicle',
+    example: 70,
+  })
   dailyRate?: number;
 
   @ApiProperty({ description: 'Model of the vehicle', example: 'Sedan' })
@@ -25,13 +42,20 @@ export class CreateVehicleSpecDto {
   @MinLength(1)
   model: string;
 
-  @ApiProperty({ description: 'Manufacturing year of the vehicle', example: 2022 })
+  @ApiProperty({
+    description: 'Manufacturing year of the vehicle',
+    example: 2022,
+  })
   @IsNumber()
   @Min(1990)
   @Max(new Date().getFullYear() + 1)
   year: number;
 
-  @ApiProperty({ description: 'Fuel type of the vehicle', enum: ['petrol', 'diesel', 'electric', 'hybrid'], example: 'petrol' })
+  @ApiProperty({
+    description: 'Fuel type of the vehicle',
+    enum: ['petrol', 'diesel', 'electric', 'hybrid'],
+    example: 'petrol',
+  })
   @IsString()
   @IsIn(['petrol', 'diesel', 'electric', 'hybrid'])
   fuelType: string;
@@ -49,7 +73,11 @@ export class CreateVehicleSpecDto {
   @Max(20)
   seats: number;
 
-  @ApiProperty({ description: 'Transmission type of the vehicle', enum: ['manual', 'automatic'], example: 'automatic' })
+  @ApiProperty({
+    description: 'Transmission type of the vehicle',
+    enum: ['manual', 'automatic'],
+    example: 'automatic',
+  })
   @IsString()
   @IsIn(['manual', 'automatic'])
   transmission: string;
