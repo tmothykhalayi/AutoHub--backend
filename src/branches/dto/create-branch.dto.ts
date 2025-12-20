@@ -19,8 +19,16 @@ import {
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateBranchDto {
+  @ApiProperty({
+    description: 'Branch name',
+    example: 'Downtown Branch',
+    minLength: 2,
+    maxLength: 100,
+  })
   @IsNotEmpty()
   @IsString()
+  @MinLength(2, { message: 'Branch name must be at least 2 characters long' })
+  @MaxLength(100, { message: 'Branch name cannot exceed 100 characters' })
   name: string;
 
   @ApiPropertyOptional({
@@ -120,6 +128,13 @@ export class CreateBranchDto {
   })
   phone: string;
 
+  @ApiProperty({
+    description: 'Contact email address',
+    example: 'branch@autohub.com',
+  })
+  @IsEmail({}, { message: 'Invalid email format' })
+  email: string;
+
   @ApiPropertyOptional({
     description:
       'Operating hours in format "HH:MM-HH:MM" or "HH:MM-HH:MM,HH:MM-HH:MM"',
@@ -176,8 +191,4 @@ export class CreateBranchDto {
   @IsString()
   @MaxLength(100, { message: 'Manager name cannot exceed 100 characters' })
   manager?: string;
-
-  @IsOptional()
-  @IsEmail()
-  email?: string;
 }

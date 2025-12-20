@@ -27,11 +27,17 @@ export class CreatePaymentDto {
   @ApiProperty()
   @IsEmail()
   email: string;
-  @Type(() => Number)
-  @Type(() => Number)
-  @IsInt()
+
   @ApiProperty({ required: false })
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  userId?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
   bookingId?: number;
   @ApiProperty()
   @IsString()

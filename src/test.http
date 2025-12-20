@@ -33,7 +33,7 @@ POST http://localhost:8000/auth/forgot-password
 Content-Type: application/json
 
 {
-  "email": "newuser@example.com"
+  "email": "TimothyKhalayi96@gmail.com"
 }
 
 ###
@@ -466,3 +466,15 @@ Authorization: Bearer your-access-token-here
 ### Delete a support ticket
 DELETE http://localhost:8000/support/1
 Authorization: Bearer your-access-token-here
+
+
+  
+  
+  
+  
+  
+ 
+  
+  
+  
+]

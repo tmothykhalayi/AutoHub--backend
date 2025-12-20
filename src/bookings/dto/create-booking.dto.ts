@@ -59,4 +59,44 @@ export class CreateBookingDto {
   @IsOptional()
   @IsString()
   dropoffLocation?: string;
+
+  @ApiPropertyOptional({
+    description: 'Total price for the booking',
+    example: 350.00,
+  })
+  @IsOptional()
+  @IsNumber()
+  totalPrice?: number;
+
+  @ApiPropertyOptional({
+    description: 'Security deposit amount',
+    example: 200.00,
+  })
+  @IsOptional()
+  @IsNumber()
+  securityDeposit?: number;
+
+  @ApiPropertyOptional({
+    description: 'Number of rental days',
+    example: 5,
+  })
+  @IsOptional()
+  @IsNumber()
+  rentalDays?: number;
+
+  @ApiPropertyOptional({
+    description: 'Cancellation fee if booking is cancelled',
+    example: 50.00,
+  })
+  @IsOptional()
+  @IsNumber()
+  cancellationFee?: number;
+
+  @ApiPropertyOptional({
+    description: 'Reason for cancellation',
+    example: 'Change of plans',
+  })
+  @IsOptional()
+  @IsString()
+  cancellationReason?: string;
 }

@@ -25,11 +25,18 @@ Handlebars.registerHelper('eq', function (v1, v2) {
         );
 
         console.log(`Email template directory: ${templateDir}`);
+        console.log(`Email configuration:`, {
+          host: config.get('MAIL_HOST'),
+          port: config.get('MAIL_PORT'),
+          secure: config.get('MAIL_SECURE'),
+          user: config.get('MAIL_USER'),
+          passwordLength: config.get('MAIL_PASSWORD')?.length || 0,
+        });
 
         return {
           transport: {
             host: config.get('MAIL_HOST'),
-            port: config.get('MAIL_PORT'),
+            port: parseInt(config.get('MAIL_PORT') || '587', 10),
             secure: config.get('MAIL_SECURE') === 'true',
             auth: {
               user: config.get('MAIL_USER'),

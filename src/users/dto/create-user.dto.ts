@@ -39,8 +39,8 @@ export class CreateUserDto {
 
   @ApiPropertyOptional({
     description: 'Role of the user',
-    example: 'CUSTOMER',
-    enum: ['CUSTOMER', 'ADMIN', 'STAFF'],
+    example: 'customer',
+    enum: ['customer', 'admin', 'staff'],
   })
   @IsOptional()
   @IsString()

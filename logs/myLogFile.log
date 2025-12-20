@@ -94,3 +94,61 @@
 12/20/25, 11:56 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
 12/20/25, 11:56 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
 12/20/25, 11:57 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:00 AM - IP: 127.0.0.1 - ERROR: {"message":"Invalid credentials","error":"Unauthorized","statusCode":401} - Path: /auth/login
+12/21/25, 12:01 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:01 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:02 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:02 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:02 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:02 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:02 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:02 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:02 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:02 AM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+12/21/25, 12:04 AM - IP: 127.0.0.1 - ERROR: connect ETIMEDOUT 142.251.173.109:587 - Path: /auth/forgot-password
+12/21/25, 12:07 AM - IP: 127.0.0.1 - ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-4324eab2ebfsm12450301f8f.40 - gsmtp - Path: /auth/forgot-password
+12/21/25, 12:09 AM - IP: 127.0.0.1 - ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-47d19346d33sm111932025e9.3 - gsmtp - Path: /auth/forgot-password
+12/21/25, 12:09 AM - IP: 127.0.0.1 - ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-4324eab33f5sm12871323f8f.41 - gsmtp - Path: /auth/forgot-password
+12/21/25, 12:13 AM - IP: 127.0.0.1 - ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-47d192e88f5sm106777065e9.0 - gsmtp - Path: /auth/forgot-password
+12/21/25, 12:14 AM - IP: 127.0.0.1 - ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-4324ea1af2bsm12998078f8f.1 - gsmtp - Path: /auth/forgot-password
+12/21/25, 12:18 AM - IP: 127.0.0.1 - ERROR: {"message":"Expected property name or '}' in JSON at position 1 (line 1 column 2)","error":"Bad Request","statusCode":400} - Path: /auth/forgot-password
+12/21/25, 12:19 AM - IP: 127.0.0.1 - ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-4324ea227e0sm13046161f8f.17 - gsmtp - Path: /auth/forgot-password
+12/21/25, 12:27 AM - IP: 127.0.0.1 - ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-4324ea1ae12sm12096065f8f.6 - gsmtp - Path: /auth/forgot-password
+12/21/25, 12:28 AM - IP: 127.0.0.1 - ERROR: {"message":"Invalid role. Allowed roles: customer, admin","error":"Bad Request","statusCode":400} - Path: /users
+12/21/25, 12:32 AM - IP: 127.0.0.1 - ERROR: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-4324ea1af20sm11881452f8f.2 - gsmtp - Path: /auth/forgot-password
+12/21/25, 12:34 AM - IP: 127.0.0.1 - ERROR: {"message":"User with id 1 not found","error":"Not Found","statusCode":404} - Path: /users/1
+12/21/25, 12:34 AM - IP: 127.0.0.1 - ERROR: {"message":"User not found","error":"Not Found","statusCode":404} - Path: /bookings
+12/21/25, 12:35 AM - IP: 127.0.0.1 - ERROR: {"message":["property weeklyRate should not exist","property dailyRate should not exist"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:35 AM - IP: 127.0.0.1 - ERROR: {"message":["property weeklyRate should not exist","property dailyRate should not exist"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:36 AM - IP: 127.0.0.1 - ERROR: invalid input value for enum vehicle_specs_category_enum: "Standard" - Path: /vehicle-specs
+12/21/25, 12:37 AM - IP: 127.0.0.1 - ERROR: invalid input value for enum vehicle_specs_category_enum: "Standard" - Path: /vehicle-specs
+12/21/25, 12:38 AM - IP: 127.0.0.1 - ERROR: {"message":["category must be one of the following values: Compact, Sedan, SUV, Luxury, Sports, Electric","category must be a string"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:39 AM - IP: 127.0.0.1 - ERROR: {"message":["category must be one of the following values: Compact, Sedan, SUV, Luxury, Sports, Electric","category must be a string"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:39 AM - IP: 127.0.0.1 - ERROR: {"message":["category must be one of the following values: Compact, Sedan, SUV, Luxury, Sports, Electric","category must be a string"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:39 AM - IP: 127.0.0.1 - ERROR: {"message":["category must be one of the following values: Compact, Sedan, SUV, Luxury, Sports, Electric","category must be a string"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:39 AM - IP: 127.0.0.1 - ERROR: {"message":["category must be one of the following values: Compact, Sedan, SUV, Luxury, Sports, Electric","category must be a string"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:39 AM - IP: 127.0.0.1 - ERROR: {"message":["category must be one of the following values: Compact, Sedan, SUV, Luxury, Sports, Electric","category must be a string"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:39 AM - IP: 127.0.0.1 - ERROR: {"message":["category must be one of the following values: Compact, Sedan, SUV, Luxury, Sports, Electric","category must be a string"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:39 AM - IP: 127.0.0.1 - ERROR: {"message":["category must be one of the following values: Compact, Sedan, SUV, Luxury, Sports, Electric","category must be a string"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:42 AM - IP: 127.0.0.1 - ERROR: invalid input value for enum vehicle_specs_category_enum: "Standard" - Path: /vehicle-specs
+12/21/25, 12:42 AM - IP: 127.0.0.1 - ERROR: invalid input value for enum vehicle_specs_category_enum: "Standard" - Path: /vehicle-specs
+12/21/25, 12:43 AM - IP: 127.0.0.1 - ERROR: {"message":["category must be one of the following values: Compact, Sedan, SUV, Luxury, Sports, Electric"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:44 AM - IP: 127.0.0.1 - ERROR: invalid input value for enum vehicle_specs_category_enum: "Standard" - Path: /vehicle-specs
+12/21/25, 12:49 AM - IP: 127.0.0.1 - ERROR: {"message":"Vehicle specification already exists: Toyota Sedan 2022","error":"Conflict","statusCode":409} - Path: /vehicle-specs
+12/21/25, 12:52 AM - IP: 127.0.0.1 - ERROR: {"message":"Unexpected non-whitespace character after JSON at position 248 (line 13 column 4)","error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:54 AM - IP: 127.0.0.1 - ERROR: {"message":["engineSize must not be less than 0.5"],"error":"Bad Request","statusCode":400} - Path: /vehicle-specs
+12/21/25, 12:55 AM - IP: 127.0.0.1 - ERROR: {"message":["name must be a string","name should not be empty"],"error":"Bad Request","statusCode":400} - Path: /branches
+12/21/25, 12:57 AM - IP: 127.0.0.1 - ERROR: {"message":"Branch not found","error":"Not Found","statusCode":404} - Path: /vehicle
+12/21/25, 12:58 AM - IP: 127.0.0.1 - ERROR: {"message":["name must be a string","name should not be empty"],"error":"Bad Request","statusCode":400} - Path: /branches
+12/21/25, 1:05 AM - IP: 127.0.0.1 - ERROR: {"message":"Branch with name \"Downtown Branch\" already exists","error":"Conflict","statusCode":409} - Path: /branches
+12/21/25, 1:06 AM - IP: 127.0.0.1 - ERROR: {"message":"Branch with code \"NYC01\" already exists","error":"Conflict","statusCode":409} - Path: /branches
+12/21/25, 1:11 AM - IP: 127.0.0.1 - ERROR: {"message":"Another branch exists within 2km of this location: Harlem Branch","error":"Conflict","statusCode":409} - Path: /branches
+12/21/25, 1:11 AM - IP: 127.0.0.1 - ERROR: {"message":"Branch with name \"Downtown Branch\" already exists","error":"Conflict","statusCode":409} - Path: /branches

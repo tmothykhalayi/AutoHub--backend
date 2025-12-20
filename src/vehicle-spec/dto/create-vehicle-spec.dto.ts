@@ -25,17 +25,21 @@ export class CreateVehicleSpecDto {
   @MaxLength(100)
   name: string;
 
-  @ApiPropertyOptional({
-    description: 'Weekly rate for the vehicle',
-    example: 350,
-  })
-  weeklyRate?: number;
-
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Daily rate for the vehicle',
     example: 70,
   })
-  dailyRate?: number;
+  @IsNumber()
+  @Min(0)
+  dailyRate: number;
+
+  @ApiProperty({
+    description: 'Weekly rate for the vehicle',
+    example: 350,
+  })
+  @IsNumber()
+  @Min(0)
+  weeklyRate: number;
 
   @ApiProperty({ description: 'Model of the vehicle', example: 'Sedan' })
   @IsString()
@@ -81,4 +85,13 @@ export class CreateVehicleSpecDto {
   @IsString()
   @IsIn(['manual', 'automatic'])
   transmission: string;
+
+  @ApiProperty({
+    description: 'Vehicle category',
+    enum: ['Compact', 'Sedan', 'SUV', 'Luxury', 'Sports', 'Electric'],
+    example: 'Sedan',
+  })
+  @IsString()
+  @IsIn(['Compact', 'Sedan', 'SUV', 'Luxury', 'Sports', 'Electric'])
+  category: string;
 }
