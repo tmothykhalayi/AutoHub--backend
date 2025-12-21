@@ -11,6 +11,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
       useFactory: (configService: ConfigService): TypeOrmModuleOptions => {
         const isProduction =
           configService.get<string>('NODE_ENV') === 'production';
+        const dbSsl = configService.get<string>('DB_SSL') === 'true';
 
         return {
           type: 'postgres',
@@ -25,8 +26,8 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
           //drops all schema incase there are constraints in the relationship among entities
           dropSchema: false,
 
-          //  Render SSL to PostgreSQL
-          ssl: isProduction ? { rejectUnauthorized: false } : false,
+          //  SSL Configuration
+          ssl: dbSsl || isProduction ? { rejectUnauthorized: false } : false,
           autoLoadEntities: true,
         };
       },

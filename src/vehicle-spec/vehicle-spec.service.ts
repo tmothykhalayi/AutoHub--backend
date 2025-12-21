@@ -344,7 +344,7 @@ export class VehicleSpecService {
   private determineVehicleCategory(spec: CreateVehicleSpecDto | any): string {
     // If category is provided, use it
     if (spec.category) return spec.category;
-    
+
     // Auto-determine category based on vehicle characteristics
     if (spec.seats >= 7) return 'SUV';
     if (spec.engineSize && spec.engineSize > 3.0) return 'Luxury';
@@ -357,7 +357,8 @@ export class VehicleSpecService {
       spec.make?.toLowerCase().includes('lexus')
     )
       return 'Luxury';
-    if (spec.seats <= 5 && spec.engineSize && spec.engineSize < 1.8) return 'Compact';
+    if (spec.seats <= 5 && spec.engineSize && spec.engineSize < 1.8)
+      return 'Compact';
     return 'Sedan'; // Default to Sedan instead of Standard
   }
 

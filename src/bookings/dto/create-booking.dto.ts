@@ -62,7 +62,7 @@ export class CreateBookingDto {
 
   @ApiPropertyOptional({
     description: 'Total price for the booking',
-    example: 350.00,
+    example: 350.0,
   })
   @IsOptional()
   @IsNumber()
@@ -70,7 +70,7 @@ export class CreateBookingDto {
 
   @ApiPropertyOptional({
     description: 'Security deposit amount',
-    example: 200.00,
+    example: 200.0,
   })
   @IsOptional()
   @IsNumber()
@@ -86,7 +86,7 @@ export class CreateBookingDto {
 
   @ApiPropertyOptional({
     description: 'Cancellation fee if booking is cancelled',
-    example: 50.00,
+    example: 50.0,
   })
   @IsOptional()
   @IsNumber()
