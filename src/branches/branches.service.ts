@@ -97,7 +97,7 @@ export class BranchService {
     });
 
     const savedBranch = await this.branchRepository.save(branch);
-
+ console.log( 'savedBranch', savedBranch);
     this.logger.log(
       `Branch created - ID: ${savedBranch.id}, Name: "${savedBranch.name}", Code: ${savedBranch.branchCode}, By: ${currentUser?.id}`,
     );
@@ -106,6 +106,7 @@ export class BranchService {
 
     return savedBranch;
   }
+
 
   async findAll(): Promise<Branch[]> {
     return this.branchRepository.find({ relations: ['vehicles'] });

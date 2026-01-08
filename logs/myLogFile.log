@@ -152,3 +152,4 @@
 12/21/25, 1:06 AM - IP: 127.0.0.1 - ERROR: {"message":"Branch with code \"NYC01\" already exists","error":"Conflict","statusCode":409} - Path: /branches
 12/21/25, 1:11 AM - IP: 127.0.0.1 - ERROR: {"message":"Another branch exists within 2km of this location: Harlem Branch","error":"Conflict","statusCode":409} - Path: /branches
 12/21/25, 1:11 AM - IP: 127.0.0.1 - ERROR: {"message":"Branch with name \"Downtown Branch\" already exists","error":"Conflict","statusCode":409} - Path: /branches
+1/8/26, 6:41 PM - IP: 127.0.0.1 - ERROR: {"message":"Cannot GET /favicon.ico","error":"Not Found","statusCode":404} - Path: /favicon.ico
