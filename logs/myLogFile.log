@@ -153,3 +153,7 @@
 12/21/25, 1:11 AM - IP: 127.0.0.1 - ERROR: {"message":"Another branch exists within 2km of this location: Harlem Branch","error":"Conflict","statusCode":409} - Path: /branches
 12/21/25, 1:11 AM - IP: 127.0.0.1 - ERROR: {"message":"Branch with name \"Downtown Branch\" already exists","error":"Conflict","statusCode":409} - Path: /branches
 1/8/26, 6:41 PM - IP: 127.0.0.1 - ERROR: {"message":"Cannot GET /favicon.ico","error":"Not Found","statusCode":404} - Path: /favicon.ico
+4/27/26, 9:38 PM - IP: 127.0.0.1 - ERROR: {"message":["role must be one of the following values: admin, customer, support_agent, staff","role should not be empty"],"error":"Bad Request","statusCode":400} - Path: /auth/register
+4/27/26, 9:41 PM - IP: 127.0.0.1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register
+4/27/26, 10:21 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+4/27/26, 10:21 PM - IP: 127.0.0.1 - ERROR: Unexpected socket close - Path: /auth/forgot-password

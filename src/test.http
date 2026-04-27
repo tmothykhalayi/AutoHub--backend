@@ -1,10 +1,28 @@
 
-#######################
-## AUTHENTICATION
-#######################
+###############################################
+# AutoHub Backend - Complete Test Suite
+# Base URL: http://localhost:3001
+# Last Updated: 2025-04-27
+###############################################
 
-### Sign up a new user
-POST http://localhost:8000/auth/signup
+@baseUrl = http://localhost:8000
+@accessToken = your-access-token-here
+@refreshToken = your-refresh-token-here
+@userId = 1
+@vehicleId = 1
+@bookingId = 1
+@paymentId = 1
+@branchId = 1
+@vehicleSpecId = 1
+@fleetManagementId = 1
+@supportTicketId = 1
+
+###############################################
+# 1. AUTHENTICATION ENDPOINTS
+###############################################
+
+### 1.1 Register a new user
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
@@ -13,12 +31,13 @@ Content-Type: application/json
   "firstName": "John",
   "lastName": "Doe",
   "phoneNumber": "+12345678901"
+  , "role": "customer"
 }
 
 ###
 
-### Login
-POST http://localhost:8000/auth/login
+### 1.2 Login user
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
@@ -28,76 +47,956 @@ Content-Type: application/json
 
 ###
 
-### Forgot password
-POST http://localhost:8000/auth/forgot-password
+### 1.3 Refresh access token
+POST {{baseUrl}}/auth/refresh
 Content-Type: application/json
-
-{
-  "email": "TimothyKhalayi96@gmail.com"
-}
-
-###
-
-### Reset password (requires token from email)
-POST http://localhost:8000/auth/reset-password
-Content-Type: application/json
-
-{
-  "token": "your-reset-token-here",
-  "newPassword": "NewTest1234!"
-}
-
-###
-
-### Refresh token
-POST http://localhost:8000/auth/refresh
-Content-Type: application/json
-Authorization: Bearer your-refresh-token-here
+Authorization: Bearer {{refreshToken}}
 
 {}
 
 ###
 
-### Logout
-POST http://localhost:8000/auth/logout
-Authorization: Bearer your-access-token-here
-
-###
-
-#######################
-## USERS
-#######################
-
-### Get all users
-GET http://localhost:8000/users
-Authorization: Bearer your-access-token-here
-
-###
-
-### Get user by ID
-GET http://localhost:8000/users/1
-Authorization: Bearer your-access-token-here
-
-###
-
-### Update user
-PATCH http://localhost:8000/users/1
+### 1.4 Forgot password (request reset token)
+POST {{baseUrl}}/auth/forgot-password
 Content-Type: application/json
-Authorization: Bearer your-access-token-here
 
 {
-  "firstName": "Updated",
-  "lastName": "Name",
+  "email": "newuser@example.com"
+}
+
+###
+
+### 1.5 Reset password (with token from email)
+POST {{baseUrl}}/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "your-reset-token-here",
+  "newPassword": "NewPassword1234!"
+}
+
+###
+
+### 1.6 Sign out user
+POST {{baseUrl}}/auth/signout
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 2. USERS MODULE
+###############################################
+
+### 2.1 Create a new user (admin only)
+POST {{baseUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "email": "admin@example.com",
+  "password": "AdminPass1234!",
+  "firstName": "Admin",
+  "lastName": "User",
+  "phoneNumber": "+11234567890",
+  "role": "admin"
+}
+
+###
+
+### 2.2 Get all users (admin only)
+GET {{baseUrl}}/users
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 2.3 Get user by ID
+GET {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 2.4 Update user profile
+PATCH {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "firstName": "UpdatedFirst",
+  "lastName": "UpdatedLast",
   "phoneNumber": "+19876543210"
 }
 
 ###
 
-### Delete user
-DELETE http://localhost:8000/users/1
-Authorization: Bearer your-access-token-here
+### 2.5 Delete user (admin only)
+DELETE {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{accessToken}}
 
 ###
+
+###############################################
+# 3. VEHICLES MODULE
+###############################################
+
+### 3.1 Create new vehicle (admin only)
+POST {{baseUrl}}/vehicle
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "licensePlate": "ABC123XYZ",
+  "make": "Toyota",
+  "model": "Camry",
+  "year": 2023,
+  "color": "Silver",
+  "fuelType": "hybrid",
+  "transmission": "automatic",
+  "seatingCapacity": 5,
+  "mileage": 15000,
+  "fuelLevel": 75,
+  "status": "available",
+  "dailyRate": 75.00,
+  "weeklyRate": 450.00,
+  "monthlyRate": 1800.00,
+  "specId": 1,
+  "branchId": 1
+}
+
+###
+
+### 3.2 Get all vehicles (with filters)
+GET {{baseUrl}}/vehicle?status=available&make=Toyota&page=1&limit=10
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 3.3 Get all vehicles without filter
+GET {{baseUrl}}/vehicle
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 3.4 Get vehicle by ID
+GET {{baseUrl}}/vehicle/{{vehicleId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 3.5 Update vehicle (admin only)
+PATCH {{baseUrl}}/vehicle/{{vehicleId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "mileage": 20000,
+  "fuelLevel": 50,
+  "status": "maintenance",
+  "dailyRate": 85.00
+}
+
+###
+
+### 3.6 Delete vehicle (admin only)
+DELETE {{baseUrl}}/vehicle/{{vehicleId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 4. VEHICLE SPECIFICATIONS MODULE
+###############################################
+
+### 4.1 Create vehicle specification (admin only)
+POST {{baseUrl}}/vehicle-specs
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "make": "BMW",
+  "model": "3 Series",
+  "year": 2024,
+  "fuelType": "gasoline",
+  "transmission": "automatic",
+  "seatingCapacity": 5,
+  "engineSize": 2.0,
+  "horsepower": 255,
+  "torque": 295,
+  "acceleration": 6.2,
+  "topSpeed": 250,
+  "fuelConsumption": 8.5,
+  "wheelSize": 18,
+  "trunkCapacity": 460,
+  "weight": 1600,
+  "dimensions": "4.7m x 1.8m x 1.4m",
+  "features": ["Leather Seats", "GPS", "Bluetooth", "Backup Camera"],
+  "description": "Premium sedan with advanced features"
+}
+
+###
+
+### 4.2 Get all vehicle specifications
+GET {{baseUrl}}/vehicle-specs
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 4.3 Get vehicle specification by ID
+GET {{baseUrl}}/vehicle-specs/{{vehicleSpecId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 4.4 Update vehicle specification (admin only)
+PATCH {{baseUrl}}/vehicle-specs/{{vehicleSpecId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "horsepower": 260,
+  "topSpeed": 255,
+  "features": ["Leather Seats", "GPS", "Bluetooth", "Backup Camera", "Heated Seats"]
+}
+
+###
+
+### 4.5 Delete vehicle specification (admin only)
+DELETE {{baseUrl}}/vehicle-specs/{{vehicleSpecId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 5. BOOKINGS MODULE
+###############################################
+
+### 5.1 Create new booking
+POST {{baseUrl}}/bookings
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "vehicleId": 1,
+  "startDate": "2025-05-15T09:00:00Z",
+  "endDate": "2025-05-20T18:00:00Z",
+  "pickupBranchId": 1,
+  "dropoffBranchId": 1,
+  "additionalNotes": "Sunroof preferred if available"
+}
+
+###
+
+### 5.2 Get all bookings (paginated)
+GET {{baseUrl}}/bookings?page=1&limit=10
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 5.3 Get all bookings
+GET {{baseUrl}}/bookings
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 5.4 Get my bookings
+GET {{baseUrl}}/bookings/my-bookings
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 5.5 Get active bookings
+GET {{baseUrl}}/bookings/active
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 5.6 Get upcoming bookings
+GET {{baseUrl}}/bookings/upcoming
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 5.7 Get booking statistics
+GET {{baseUrl}}/bookings/stats
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 5.8 Get bookings by vehicle
+GET {{baseUrl}}/bookings/vehicle/{{vehicleId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 5.9 Get booking by ID
+GET {{baseUrl}}/bookings/{{bookingId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 5.10 Check vehicle availability
+GET {{baseUrl}}/bookings/availability/{{vehicleId}}?startDate=2025-05-15&endDate=2025-05-20
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 5.11 Update booking
+PATCH {{baseUrl}}/bookings/{{bookingId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "startDate": "2025-05-15T10:00:00Z",
+  "endDate": "2025-05-21T18:00:00Z",
+  "additionalNotes": "Updated notes"
+}
+
+###
+
+### 5.12 Cancel booking
+PATCH {{baseUrl}}/bookings/{{bookingId}}/cancel
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "reason": "Personal emergency"
+}
+
+###
+
+### 5.13 Delete booking (admin only)
+DELETE {{baseUrl}}/bookings/{{bookingId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 6. PAYMENTS MODULE
+###############################################
+
+### 6.1 Initialize payment (Paystack)
+POST {{baseUrl}}/payments/initialize
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "bookingId": 1,
+  "email": "user@example.com",
+  "amount": 750.50,
+  "currency": "NGN",
+  "paymentMethod": "paystack"
+}
+
+###
+
+### 6.2 Verify payment
+POST {{baseUrl}}/payments/verify/{{reference}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{}
+
+###
+
+### 6.3 Get all payments (user's)
+GET {{baseUrl}}/payments
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 6.4 Get all payments (admin only)
+GET {{baseUrl}}/payments/admin/all
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 6.5 Get payments by branch (admin)
+GET {{baseUrl}}/payments/branch/{{branchId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 6.6 Get payment by ID
+GET {{baseUrl}}/payments/{{paymentId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 6.7 Update payment status (admin only)
+PATCH {{baseUrl}}/payments/{{paymentId}}/status
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "status": "completed"
+}
+
+###
+
+### 6.8 Process refund
+POST {{baseUrl}}/payments/{{paymentId}}/refund
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "amount": 350.25,
+  "reason": "Booking cancelled - customer requested"
+}
+
+###
+
+### 6.9 Cancel payment (admin only)
+PATCH {{baseUrl}}/payments/{{paymentId}}/cancel
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "reason": "Customer cancelled booking"
+}
+
+###
+
+### 6.10 Update payment details (admin)
+PATCH {{baseUrl}}/payments/{{paymentId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "status": "pending",
+  "notes": "Awaiting confirmation from customer"
+}
+
+###
+
+### 6.11 Delete payment (admin only)
+DELETE {{baseUrl}}/payments/{{paymentId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 6.12 Webhook - Payment notification
+POST {{baseUrl}}/payments/webhook
+Content-Type: application/json
+
+{
+  "event": "charge.success",
+  "data": {
+    "reference": "payment_reference_123",
+    "amount": 75000,
+    "status": "success"
+  }
+}
+
+###
+
+###############################################
+# 7. BRANCHES/LOCATIONS MODULE
+###############################################
+
+### 7.1 Create new branch (admin only)
+POST {{baseUrl}}/branches
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "Downtown Branch",
+  "address": "123 Main Street",
+  "city": "New York",
+  "state": "NY",
+  "zipCode": "10001",
+  "country": "USA",
+  "latitude": 40.7128,
+  "longitude": -74.0060,
+  "phoneNumber": "+12125551234",
+  "email": "downtown@autohub.com",
+  "operatingHours": {
+    "Monday": { "open": "09:00", "close": "18:00" },
+    "Tuesday": { "open": "09:00", "close": "18:00" },
+    "Wednesday": { "open": "09:00", "close": "18:00" },
+    "Thursday": { "open": "09:00", "close": "18:00" },
+    "Friday": { "open": "09:00", "close": "20:00" },
+    "Saturday": { "open": "10:00", "close": "16:00" },
+    "Sunday": { "open": "closed", "close": "closed" }
+  },
+  "capacity": 50,
+  "manager": "John Manager"
+}
+
+###
+
+### 7.2 Get all branches
+GET {{baseUrl}}/branches
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 7.3 Get branch by ID
+GET {{baseUrl}}/branches/{{branchId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 7.4 Update branch (admin only)
+PATCH {{baseUrl}}/branches/{{branchId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "capacity": 75,
+  "phoneNumber": "+12125559999",
+  "manager": "Jane New Manager"
+}
+
+###
+
+### 7.5 Delete branch (admin only)
+DELETE {{baseUrl}}/branches/{{branchId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 8. FLEET MANAGEMENT MODULE
+###############################################
+
+### 8.1 Create fleet management record (admin)
+POST {{baseUrl}}/fleet-management
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "fleetName": "City Fleet",
+  "description": "Fleet for urban area operations",
+  "totalVehicles": 50,
+  "acquisitionDate": "2024-01-15",
+  "managerId": 1,
+  "status": "active"
+}
+
+###
+
+### 8.2 Get all fleet records
+GET {{baseUrl}}/fleet-management
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 8.3 Get fleet record by ID
+GET {{baseUrl}}/fleet-management/{{fleetManagementId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 8.4 Update fleet record (admin)
+PATCH {{baseUrl}}/fleet-management/{{fleetManagementId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "totalVehicles": 55,
+  "status": "active"
+}
+
+###
+
+### 8.5 Delete fleet record (admin)
+DELETE {{baseUrl}}/fleet-management/{{fleetManagementId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 9. SUPPORT/TICKETS MODULE
+###############################################
+
+### 9.1 Create support ticket
+POST {{baseUrl}}/support
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "subject": "Vehicle damage claim",
+  "category": "billing",
+  "priority": "high",
+  "description": "Windshield has a crack after my rental",
+  "attachmentUrl": "https://example.com/image.jpg"
+}
+
+###
+
+### 9.2 Get all support tickets (admin/staff)
+GET {{baseUrl}}/support
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 9.3 Get ticket by ID
+GET {{baseUrl}}/support/{{supportTicketId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 9.4 Update support ticket
+PATCH {{baseUrl}}/support/{{supportTicketId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "status": "resolved",
+  "priority": "low",
+  "adminResponse": "Damage claim has been processed. $200 will be refunded."
+}
+
+###
+
+### 9.5 Delete support ticket (admin)
+DELETE {{baseUrl}}/support/{{supportTicketId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 10. HEALTH CHECK ENDPOINT
+###############################################
+
+### 10.1 Check API health
+GET {{baseUrl}}
+
+###
+
+###############################################
+# 11. CANCELLATION POLICIES (Advanced Features)
+###############################################
+
+### 11.1 Get all cancellation policies
+GET {{baseUrl}}/bookings/cancellation-policies
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 11.2 Create cancellation policy (admin)
+POST {{baseUrl}}/bookings/cancellation-policies
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "name": "Standard Policy",
+  "description": "Standard cancellation policy for regular rentals",
+  "hoursBeforeStart": 48,
+  "refundPercentage": 100,
+  "cancellationFee": 0,
+  "gracePeriodHours": 24,
+  "priority": 1,
+  "isActive": true
+}
+
+###
+
+### 11.3 Get specific cancellation policy
+GET {{baseUrl}}/bookings/cancellation-policies/1
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 11.4 Update cancellation policy (admin)
+PATCH {{baseUrl}}/bookings/cancellation-policies/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "refundPercentage": 95,
+  "cancellationFee": 10
+}
+
+###
+
+###############################################
+# 12. REFUNDS (Advanced Features)
+###############################################
+
+### 12.1 Create refund request
+POST {{baseUrl}}/refunds
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "bookingId": 1,
+  "reason": "Personal emergency - cannot complete rental"
+}
+
+###
+
+### 12.2 Process refund (admin)
+POST {{baseUrl}}/refunds/1/process
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "processedBy": "admin@example.com"
+}
+
+###
+
+### 12.3 Get all refunds (admin)
+GET {{baseUrl}}/refunds
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 12.4 Get refund by ID
+GET {{baseUrl}}/refunds/1
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 12.5 Get refunds for booking
+GET {{baseUrl}}/refunds/booking/1
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 13. LATE RETURN PENALTIES (Advanced Features)
+###############################################
+
+### 13.1 Get all penalties (admin)
+GET {{baseUrl}}/penalties
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 13.2 Get unpaid penalties (admin)
+GET {{baseUrl}}/penalties/unpaid
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 13.3 Get penalty for booking
+GET {{baseUrl}}/penalties/booking/1
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 13.4 Waive penalty (manager)
+POST {{baseUrl}}/penalties/1/waive
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "reason": "Vehicle emergency - customer had flat tire"
+}
+
+###
+
+###############################################
+# 14. VEHICLE INSPECTIONS (Advanced Features)
+###############################################
+
+### 14.1 Create vehicle inspection
+POST {{baseUrl}}/inspections
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "vehicleId": 1,
+  "bookingId": 1,
+  "inspectionType": "pre_rental",
+  "mileage": 15000,
+  "fuelLevel": 100,
+  "condition": "excellent"
+}
+
+###
+
+### 14.2 Get all inspections
+GET {{baseUrl}}/inspections
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 14.3 Get inspection by ID
+GET {{baseUrl}}/inspections/1
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 14.4 Get inspections for vehicle
+GET {{baseUrl}}/inspections/vehicle/{{vehicleId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 14.5 Get inspections for booking
+GET {{baseUrl}}/inspections/booking/{{bookingId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 14.6 Get pending inspections
+GET {{baseUrl}}/inspections/pending
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 14.7 Complete inspection
+PUT {{baseUrl}}/inspections/1/complete
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "completedNotes": "Vehicle in excellent condition",
+  "damageReports": []
+}
+
+###
+
+### 14.8 Approve inspection (manager)
+PUT {{baseUrl}}/inspections/1/approve
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 15. INVOICES (Advanced Features)
+###############################################
+
+### 15.1 Generate invoice for booking
+POST {{baseUrl}}/invoices/booking/{{bookingId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "includeInsurance": true,
+  "includeLocationFee": true
+}
+
+###
+
+### 15.2 Get all invoices (admin)
+GET {{baseUrl}}/invoices
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 15.3 Get invoice by ID
+GET {{baseUrl}}/invoices/1
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 15.4 Get user invoices
+GET {{baseUrl}}/invoices/user/{{userId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 15.5 Get overdue invoices (admin)
+GET {{baseUrl}}/invoices/overdue
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 15.6 Mark invoice as paid (admin)
+PUT {{baseUrl}}/invoices/1/paid
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "paidDate": "2025-05-25T10:00:00Z"
+}
+
+###
+
+###############################################
+# 16. FLEET ANALYTICS (Advanced Features)
+###############################################
+
+### 16.1 Get fleet health metrics
+GET {{baseUrl}}/analytics/fleet/health
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 16.2 Get fleet utilization overview
+GET {{baseUrl}}/analytics/fleet/utilization
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 16.3 Get vehicle utilization
+GET {{baseUrl}}/analytics/vehicle/{{vehicleId}}/utilization
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 16.4 Get vehicle performance
+GET {{baseUrl}}/analytics/vehicle/{{vehicleId}}/performance
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 16.5 Get top performing vehicles
+GET {{baseUrl}}/analytics/top-performers
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 16.6 Get underutilized vehicles
+GET {{baseUrl}}/analytics/underutilized
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 16.7 Get comprehensive KPI report
+GET {{baseUrl}}/analytics/kpi-report
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# 17. LOGS MODULE
+###############################################
+
+### 17.1 Get all logs (admin)
+GET {{baseUrl}}/logs?page=1&limit=20
+Authorization: Bearer {{accessToken}}
+
+###
+
+### 17.2 Get logs by action
+GET {{baseUrl}}/logs?action=BOOKING_CREATED
+Authorization: Bearer {{accessToken}}
+
+###
+
+###############################################
+# NOTES AND GUIDELINES
+###############################################
+
+# 1. Replace {{baseUrl}} with your actual API base URL (default: http://localhost:3001)
+# 2. Replace {{accessToken}} with actual JWT token from login response
+# 3. Replace {{refreshToken}} with refresh token from login response
+# 4. Replace IDs ({{userId}}, {{vehicleId}}, etc.) with actual IDs from database
+# 5. Use HTTP Client extension in VS Code to execute these requests
+# 6. All timestamps should be in ISO 8601 format (YYYY-MM-DDTHH:mm:ssZ)
+# 7. Status codes:
+#    - 200 OK: Successful GET, PATCH, DELETE
+#    - 201 Created: Successful POST
+#    - 400 Bad Request: Invalid input data
+#    - 401 Unauthorized: Missing or invalid token
+#    - 403 Forbidden: Insufficient permissions
+#    - 404 Not Found: Resource not found
+#    - 500 Internal Server Error: Server error
+# 8. Test sequence recommendation:
+#    1. Register/Login
+#    2. Create resources (vehicles, branches)
+#    3. Create bookings
+#    4. Create payments
+#    5. Create support tickets
+#    6. View analytics
+
+###############################################
+# END OF TEST SUITE
+###############################################
 
 #######################
 ## BRANCHES
