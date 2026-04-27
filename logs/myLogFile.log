@@ -157,3 +157,18 @@
 4/27/26, 9:41 PM - IP: 127.0.0.1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register
 4/27/26, 10:21 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
 4/27/26, 10:21 PM - IP: 127.0.0.1 - ERROR: Unexpected socket close - Path: /auth/forgot-password
+4/27/26, 10:36 PM - IP: 127.0.0.1 - ERROR: {"message":["property phoneNumber should not exist"],"error":"Bad Request","statusCode":400} - Path: /users
+4/27/26, 10:38 PM - IP: 127.0.0.1 - ERROR: {"message":["phoneNumber must be a string","phoneNumber should not be empty","role must be one of the following values: admin, customer, support_agent, staff","role should not be empty"],"error":"Bad Request","statusCode":400} - Path: /auth/register
+4/27/26, 10:40 PM - IP: 127.0.0.1 - ERROR: {"message":["property phoneNumber should not exist"],"error":"Bad Request","statusCode":400} - Path: /users
+4/27/26, 10:41 PM - IP: 127.0.0.1 - ERROR: Unexpected socket close - Path: /auth/forgot-password
+4/27/26, 10:42 PM - IP: 127.0.0.1 - ERROR: {"message":["property make should not exist","property model should not exist","property year should not exist","property color should not exist","property fuelType should not exist","property transmission should not exist","property seatingCapacity should not exist","property fuelLevel should not exist","property dailyRate should not exist","property weeklyRate should not exist","property monthlyRate should not exist","registrationNumber must be a string","registrationNumber should not be empty"],"error":"Bad Request","statusCode":400} - Path: /vehicle
+4/27/26, 10:44 PM - IP: 127.0.0.1 - ERROR: {"message":"Vehicle not found","error":"Not Found","statusCode":404} - Path: /bookings
+4/27/26, 10:44 PM - IP: 127.0.0.1 - ERROR: {"message":"Vehicle specification not found","error":"Not Found","statusCode":404} - Path: /vehicle
+4/27/26, 10:47 PM - IP: 127.0.0.1 - ERROR: {"message":"Vehicle is currently active","error":"Bad Request","statusCode":400} - Path: /bookings
+4/27/26, 10:47 PM - IP: 127.0.0.1 - ERROR: {"message":"Vehicle is currently active","error":"Bad Request","statusCode":400} - Path: /bookings
+4/27/26, 10:47 PM - IP: 127.0.0.1 - ERROR: Cannot read properties of undefined (reading 'id') - Path: /bookings/my-bookings
+4/27/26, 10:48 PM - IP: 127.0.0.1 - ERROR: {"message":"Vehicle is currently active","error":"Bad Request","statusCode":400} - Path: /bookings
+4/27/26, 10:49 PM - IP: 127.0.0.1 - ERROR: {"message":["property pickupBranchId should not exist","property dropoffBranchId should not exist","property additionalNotes should not exist","userId must be a number conforming to the specified constraints","userId should not be empty"],"error":"Bad Request","statusCode":400} - Path: /bookings
+4/27/26, 10:49 PM - IP: 127.0.0.1 - ERROR: {"message":["userId must be a number conforming to the specified constraints","userId should not be empty"],"error":"Bad Request","statusCode":400} - Path: /bookings
+4/27/26, 10:49 PM - IP: 127.0.0.1 - ERROR: {"message":["userId must be a number conforming to the specified constraints","userId should not be empty"],"error":"Bad Request","statusCode":400} - Path: /bookings
+4/27/26, 10:51 PM - IP: 127.0.0.1 - ERROR: {"message":"Vehicle is currently active","error":"Bad Request","statusCode":400} - Path: /bookings

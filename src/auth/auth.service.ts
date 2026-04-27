@@ -34,8 +34,6 @@ export class AuthService {
 
   // ===== SIGN UP =====
   async signUp(createAuthDto: CreateAuthDto): Promise<{
-    accessToken: string;
-    refreshToken: string;
     user: {
       id: number;
       email: string;
@@ -61,18 +59,8 @@ export class AuthService {
       email_verified: false,
     });
 
-    // 3. Generate tokens
-    const { accessToken, refreshToken } = await this.getTokens(
-      user.id.toString(),
-      user.email,
-      user.role,
-    );
-    await this.updateRefreshToken(user.id.toString(), refreshToken);
-
-    // 4. Return tokens and user info
+    // 3. Return user info only (tokens are NOT generated on registration)
     return {
-      accessToken,
-      refreshToken,
       user: {
         id: user.id,
         email: user.email,

@@ -30,8 +30,8 @@ Content-Type: application/json
   "password": "Test1234!",
   "firstName": "John",
   "lastName": "Doe",
-  "phoneNumber": "+12345678901"
-  , "role": "customer"
+  "phoneNumber": "+12345678901",
+  "role": "customer"
 }
 
 ###
@@ -97,8 +97,8 @@ Authorization: Bearer {{accessToken}}
   "password": "AdminPass1234!",
   "firstName": "Admin",
   "lastName": "User",
-  "phoneNumber": "+11234567890",
-  "role": "admin"
+  "role": "admin" ,
+  "phoneNumber": "+1234567890"
 }
 
 ###
@@ -278,9 +278,8 @@ Authorization: Bearer {{accessToken}}
   "vehicleId": 1,
   "startDate": "2025-05-15T09:00:00Z",
   "endDate": "2025-05-20T18:00:00Z",
-  "pickupBranchId": 1,
-  "dropoffBranchId": 1,
-  "additionalNotes": "Sunroof preferred if available"
+  "pickupLocation": "Main Branch - Manhattan Downtown",
+  "dropoffLocation": "Main Branch - Manhattan Downtown"
 }
 
 ###
