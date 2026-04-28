@@ -3,6 +3,7 @@
   <p><strong>A comprehensive, production-ready NestJS API for managing vehicle rentals at scale</strong></p>
 </div>
 
+
 <p align="center">
   <img src="https://img.shields.io/badge/NestJS-11.0-e0234e?logo=nestjs&logoColor=white" alt="NestJS" />
   <img src="https://img.shields.io/badge/TypeScript-5.0-3178c6?logo=typescript&logoColor=white" alt="TypeScript" />
