@@ -971,6 +971,7 @@ LEFT JOIN bookings b ON v.id = b.vehicle_id;
 
 ### Dashboard Visualizations
 
+
 #### Real-Time Vehicle Utilization
 
 ```
@@ -1144,7 +1145,7 @@ export class LateReturnService {
     }
 }
 ```
-
+qqqqqqqqqqqqasaw
 ---
 
 ## 7. Email Notification Flows
@@ -1388,12 +1389,13 @@ POST /api/bookings/b1/mark-returned
 
 ---
 
-## Summary
+
 
 The advanced features in AutoHub provide a comprehensive system for managing complex vehicle rental operations, from refund processing to fleet analytics. These systems are:
 
 - **Automated**: Reduce manual work through scheduled tasks
-- **Configurable**: Customizable policies and thresholds
+- **Configurable**: Customizable policies and thresholdscc 
 - **Integrated**: Work seamlessly with payment gateways
 - **Auditable**: Complete record keeping for compliance
 - **Data-Driven**: Analytics enable informed business decisions
+

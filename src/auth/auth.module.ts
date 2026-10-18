@@ -31,7 +31,7 @@ import { MailModule } from '../mail/mail.module';
       }),
     }),
   ],
-  providers: [AuthService, AtStrategy, RfStrategy, ConfigService, RolesGuard],
+  providers: [AuthService, AtStrategy, RfStrategy, RolesGuard],
   controllers: [AuthController],
   exports: [AuthService, JwtModule],
 })
