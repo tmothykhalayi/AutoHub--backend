@@ -9,8 +9,6 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService): TypeOrmModuleOptions => {
-        const isProduction =
-          configService.get<string>('NODE_ENV') === 'production';
         const dbSsl = configService.get<string>('DB_SSL') === 'true';
 
         return {
@@ -26,8 +24,8 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
           //drops all schema incase there are constraints in the relationship among entities
           dropSchema: false,
 
-          //  SSL Configuration
-          ssl: dbSsl || isProduction ? { rejectUnauthorized: false } : false,
+          // Enable SSL only when explicitly requested by the database provider.
+          ssl: dbSsl ? { rejectUnauthorized: false } : false,
           autoLoadEntities: true,
         };
       },
