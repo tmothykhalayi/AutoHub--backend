@@ -1126,7 +1126,7 @@ http://localhost:3001/api
 - `GET /auth/profile` - Get current user profile
 - `POST /auth/refresh` - Refresh access token
 - `POST /auth/forgot-password` - Request password reset
-- `POST /auth/reset-password` - Reset password with token
+- `POST /auth/reset-password` - Reset password with the email and six-digit OTP from the reset email
 
 #### Users Endpoints
 - `GET /users` - Get all users (Admin only)

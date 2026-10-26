@@ -6,8 +6,8 @@
 ###############################################
 
 @baseUrl = http://localhost:8000
-@accessToken = your-access-token-here
-@refreshToken = your-refresh-token-here
+@accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJuZXd1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5Mjk0MDIyMywiZXhwIjoxNzkyOTc2MjIzfQ.9RwshiTsBSoRw8f52_IzYK9JLL13y7Xv5yLbQPq7wao"
+@refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJuZXd1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5Mjk0MDIyMywiZXhwIjoxNzkzNTQ1MDIzfQ.a8rMAlW91vUVx-A6fUZ_GlX7X9t1_jCBHXA5touF6ZE"
 @userId = 1
 @vehicleId = 1
 @bookingId = 1
@@ -26,12 +26,12 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "newuser@example.com",
-  "password": "Test1234!",
+  "email": "newuser2@gmail.com",
+  "password": "777777",
   "firstName": "John",
   "lastName": "Doe",
   "phoneNumber": "+12345678901",
-  "role": "customer"
+  "role": "client"
 }
 
 ###
@@ -41,7 +41,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "newuser@example.com",
+  "email": "newuser@gmail.com",
   "password": "Test1234!"
 }
 
@@ -50,7 +50,7 @@ Content-Type: application/json
 ### 1.3 Refresh access token
 POST {{baseUrl}}/auth/refresh
 Content-Type: application/json
-Authorization: Bearer {{refreshToken}}
+Authorization: Bearer {{"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJuZXd1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc5Mjk0MDIyMywiZXhwIjoxNzkzNTQ1MDIzfQ.a8rMAlW91vUVx-A6fUZ_GlX7X9t1_jCBHXA5touF6ZE"}}
 
 {}
 
@@ -61,17 +61,18 @@ POST {{baseUrl}}/auth/forgot-password
 Content-Type: application/json
 
 {
-  "email": "newuser@example.com"
+  "email": "newuser@gmail.com"
 }
 
 ###
 
-### 1.5 Reset password (with token from email)
+### 1.5 Reset password (with OTP from email)
 POST {{baseUrl}}/auth/reset-password
 Content-Type: application/json
 
 {
-  "token": "your-reset-token-here",
+  "email": "newuser@gmail.com",
+  "otp": "123456",
   "newPassword": "NewPassword1234!"
 }
 
@@ -98,7 +99,7 @@ Authorization: Bearer {{accessToken}}
   "firstName": "Admin",
   "lastName": "User",
   "role": "admin" ,
-  "phoneNumber": "+1234567890"
+  "phone": "+1234567890"
 }
 
 ###
@@ -123,7 +124,7 @@ Authorization: Bearer {{accessToken}}
 {
   "firstName": "UpdatedFirst",
   "lastName": "UpdatedLast",
-  "phoneNumber": "+19876543210"
+  "phone": "+19876543210"
 }
 
 ###

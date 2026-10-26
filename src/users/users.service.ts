@@ -53,9 +53,7 @@ export class UsersService {
     }
     if (userRole === Role.ADMIN) {
       if (!currentUser || currentUser.role !== Role.ADMIN) {
-        throw new BadRequestException(
-          'Only administrators can create admin users',
-        );
+        throw new BadRequestException('Only administrators can create admin users',);
       }
     }
 
