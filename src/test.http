@@ -374,6 +374,7 @@ Authorization: Bearer {{accessToken}}
 ###############################################
 
 ### 6.1 Initialize payment (Paystack)
+# @name initializePayment
 POST {{baseUrl}}/payments/initialize
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
@@ -389,7 +390,7 @@ Authorization: Bearer {{accessToken}}
 ###
 
 ### 6.2 Verify payment
-POST {{baseUrl}}/payments/verify/{{reference}}
+POST {{baseUrl}}/payments/verify/{{initializePayment.response.body.$.data.reference}}
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
