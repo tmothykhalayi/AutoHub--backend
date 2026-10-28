@@ -13,3 +13,6 @@
 10/25/26, 6:01 PM - IP: 127.0.0.1 - ERROR: {"message":["property phoneNumber should not exist"],"error":"Bad Request","statusCode":400} - Path: /users
 10/25/26, 11:13 PM - IP: 127.0.0.1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register
 10/25/26, 11:17 PM - IP: 127.0.0.1 - ERROR: {"message":["role must be one of the following values: admin, customer, support_agent, staff"],"error":"Bad Request","statusCode":400} - Path: /auth/register
+10/28/26, 1:57 PM - IP: 127.0.0.1 - ERROR: {"message":["role must be one of the following values: admin, customer, support_agent, staff"],"error":"Bad Request","statusCode":400} - Path: /auth/register
+10/28/26, 1:58 PM - IP: 127.0.0.1 - ERROR: {"message":"Unauthorized","statusCode":401} - Path: /auth/refresh
+11/8/26, 11:26 PM - IP: 127.0.0.1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register

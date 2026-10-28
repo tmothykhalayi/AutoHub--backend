@@ -96,7 +96,6 @@ export class VehicleService {
       if (!branch) throw new NotFoundException('Branch not found');
       vehicle.branch = branch;
     }
-
     if (updateVehicleDto.registrationNumber !== undefined) {
       vehicle.registrationNumber = updateVehicleDto.registrationNumber;
     }
