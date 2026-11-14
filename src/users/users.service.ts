@@ -316,7 +316,6 @@ export class UsersService {
 
     const passwordMatches = await bcrypt.compare(plainPassword, user.password);
     if (!passwordMatches) return null;
-
     return user;
   }
 
