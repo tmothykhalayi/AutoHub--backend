@@ -61,6 +61,8 @@ export class SupportService {
       'not working',
       'down',
     ];
+
+    
     const highKeywords = [
       'issue',
       'problem',

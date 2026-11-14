@@ -5,6 +5,7 @@ import { CreateSupportDto } from './dto/create-support.dto';
 import { UpdateSupportDto } from './dto/update-support.dto';
 
 @ApiTags('support')
+
 @ApiBearerAuth()
 @Controller('support')
 export class SupportController {
