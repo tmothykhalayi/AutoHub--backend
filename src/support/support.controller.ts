@@ -8,7 +8,7 @@ import { UpdateSupportDto } from './dto/update-support.dto';
 
 @ApiBearerAuth()
 @Controller('support')
-export class SupportController {
+export class SupportController {1234567890
   constructor(private readonly supportService: SupportService) {}
 
   @Post()
