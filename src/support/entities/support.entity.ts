@@ -12,7 +12,7 @@ export class Support {
     responseTime?: string | null;
     priorityLabel?: string;
   };
-FFRE
+
   @ManyToOne(() => User)
   user: User;
 

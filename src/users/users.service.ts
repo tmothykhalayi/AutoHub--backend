@@ -275,6 +275,9 @@ export class UsersService {
     // Return updated user (with role-based data filtering)
     return this.findById(id, currentUser);
   }
+
+
+  
   // Delete user with protections
   async remove(
     id: number,
