@@ -1,22 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  ParseIntPipe,
-  HttpStatus,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-} from '@nestjs/swagger';
+import {Controller,Get,Post,Body,Patch,Param,Delete,ParseIntPipe,HttpStatus,} from '@nestjs/common';
+import {ApiTags,ApiBearerAuth,ApiOperation,ApiResponse,ApiParam,ApiBody,} from '@nestjs/swagger';
 import { SupportService } from './support.service';
 import { CreateSupportDto } from './dto/create-support.dto';
 import { UpdateSupportDto } from './dto/update-support.dto';

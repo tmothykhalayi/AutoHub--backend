@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import {Injectable,NotFoundException,BadRequestException,} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan } from 'typeorm';
 import { Repository } from 'typeorm';
@@ -121,7 +117,6 @@ export class UsersService {
         order: { createdAt: 'DESC' },
       });
     }
-
     return this.usersRepository.find({
       select: [
         'id',
@@ -170,6 +165,8 @@ export class UsersService {
     }
 
     // Non-admin users can only limited info
+
+    7
     if (currentUser && currentUser.role !== Role.ADMIN) {
       return {
         id: user.id,

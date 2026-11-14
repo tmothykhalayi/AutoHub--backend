@@ -1,11 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import {Entity,PrimaryGeneratedColumn,Column, ManyToOne,CreateDateColumn,UpdateDateColumn,} from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 
 @Entity()
@@ -19,11 +12,11 @@ export class Support {
     responseTime?: string | null;
     priorityLabel?: string;
   };
-
+FFRE
   @ManyToOne(() => User)
   user: User;
 
-  @Column()
+  @Column()  
   subject: string;
 
   @Column('text')
